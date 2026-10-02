@@ -18,6 +18,8 @@ export function hydrateCard(card: Card): Card {
     name: product.name,
     bank: product.bank,
     source: product.source,
+    image: product.image,
+    imageSource: product.imageSource,
     verified: product.verified,
     description: product.description,
     benefits: [...benefits, ...custom],

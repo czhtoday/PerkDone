@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, X } from "lucide-react";
-import { localDate, type Card, type DueItem } from "./model";
+import { ChevronDown, X, CreditCard } from "lucide-react";
+import {
+  cardLabel,
+  localDate,
+  type Card,
+  type DueItem,
+  type Product,
+} from "./model";
 import { t } from "./i18n";
 function position(node: HTMLElement, anchor: HTMLElement | null) {
   const r = anchor?.getBoundingClientRect();
@@ -60,10 +66,7 @@ export function CardFilter({
               checked={selected === null || selected.includes(c.id)}
               onChange={() => choose(c.id)}
             />
-            <span>
-              {c.nickname || c.name}
-              {c.last4 && <small> · {c.last4}</small>}
-            </span>
+            <span>{cardLabel(c)}</span>
           </label>
         ))}
       </div>
@@ -160,5 +163,31 @@ export function DateEditor({
         </button>
       </form>
     </div>
+  );
+}
+
+export function CardArt({
+  card,
+  mini = false,
+}: {
+  card: Pick<Product, "name" | "bank" | "image">;
+  mini?: boolean;
+}) {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [card.image]);
+  return card.image && !failed ? (
+    <img
+      className={mini ? "mini-card-image" : "official-card-art"}
+      src={card.image}
+      alt={card.name}
+      width={mini ? 46 : 77}
+      height={mini ? 29 : 49}
+      onError={() => setFailed(true)}
+    />
+  ) : (
+    <span className={mini ? "mini-card" : "card-art"} aria-label={card.name}>
+      <CreditCard size={mini ? 17 : 19} />
+      {!mini && <span>{card.bank}</span>}
+    </span>
   );
 }

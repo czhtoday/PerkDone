@@ -1583,3 +1583,39 @@ input::placeholder {
     gap: 10px;
   }
 }
+
+.official-card-art {
+  display: block;
+  width: 77px;
+  height: 49px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 5px;
+}
+.mini-card-image {
+  display: block;
+  width: 46px;
+  height: 29px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.card-title {
+  min-width: 0;
+}
+.card-title h3 {
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.card-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.card-art svg {
+  position: static;
+}
+.card-art > span {
+  font-size: 7px;
+  letter-spacing: 0;
+}

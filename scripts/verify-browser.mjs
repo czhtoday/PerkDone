@@ -41,6 +41,22 @@ try {
   assert.equal(await page.locator(".due-row").count(), 0);
   async function add(search, nickname, suffix) {
     await page.getByRole("button", { name: "Add a card", exact: true }).click();
+    if (!search) {
+      await page.waitForFunction(
+        () =>
+          document.querySelectorAll(".product img").length === 10 &&
+          [...document.querySelectorAll(".product img")].every(
+            (i) => i.complete && i.naturalWidth > 0,
+          ),
+      );
+      assert.ok(
+        await page
+          .locator(".product img")
+          .evaluateAll((images) =>
+            images.every((i) => i.src.startsWith("chrome-extension://")),
+          ),
+      );
+    }
     if (search) {
       await page.getByLabel("Search cards").fill(search);
       await page.locator(".product").first().click();
@@ -55,18 +71,36 @@ try {
     await page.locator("dialog").waitFor({ state: "hidden" });
   }
   await add("", "Aspire 1", "01007");
+  await page
+    .getByRole("heading", { name: "Aspire 1 01007", exact: true })
+    .waitFor();
+  async function rename(oldName, nickname, newName) {
+    await page
+      .getByRole("button", { name: `Edit card ${oldName}`, exact: true })
+      .click();
+    await page
+      .getByLabel("Nickname (optional)", { exact: true })
+      .fill(nickname);
+    await page.getByRole("button", { name: "Save card", exact: true }).click();
+    await page.locator("dialog").waitFor({ state: "hidden" });
+    await page.getByRole("heading", { name: newName, exact: true }).waitFor();
+  }
+  await rename("Aspire 1 01007", "", "Hilton Honors Aspire 01007");
+  await rename("Hilton Honors Aspire 01007", "Hilton小卡", "Hilton小卡 01007");
+  assert.equal(await page.locator(".card-title>span").count(), 0);
+  await rename("Hilton小卡 01007", "Aspire 1", "Aspire 1 01007");
   const year = new Date().getFullYear();
   const today = await page.evaluate(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   });
   const q1 = page.getByRole("button", {
-    name: `Aspire 1 Flight Credit ${year} Q1 Mark done`,
+    name: `Aspire 1 01007 Flight Credit ${year} Q1 Mark done`,
     exact: true,
   });
   await q1.click();
   let done = page.getByRole("button", {
-    name: `Aspire 1 Flight Credit ${year} Q1 Done ${today}`,
+    name: `Aspire 1 01007 Flight Credit ${year} Q1 Done ${today}`,
     exact: true,
   });
   await done.waitFor();
@@ -78,7 +112,7 @@ try {
   await page.locator(".date-popover input[type=date]").fill(`${year}-02-21`);
   await page.getByRole("button", { name: "Save date", exact: true }).click();
   done = page.getByRole("button", {
-    name: `Aspire 1 Flight Credit ${year} Q1 Done ${year}-02-21`,
+    name: `Aspire 1 01007 Flight Credit ${year} Q1 Done ${year}-02-21`,
     exact: true,
   });
   await done.waitFor();
@@ -88,7 +122,7 @@ try {
   await q1.click();
   await page
     .getByRole("button", {
-      name: `Aspire 1 Flight Credit ${year} Q1 Done ${today}`,
+      name: `Aspire 1 01007 Flight Credit ${year} Q1 Done ${today}`,
       exact: true,
     })
     .waitFor();
@@ -133,9 +167,9 @@ try {
   await add("gold", "My Gold", "23456");
   await page.getByRole("button", { name: "Choose cards" }).click();
   const filter = page.locator(".filter-popover");
-  await filter.getByLabel("My CSP · 1234").uncheck();
+  await filter.getByLabel("My CSP 1234").uncheck();
   assert.equal(await page.locator(".card-section").count(), 2);
-  await filter.getByLabel("My Gold · 23456").uncheck();
+  await filter.getByLabel("My Gold 23456").uncheck();
   assert.equal(await page.locator(".card-section").count(), 1);
   await filter.getByRole("button", { name: "Clear", exact: true }).click();
   assert.equal(await page.locator(".card-section").count(), 0);
@@ -143,10 +177,16 @@ try {
   assert.equal(await page.locator(".card-section").count(), 3);
   await page.keyboard.press("Escape");
   await page
-    .getByRole("button", { name: "Hide Aspire 1 Flight Credit", exact: true })
+    .getByRole("button", {
+      name: "Hide Aspire 1 01007 Flight Credit",
+      exact: true,
+    })
     .click();
   await page
-    .getByRole("button", { name: "Show hidden perks · Aspire 1", exact: true })
+    .getByRole("button", {
+      name: "Show hidden perks · Aspire 1 01007",
+      exact: true,
+    })
     .click();
   await page
     .getByRole("button", { name: "Restore Flight Credit", exact: true })
@@ -239,8 +279,15 @@ try {
   const demo = await context.newPage();
   await demo.goto(base + "index.html?demo=1");
   await demo
-    .getByRole("heading", { name: "The Platinum Card", exact: true })
+    .getByRole("heading", { name: "Everyday perks 07997", exact: true })
     .waitFor();
+  await demo.waitForFunction(
+    () =>
+      [...document.querySelectorAll(".official-card-art")].length === 3 &&
+      [...document.querySelectorAll(".official-card-art")].every(
+        (i) => i.complete && i.naturalWidth > 0,
+      ),
+  );
   const widths = await demo
     .locator(".period-grid")
     .evaluateAll((es) =>

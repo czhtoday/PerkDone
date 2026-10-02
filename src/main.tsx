@@ -48,6 +48,7 @@ import {
   type Theme,
   type Language,
   annualValue,
+  cardLabel,
 } from "./model";
 import {
   isExtension,
@@ -57,7 +58,7 @@ import {
   type Mutation,
 } from "./storage";
 import { t, setLanguage } from "./i18n";
-import { CardFilter, DateEditor } from "./controls";
+import { CardArt, CardFilter, DateEditor } from "./controls";
 import "./styles.css";
 const popup = window.location.pathname.endsWith("/popup.html");
 const money = (n: number) =>
@@ -408,7 +409,7 @@ function App() {
                   e.currentTarget,
                 )
               }
-              aria-label={`${t("完成")} ${item.card.nickname || item.card.name} ${item.benefit.name} ${t(item.period.label)}`}
+              aria-label={`${t("完成")} ${cardLabel(item.card)} ${item.benefit.name} ${t(item.period.label)}`}
               title={
                 item.period.start > localDate()
                   ? `${item.period.start} ${t("开始")}`
@@ -420,8 +421,7 @@ function App() {
             <div className="due-description">
               <b>{item.benefit.name}</b>
               <span>
-                {item.card.nickname || item.card.name}
-                {item.card.last4 ? ` · ${item.card.last4}` : ""}{" "}
+                {cardLabel(item.card)}{" "}
                 <span className="due-period">/ {t(item.period.label)}</span>
               </span>
             </div>
@@ -764,29 +764,15 @@ function App() {
                       {cards.map((card) => (
                         <section className="card-section" key={card.id}>
                           <div className="card-heading">
-                            <div className="card-art">
-                              <span>
-                                {card.bank === "Chase" ? "CHASE" : "AMEX"}
-                              </span>
-                              <CreditCard size={19} />
-                              <b>
-                                {card.last4 ? `•• ${card.last4}` : "PERK DONE"}
-                              </b>
-                            </div>
+                            <CardArt card={card} />
                             <div className="card-title">
                               <small>{card.bank}</small>
-                              <h3>{card.name}</h3>
-                              {(card.nickname || card.last4) && (
-                                <span>
-                                  {card.nickname}
-                                  {card.last4 ? ` · ${card.last4}` : ""}
-                                </span>
-                              )}
+                              <h3 title={card.name}>{cardLabel(card)}</h3>
                             </div>
                             <div className="card-actions">
                               <button
                                 className="icon-button"
-                                aria-label={`${t("编辑卡片")} ${card.nickname || card.name}`}
+                                aria-label={`${t("编辑卡片")} ${cardLabel(card)}`}
                                 title={t("编辑昵称与尾号")}
                                 disabled={demo || busy}
                                 onClick={() => {
@@ -821,7 +807,7 @@ function App() {
                               <button
                                 className="icon-button"
                                 disabled={demo || busy}
-                                aria-label={`${t("移除")} ${card.nickname || card.name}`}
+                                aria-label={`${t("移除")} ${cardLabel(card)}`}
                                 onClick={() => setRemove(card)}
                               >
                                 <Trash2 size={14} />
@@ -861,7 +847,7 @@ function App() {
                                       <button
                                         className="hide-perk"
                                         disabled={demo || busy}
-                                        aria-label={`${t("隐藏")} ${card.nickname || card.name} ${benefit.name}`}
+                                        aria-label={`${t("隐藏")} ${cardLabel(card)} ${benefit.name}`}
                                         title={t("隐藏此权益")}
                                         onClick={() =>
                                           void save({
@@ -947,7 +933,7 @@ function App() {
                                                 demo ||
                                                 status === "future"
                                               }
-                                              aria-label={`${card.nickname || card.name} ${benefit.name} ${p.recordYear} ${t(p.label)} ${done ? `Done ${done}` : t("标记完成")}`}
+                                              aria-label={`${cardLabel(card)} ${benefit.name} ${p.recordYear} ${t(p.label)} ${done ? `Done ${done}` : t("标记完成")}`}
                                               title={`${p.start} — ${p.end}${benefit.note ? `\n${t(benefit.note ?? "")}` : ""}`}
                                               onClick={(e) =>
                                                 void openCompletion(
@@ -1022,7 +1008,7 @@ function App() {
                                   setError("");
                                 }}
                                 title={t("Show hidden perks")}
-                                aria-label={`${t("Show hidden perks")} · ${card.nickname || card.name}`}
+                                aria-label={`${t("Show hidden perks")} · ${cardLabel(card)}`}
                               >
                                 <MoreHorizontal size={21} />
                                 <span className="hidden-tooltip">
@@ -1095,9 +1081,7 @@ function App() {
                     }
                     onClick={() => setProduct(p.productId)}
                   >
-                    <span className="mini-card">
-                      <CreditCard size={17} />
-                    </span>
+                    <CardArt card={p} mini />
                     <span>
                       <b>{p.name}</b>
                       <small>
@@ -1183,9 +1167,7 @@ function App() {
           onClose={() => setBenefitCard(null)}
         >
           <form onSubmit={addBenefit}>
-            <p className="modal-copy">
-              {benefitCard.nickname || benefitCard.name}
-            </p>
+            <p className="modal-copy">{cardLabel(benefitCard)}</p>
             <label>
               {t("福利名称")}
               <input
@@ -1258,7 +1240,7 @@ function App() {
           onClose={() => setHiddenCard(null)}
         >
           <p className="modal-copy">
-            {hiddenCard.nickname || hiddenCard.name}
+            {cardLabel(hiddenCard)}
             {t("· 隐藏的权益不计入待办，完成记录仍保留。")}
           </p>
           <div className="hidden-list">
@@ -1408,8 +1390,8 @@ function App() {
         >
           <p className="modal-copy">
             {t("移除")}
-            {remove.nickname || remove.name}
-            {remove.last4 ? ` · ${remove.last4}` : ""}
+            {cardLabel(remove)}
+
             {t("？所有年度完成记录也会删除。")}
           </p>
           <div className="dialog-actions">

@@ -25,6 +25,8 @@ export type Card = {
   last4: string;
   color: string;
   benefits: Benefit[];
+  image?: string;
+  imageSource?: string;
   source?: string;
   verified?: string;
   description?: string;
@@ -240,4 +242,10 @@ export function annualValue(wallet: Wallet, year: number) {
     net: Math.round((recovered - fees) * 100) / 100,
     missingFees: wallet.cards.filter((c) => c.annualFee === undefined).length,
   };
+}
+
+export function cardLabel(card: Pick<Card, "name" | "nickname" | "last4">) {
+  return [card.nickname.trim() || card.name, card.last4]
+    .filter(Boolean)
+    .join(" ");
 }

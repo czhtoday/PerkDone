@@ -42,7 +42,9 @@
       ],
       "aliases": ["Aspire", "希尔顿"],
       "description": "",
-      "annualFee": 550
+      "annualFee": 550,
+      "image": "cards/amex-aspire.png",
+      "imageSource": "https://icm.aexp-static.com/acquisition/card-art/NUS000000329_480x304_straight_withname.png"
     },
     {
       "productId": "amex-surpass",
@@ -70,7 +72,9 @@
       ],
       "aliases": ["Surpass"],
       "description": "",
-      "annualFee": 150
+      "annualFee": 150,
+      "image": "cards/amex-surpass.png",
+      "imageSource": "https://icm.aexp-static.com/acquisition/card-art/NUS000000328_480x304_straight_withname.png"
     },
     {
       "productId": "amex-platinum",
@@ -170,7 +174,9 @@
       ],
       "aliases": ["白金", "Platinum", "Amex Platinum"],
       "description": "美国个人版；Morgan Stanley、Schwab 或 Business 变体请核对专属条款。",
-      "annualFee": 895
+      "annualFee": 895,
+      "image": "cards/amex-platinum.png",
+      "imageSource": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/platinum-card.png"
     },
     {
       "productId": "amex-gold",
@@ -211,7 +217,9 @@
       ],
       "aliases": ["Gold", "黄金"],
       "description": "",
-      "annualFee": 325
+      "annualFee": 325,
+      "image": "cards/amex-gold.png",
+      "imageSource": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/gold-card.png"
     },
     {
       "productId": "amex-hilton",
@@ -223,7 +231,9 @@
       "benefits": [],
       "aliases": ["Hilton honor", "希尔顿无年费"],
       "description": "无年费版没有固定周期的报销额度，也没有年度免费房券。可以添加自定义权益。",
-      "annualFee": 0
+      "annualFee": 0,
+      "image": "cards/amex-hilton.png",
+      "imageSource": "https://icm.aexp-static.com/acquisition/card-art/NUS000000327_480x304_straight_withname.png"
     },
     {
       "productId": "chase-csp",
@@ -252,7 +262,9 @@
       ],
       "aliases": ["CSP", "蓝宝石首选"],
       "description": "",
-      "annualFee": 95
+      "annualFee": 95,
+      "image": "cards/chase-csp.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/sapphire-preferredcard2026.png"
     },
     {
       "productId": "chase-csr",
@@ -345,7 +357,9 @@
       ],
       "aliases": ["CSR", "蓝宝石储备"],
       "description": "",
-      "annualFee": 795
+      "annualFee": 795,
+      "image": "cards/chase-csr.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/sapphire_reserve_card_Halo.png"
     },
     {
       "productId": "chase-marriott-boundless",
@@ -366,7 +380,9 @@
       ],
       "aliases": ["Marriott", "万豪", "Boundless"],
       "description": "",
-      "annualFee": 95
+      "annualFee": 95,
+      "image": "cards/chase-marriott-boundless.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/marriott-bonvoy-boundless-card.png"
     },
     {
       "productId": "chase-ritz",
@@ -394,7 +410,9 @@
       ],
       "aliases": ["栗子", "栗子卡", "Ritz"],
       "description": "",
-      "annualFee": 450
+      "annualFee": 450,
+      "image": "cards/chase-ritz.png",
+      "imageSource": "https://marriott.chase.com/content/dam/chase/marriott-bonvoy/static-sites/ecm-components/images/The-Ritz-Carlton-cc.png"
     },
     {
       "productId": "chase-ihg-premier",
@@ -423,7 +441,9 @@
       ],
       "aliases": ["IHG", "洲际", "Premier"],
       "description": "",
-      "annualFee": 150
+      "annualFee": 150,
+      "image": "cards/chase-ihg-premier.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/ihgpremiercardart2026.png"
     }
   ]
 }

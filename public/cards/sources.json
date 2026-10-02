@@ -1,0 +1,15 @@
+{
+  "retrievedAt": "2026-10-01",
+  "assets": {
+    "amex-aspire": "https://icm.aexp-static.com/acquisition/card-art/NUS000000329_480x304_straight_withname.png",
+    "amex-surpass": "https://icm.aexp-static.com/acquisition/card-art/NUS000000328_480x304_straight_withname.png",
+    "amex-hilton": "https://icm.aexp-static.com/acquisition/card-art/NUS000000327_480x304_straight_withname.png",
+    "amex-gold": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/gold-card.png",
+    "amex-platinum": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/platinum-card.png",
+    "chase-csp": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/sapphire-preferredcard2026.png",
+    "chase-csr": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/sapphire_reserve_card_Halo.png",
+    "chase-marriott-boundless": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/marriott-bonvoy-boundless-card.png",
+    "chase-ihg-premier": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/ihgpremiercardart2026.png",
+    "chase-ritz": "https://marriott.chase.com/content/dam/chase/marriott-bonvoy/static-sites/ecm-components/images/The-Ritz-Carlton-cc.png"
+  }
+}

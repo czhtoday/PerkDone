@@ -13,9 +13,10 @@ A small Chrome extension for keeping track of credit card perks — without anot
 - **Toolbar popup:** numbers only — total cards, remaining quarter perks, and annual fees / completed credit value with the difference.
 - **Full dashboard:** jump straight to an equal-width annual timeline; the quarter deadline list is collapsed until you open it. Select any combination of cards with the multi-select filter. Monthly, quarterly, semiannual, and calendar-year perks share the same 12-month axis.
 - **Restrained UI:** black, white, and gray with a blue accent for completion and earned value, with light, dark, and system themes. Theme preferences sync between extension surfaces and devices.
-- **Multiple cards per product:** distinguish cards with nicknames and optional **4–5 digit suffixes**, including Amex's last five digits. Existing suffixes can be edited without losing records.
+- **Multiple cards per product:** distinguish cards with nicknames and optional **4–5 digit suffixes**, including Amex's last five digits. Card titles use the nickname when set, otherwise the official product name, with the suffix appended on the same line. Existing suffixes can be edited without losing records.
 - **One-click completion:** click an unfinished period to save today immediately. Click `Done(6/21)` to open a small anchored date editor with Save date and Undo completion. Historical periods can be logged today; upcoming periods cannot be completed.
 - **Hidden perks:** use the eye icon beside a perk to hide it from the timeline and quarter's todo count. The card's `…` control says **Show hidden perks** on hover or keyboard focus and lets you restore them. Hidden perks retain their completion history.
+- **Official card artwork:** ten bundled issuer images, available offline in card headers and the product picker. Custom cards use a simple fallback icon.
 - **Custom cards and perks:** add products not in the bundled catalog.
 - **Actual validity dates:** set bank-reported ranges for cardmember-year credits and certificates instead of treating them as calendar-year credits.
 
@@ -36,7 +37,7 @@ npm ci
 npm run dev      # local preview; independent browser-local storage
 npm test         # model, storage, migration, deadline and catalog tests
 npm run build    # creates dist, ready for Load unpacked
-npm run package  # creates release/perk-done-0.3.1.zip
+npm run package  # creates release/perk-done-0.3.2.zip
 ```
 
 Preview routes:
@@ -69,6 +70,10 @@ Currently included:
 The no-fee Hilton Honors card is available to add, but has no fixed recurring reimbursement or annual free-night award; the app does not invent one. Add any personal offers as custom perks.
 
 This is a **trackable-perk catalog**, not a list of every card's points earning, insurance, status, signup bonus, or conditional merchant offer. Enrollment requirements and issuer rules still apply. Variants such as Business, Schwab, and Morgan Stanley Platinum may have different terms.
+
+### Card artwork
+
+Artwork is downloaded from American Express and Chase public product pages and bundled in `public/cards/`. Each catalog product includes a local `image` path and the original `imageSource` URL. [`public/cards/sources.json`](public/cards/sources.json) records the exact sources. Existing cards pick up artwork from the catalog when loaded. The extension never fetches issuer images at runtime and needs no host permissions. Card imagery and trademarks belong to their respective issuers; the app uses them for product identification and is not affiliated with those issuers.
 
 ### Updating JSON
 
@@ -149,6 +154,6 @@ For an existing Chrome-for-Testing installation, pass its executable path throug
 
 ## Publishing
 
-`release/perk-done-0.3.1.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
+`release/perk-done-0.3.2.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
 
 The GitHub repository stores the source. Rebuild locally for Load unpacked. Chrome Web Store distribution additionally needs a developer registration, a one-time registration fee, listing screenshots, and a publicly accessible privacy policy.
