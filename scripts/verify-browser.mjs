@@ -30,6 +30,8 @@ try {
     context.serviceWorkers()[0] ||
     (await context.waitForEvent("serviceworker"));
   const base = `chrome-extension://${new URL(worker.url()).host}/`;
+  const feedbackHref =
+    "mailto:perkdonedev@gmail.com?subject=Perk%20Done%20feedback";
   const page = await context.newPage();
   await page.goto(base + "index.html");
   await page
@@ -40,6 +42,12 @@ try {
     "false",
   );
   assert.equal(await page.locator(".due-row").count(), 0);
+  assert.equal(
+    await page
+      .getByRole("link", { name: "Feedback", exact: true })
+      .getAttribute("href"),
+    feedbackHref,
+  );
   async function add(search, nickname, suffix) {
     await page.getByRole("button", { name: "Add a card", exact: true }).click();
     if (!search) {
@@ -139,8 +147,8 @@ try {
     });
   assert.notEqual(...colors);
   assert.ok(
-    Number(colors[0].match(/\d+/)[0]) >= 220,
-    "Light done cells should stay soft gray",
+    Number(colors[0].match(/\d+/)[0]) >= 245,
+    "Light done cells should be near white",
   );
   const doneState = await page
     .locator(".period.done .period-state")
@@ -176,6 +184,12 @@ try {
   await popup.setViewportSize({ width: 430, height: 600 });
   await popup.goto(base + "popup.html");
   await popup.getByTestId("card-count").waitFor();
+  assert.equal(
+    await popup
+      .getByRole("link", { name: "Feedback", exact: true })
+      .getAttribute("href"),
+    feedbackHref,
+  );
   await popup
     .getByTestId("net-value")
     .filter({ hasText: "Keep going!" })
@@ -330,6 +344,11 @@ try {
   await demo.getByRole("button", { name: "Light mode", exact: true }).click();
   await demo.waitForFunction(
     () => document.documentElement.dataset.theme === "light",
+  );
+  await demo.waitForFunction(() =>
+    [...document.querySelectorAll(".period.done")].every(
+      (e) => getComputedStyle(e).backgroundColor === "rgb(248, 248, 248)",
+    ),
   );
   await demo.screenshot({
     path: "test-results/desktop-light.png",

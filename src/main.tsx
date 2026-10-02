@@ -18,6 +18,7 @@ import {
   Trash2,
   Cloud,
   CircleHelp,
+  Mail,
   MoreHorizontal,
   Eye,
   EyeOff,
@@ -501,6 +502,15 @@ function App() {
               </button>
             ))}
           </div>
+          <a
+            className="feedback-link"
+            href="mailto:perkdonedev@gmail.com?subject=Perk%20Done%20feedback"
+            aria-label={t("反馈")}
+            title={`${t("反馈")} · perkdonedev@gmail.com`}
+          >
+            <Mail size={16} aria-hidden="true" />
+            <span>{t("反馈")}</span>
+          </a>
           {!popup && (
             <button
               className="icon-button"

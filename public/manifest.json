@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Perk Done",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Track your credit card perks on one annual timeline. Mark benefits done and sync through Chrome.",
   "permissions": ["storage"],
   "action": {

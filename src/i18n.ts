@@ -5,6 +5,7 @@ export function setLanguage(value: Language) {
   language = value;
 }
 const translations: Record<string, string> = {
+  反馈: "Feedback",
   ...catalogTranslations,
   本季度: "This quarter",
   净赚: "Net earned",

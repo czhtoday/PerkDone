@@ -15,12 +15,13 @@ A small Chrome extension for keeping track of credit card perks — without anot
 - **Restrained UI:** black, white, and gray with a blue accent for completion and earned value, with light, dark, and system themes. Theme preferences sync between extension surfaces and devices.
 - **Multiple cards per product:** distinguish cards with nicknames and optional **4–5 digit suffixes**, including Amex's last five digits. Card titles use the nickname when set, otherwise the official product name, with the suffix appended on the same line. Existing suffixes can be edited without losing records.
 - **One-click completion:** click an unfinished period to save today immediately. Click `Done(6/21)` to open a small anchored date editor with Save date and Undo completion. Historical periods can be logged today; upcoming periods cannot be completed.
+- **Feedback:** the envelope button opens your email app with `perkdonedev@gmail.com` as the recipient and a prefilled subject. Available in the dashboard and popup; no form service or server.
 - **Hidden perks:** use the eye icon beside a perk to hide it from the timeline and quarter's todo count. The card's `…` control says **Show hidden perks** on hover or keyboard focus and lets you restore them. Hidden perks retain their completion history.
 - **Official card artwork:** bundled official issuer images, available offline in card headers and the product picker. Custom cards use a simple fallback icon.
 - **Custom cards and perks:** add products not in the bundled catalog.
 - **Actual validity dates:** set bank-reported ranges for cardmember-year credits and certificates instead of treating them as calendar-year credits.
 
-English is the default language. The **中 / EN** button switches to Chinese or English; this preference syncs with the wallet. Completed cells and selected controls use a distinct soft gray fill in both themes. Unfinished periods use an empty circle; completed periods use a solid blue check circle and a thin blue border, preserving the date. The compact popup shows fees in gray, earned value in blue, and a small emoji with progress or net-earnings encouragement.
+English is the default language. The **中 / EN** button switches to Chinese or English; this preference syncs with the wallet. Completed cells use a near-white fill in light mode and a soft gray fill in dark mode. Selected controls retain their distinct gray fill. Unfinished periods use an empty circle; completed periods use a solid blue check circle and a thin blue border, preserving the date. The compact popup shows fees in gray, earned value in blue, and a small emoji with progress or net-earnings encouragement.
 
 ## Install locally / 本地安装
 
@@ -37,7 +38,7 @@ npm ci
 npm run dev      # local preview; independent browser-local storage
 npm test         # model, storage, migration, deadline and catalog tests
 npm run build    # creates dist, ready for Load unpacked
-npm run package  # creates release/perk-done-0.4.0.zip
+npm run package  # creates release/perk-done-0.4.1.zip
 ```
 
 Preview routes:
@@ -151,6 +152,6 @@ For an existing Chrome-for-Testing installation, pass its executable path throug
 
 ## Publishing
 
-`release/perk-done-0.4.0.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
+`release/perk-done-0.4.1.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
 
 The GitHub repository stores the source. Rebuild locally for Load unpacked. Chrome Web Store distribution additionally needs a developer registration, a one-time registration fee, listing screenshots, and a publicly accessible privacy policy.
