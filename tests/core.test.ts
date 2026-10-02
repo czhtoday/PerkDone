@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  annualValue,
   localDate,
   periods,
   validCompletion,
@@ -33,12 +34,12 @@ describe("equal-width calendar periods", () => {
     expect(periods("monthly", 2028)[1].end).toBe("2028-02-29");
     expect(localDate(new Date(2026, 0, 1))).toBe("2026-01-01");
   });
-  it("validates completion dates against the period and today", () => {
+  it("allows logging historical periods today, but blocks future dates and periods", () => {
     expect(
       validCompletion("2026-06-21", "2026-04-01", "2026-06-30", "2026-10-01"),
     ).toBe(true);
     expect(
-      validCompletion("2026-03-31", "2026-04-01", "2026-06-30", "2026-10-01"),
+      validCompletion("2026-10-01", "2026-11-01", "2026-06-30", "2026-10-01"),
     ).toBe(false);
     expect(
       validCompletion("2026-10-02", "2026-10-01", "2026-12-31", "2026-10-01"),
@@ -132,7 +133,7 @@ describe("sync record operations", () => {
         benefitId: "flight",
         year: 2025,
         index: 0,
-        date: "2025-06-21",
+        date: "2025-02-30",
       }),
     ).toThrow();
     expect(() =>
@@ -399,5 +400,81 @@ describe("upgrades and preferences", () => {
     expect(
       catalog.find((c) => c.productId === "amex-hilton")?.benefits,
     ).toEqual([]);
+  });
+});
+
+describe("wallet value and language", () => {
+  it("calculates Aspire 550/600 and retains earned value when hidden", () => {
+    const c = { ...card, annualFee: 550 };
+    const records = Object.fromEntries(
+      c.benefits
+        .filter((b) => ["flight", "resort"].includes(b.id))
+        .flatMap((b) =>
+          benefitPeriods(b, 2025).map((p) => [
+            recordKey(c.id, b.id, 2025, p.index),
+            "2025-12-31",
+          ]),
+        ),
+    );
+    expect(annualValue({ cards: [c], records }, 2025)).toEqual({
+      fees: 550,
+      recovered: 600,
+      net: 50,
+      missingFees: 0,
+    });
+    expect(
+      annualValue(
+        {
+          cards: [
+            { ...c, benefits: c.benefits.map((b) => ({ ...b, hidden: true })) },
+          ],
+          records,
+        },
+        2025,
+      ).recovered,
+    ).toBe(600);
+    delete records[recordKey(c.id, "flight", 2025, 0)];
+    expect(annualValue({ cards: [c], records }, 2025).net).toBe(0);
+  });
+  it("counts December extras and renewed manual records only once", () => {
+    const c = {
+      ...card,
+      benefits: [
+        {
+          id: "cash",
+          name: "cash",
+          amount: 15,
+          decemberExtra: 20,
+          frequency: "monthly" as const,
+        },
+        {
+          id: "manual",
+          name: "manual",
+          amount: 100,
+          frequency: "manual" as const,
+        },
+      ],
+    };
+    const records = {
+      "test/2025/cash/11": "2025-12-02",
+      "test/2024/manual/2024-02-01_2026-01-31": "2025-12-03",
+    };
+    expect(annualValue({ cards: [c], records }, 2025).recovered).toBe(135);
+    expect(annualValue({ cards: [c], records }, 2024).recovered).toBe(0);
+  });
+  it("persists language and fee overrides through catalog hydration", () => {
+    let items = change(
+      { "pd:card:test": card },
+      { type: "language", language: "zh" },
+    );
+    items = change(items, {
+      type: "identity",
+      id: "test",
+      nickname: "",
+      last4: "",
+      annualFee: 0,
+    });
+    expect(decode(items).language).toBe("zh");
+    expect(decode(items).cards[0].annualFee).toBe(0);
   });
 });

@@ -41,7 +41,8 @@
         }
       ],
       "aliases": ["Aspire", "希尔顿"],
-      "description": ""
+      "description": "",
+      "annualFee": 550
     },
     {
       "productId": "amex-surpass",
@@ -68,7 +69,8 @@
         }
       ],
       "aliases": ["Surpass"],
-      "description": ""
+      "description": "",
+      "annualFee": 150
     },
     {
       "productId": "amex-platinum",
@@ -167,7 +169,8 @@
         }
       ],
       "aliases": ["白金", "Platinum", "Amex Platinum"],
-      "description": "美国个人版；Morgan Stanley、Schwab 或 Business 变体请核对专属条款。"
+      "description": "美国个人版；Morgan Stanley、Schwab 或 Business 变体请核对专属条款。",
+      "annualFee": 895
     },
     {
       "productId": "amex-gold",
@@ -207,7 +210,8 @@
         }
       ],
       "aliases": ["Gold", "黄金"],
-      "description": ""
+      "description": "",
+      "annualFee": 325
     },
     {
       "productId": "amex-hilton",
@@ -218,7 +222,8 @@
       "verified": "2026-10-01",
       "benefits": [],
       "aliases": ["Hilton honor", "希尔顿无年费"],
-      "description": "无年费版没有固定周期的报销额度，也没有年度免费房券。可以添加自定义权益。"
+      "description": "无年费版没有固定周期的报销额度，也没有年度免费房券。可以添加自定义权益。",
+      "annualFee": 0
     },
     {
       "productId": "chase-csp",
@@ -246,7 +251,8 @@
         }
       ],
       "aliases": ["CSP", "蓝宝石首选"],
-      "description": ""
+      "description": "",
+      "annualFee": 95
     },
     {
       "productId": "chase-csr",
@@ -338,7 +344,8 @@
         }
       ],
       "aliases": ["CSR", "蓝宝石储备"],
-      "description": ""
+      "description": "",
+      "annualFee": 795
     },
     {
       "productId": "chase-marriott-boundless",
@@ -358,7 +365,8 @@
         }
       ],
       "aliases": ["Marriott", "万豪", "Boundless"],
-      "description": ""
+      "description": "",
+      "annualFee": 95
     },
     {
       "productId": "chase-ritz",
@@ -385,7 +393,8 @@
         }
       ],
       "aliases": ["栗子", "栗子卡", "Ritz"],
-      "description": ""
+      "description": "",
+      "annualFee": 450
     },
     {
       "productId": "chase-ihg-premier",
@@ -413,7 +422,8 @@
         }
       ],
       "aliases": ["IHG", "洲际", "Premier"],
-      "description": ""
+      "description": "",
+      "annualFee": 150
     }
   ]
 }

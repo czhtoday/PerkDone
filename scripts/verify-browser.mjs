@@ -3,14 +3,14 @@ import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, rmSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
-const executablePath = process.env.CHROME_EXECUTABLE;
 const profile = mkdtempSync(`${tmpdir()}/perk-done-test-`);
 mkdirSync("test-results", { recursive: true });
 mkdirSync("docs/screenshots", { recursive: true });
 assert.equal(
-  JSON.parse(readFileSync("dist/manifest.json", "utf8")).action.default_popup,
+  JSON.parse(readFileSync("dist/manifest.json")).action.default_popup,
   "popup.html",
 );
+const executablePath = process.env.CHROME_EXECUTABLE;
 const context = await chromium.launchPersistentContext(profile, {
   executablePath,
   channel: executablePath ? undefined : "chromium",
@@ -23,266 +23,229 @@ const context = await chromium.launchPersistentContext(profile, {
   ],
 });
 const errors = [];
-context.on("page", (page) =>
-  page.on("pageerror", (e) => errors.push(e.message)),
-);
+context.on("page", (p) => p.on("pageerror", (e) => errors.push(e.message)));
 try {
   const worker =
     context.serviceWorkers()[0] ||
     (await context.waitForEvent("serviceworker"));
-  const extensionId = new URL(worker.url()).host;
-  const url = `chrome-extension://${extensionId}/index.html`;
+  const base = `chrome-extension://${new URL(worker.url()).host}/`;
   const page = await context.newPage();
-  await page.goto(url);
-  await page.getByRole("heading", { name: "从第一张信用卡开始" }).waitFor();
-  await page.getByRole("button", { name: "添加第一张信用卡" }).click();
-  await page.getByLabel("昵称（可选）").fill("Aspire 1");
-  await page.getByLabel("尾号（可选，4–5 位）").fill("01007");
-  await page.getByRole("button", { name: "添加到我的卡片" }).click();
-  await page.getByRole("dialog").waitFor({ state: "hidden" });
-  let data = await worker.evaluate(() => chrome.storage.sync.get(null));
-  const card = Object.values(data).find(
-    (v) => v.name === "Hilton Honors Aspire",
+  await page.goto(base + "index.html");
+  await page
+    .getByRole("heading", { name: "Start with your first card" })
+    .waitFor();
+  assert.equal(
+    await page.locator(".quarter-disclosure").getAttribute("aria-expanded"),
+    "false",
   );
-  assert.equal(card.last4, "01007");
-  // Historical dates and per-year records still work after the redesign.
-  const year = new Date().getFullYear() - 1;
-  await page.getByRole("button", { name: "上一年" }).click();
+  assert.equal(await page.locator(".due-row").count(), 0);
+  async function add(search, nickname, suffix) {
+    await page.getByRole("button", { name: "Add a card", exact: true }).click();
+    if (search) {
+      await page.getByLabel("Search cards").fill(search);
+      await page.locator(".product").first().click();
+    }
+    await page
+      .getByLabel("Nickname (optional)", { exact: true })
+      .fill(nickname);
+    await page
+      .getByLabel("Last 4–5 digits (optional)", { exact: true })
+      .fill(suffix);
+    await page.getByRole("button", { name: "Add to my cards" }).click();
+    await page.locator("dialog").waitFor({ state: "hidden" });
+  }
+  await add("", "Aspire 1", "01007");
+  const year = new Date().getFullYear();
+  const today = await page.evaluate(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  });
   const q1 = page.getByRole("button", {
-    name: `Aspire 1 Flight Credit ${year} Q1 标记完成`,
+    name: `Aspire 1 Flight Credit ${year} Q1 Mark done`,
     exact: true,
   });
   await q1.click();
-  await page.getByLabel("完成日期").fill(`${year}-02-21`);
-  await page.getByRole("button", { name: "完成", exact: true }).click();
-  await page.getByRole("dialog").waitFor({ state: "hidden" });
-  await page.reload();
-  await page.getByRole("button", { name: "上一年" }).click();
+  let done = page.getByRole("button", {
+    name: `Aspire 1 Flight Credit ${year} Q1 Done ${today}`,
+    exact: true,
+  });
+  await done.waitFor();
+  assert.equal(await page.locator(".date-popover:popover-open").count(), 0);
+  assert.equal(await page.locator("dialog[open]").count(), 0);
+  await done.click();
+  await page.locator(".date-popover:popover-open").waitFor();
+  assert.equal(await page.locator("dialog[open]").count(), 0);
+  await page.locator(".date-popover input[type=date]").fill(`${year}-02-21`);
+  await page.getByRole("button", { name: "Save date", exact: true }).click();
+  done = page.getByRole("button", {
+    name: `Aspire 1 Flight Credit ${year} Q1 Done ${year}-02-21`,
+    exact: true,
+  });
+  await done.waitFor();
+  await done.click();
+  await page.getByRole("button", { name: "Undo completion" }).click();
+  await q1.waitFor();
+  await q1.click();
   await page
     .getByRole("button", {
-      name: `Aspire 1 Flight Credit ${year} Q1 Done ${year}-02-21`,
+      name: `Aspire 1 Flight Credit ${year} Q1 Done ${today}`,
       exact: true,
     })
     .waitFor();
-  await page.getByRole("button", { name: "下一年" }).click();
-  assert.equal(await page.locator(".period.done").count(), 0);
-  // Hidden perks disappear in both surfaces, change counts, and keep old records.
+  const colors = await page
+    .locator(".period.done")
+    .first()
+    .evaluate((e) => {
+      const s = getComputedStyle(e);
+      return [s.backgroundColor, s.color];
+    });
+  assert.notEqual(...colors);
   const popup = await context.newPage();
   await popup.setViewportSize({ width: 430, height: 600 });
-  await popup.goto(`chrome-extension://${extensionId}/popup.html`);
-  await popup.getByTestId("due-count").waitFor();
-  assert.equal(await popup.locator(".tracker").count(), 0);
-  const beforeHide = Number(await popup.getByTestId("due-count").textContent());
-  await page
-    .getByRole("button", { name: "隐藏 Aspire 1 Flight Credit", exact: true })
-    .click();
-  await page
-    .locator(".benefit-name b")
-    .filter({ hasText: "Flight Credit" })
-    .waitFor({ state: "hidden" });
-  await popup.waitForFunction(
-    (before) =>
-      Number(
-        document.querySelector('[data-testid="due-count"]').textContent,
-      ) ===
-      before - 1,
-    beforeHide,
+  await popup.goto(base + "popup.html");
+  await popup.getByTestId("card-count").waitFor();
+  assert.equal(await popup.getByTestId("card-count").textContent(), "1");
+  assert.equal(
+    await popup.locator(".due-row,.quarter-focus,.tracker").count(),
+    0,
   );
-  data = await worker.evaluate(() => chrome.storage.sync.get(null));
-  assert.equal(data[`pd:year:${card.id}:${year}`]["flight/0"], `${year}-02-21`);
+  await add("CSP", "My CSP", "1234");
+  await add("gold", "My Gold", "23456");
+  await page.getByRole("button", { name: "Choose cards" }).click();
+  const filter = page.locator(".filter-popover");
+  await filter.getByLabel("My CSP · 1234").uncheck();
+  assert.equal(await page.locator(".card-section").count(), 2);
+  await filter.getByLabel("My Gold · 23456").uncheck();
+  assert.equal(await page.locator(".card-section").count(), 1);
+  await filter.getByRole("button", { name: "Clear", exact: true }).click();
+  assert.equal(await page.locator(".card-section").count(), 0);
+  await filter.getByRole("button", { name: "Select all" }).click();
+  assert.equal(await page.locator(".card-section").count(), 3);
+  await page.keyboard.press("Escape");
   await page
-    .getByRole("button", { name: "Show hidden perks · Aspire 1", exact: true })
-    .hover();
-  assert.equal(await page.locator(".hidden-tooltip").isVisible(), true);
+    .getByRole("button", { name: "Hide Aspire 1 Flight Credit", exact: true })
+    .click();
   await page
     .getByRole("button", { name: "Show hidden perks · Aspire 1", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "恢复 Flight Credit", exact: true })
+    .getByRole("button", { name: "Restore Flight Credit", exact: true })
     .click();
-  await page.getByRole("button", { name: "关闭", exact: true }).click();
-  await popup.waitForFunction(
-    (before) =>
-      Number(
-        document.querySelector('[data-testid="due-count"]').textContent,
-      ) === before,
-    beforeHide,
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.locator(".quarter-disclosure").click();
+  assert.equal(
+    await page.locator(".quarter-disclosure").getAttribute("aria-expanded"),
+    "true",
   );
-  // Theme preferences are persisted and reflected across open surfaces.
-  await page.getByRole("button", { name: "深色模式", exact: true }).click();
+  await page.locator(".quarter-disclosure").click();
+  await page.getByRole("button", { name: "Dark mode", exact: true }).click();
   await popup.waitForFunction(
     () => document.documentElement.dataset.theme === "dark",
   );
-  assert.equal(
-    await page.evaluate(() =>
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--bg")
-        .trim(),
-    ),
-    "#101010",
-  );
+  const darkColors = await page
+    .locator(".period.done")
+    .first()
+    .evaluate((e) => {
+      const s = getComputedStyle(e);
+      return [s.backgroundColor, s.color];
+    });
+  assert.notEqual(...darkColors);
+  assert.notEqual(colors[0], darkColors[0]);
+  await page.getByRole("button", { name: "Switch to Chinese" }).click();
+  await popup.getByText("本季度待完成", { exact: true }).waitFor();
+  await page.getByRole("heading", { name: "我的权益", exact: true }).waitFor();
   await page.reload();
-  assert.equal(
-    await page
-      .getByRole("button", { name: "深色模式", exact: true })
-      .getAttribute("aria-pressed"),
-    "true",
+  await page.getByRole("heading", { name: "我的权益", exact: true }).waitFor();
+  await page.getByRole("button", { name: "切换到英文" }).click();
+  await popup.getByText("Remaining this quarter", { exact: true }).waitFor();
+  // Direct fixture writes use only the isolated test profile. All six Aspire cash credits completed.
+  await worker.evaluate(
+    ({ year, today }) =>
+      chrome.storage.sync.get(null).then((items) => {
+        const card = Object.values(items).find(
+          (v) => v?.nickname === "Aspire 1",
+        );
+        const group = {};
+        for (let i = 0; i < 4; i++) group[`flight/${i}`] = today;
+        for (let i = 0; i < 2; i++) group[`resort/${i}`] = today;
+        const remove = Object.entries(items)
+          .filter(([k, v]) => k.startsWith("pd:card:") && v.id !== card.id)
+          .map(([k]) => k);
+        return chrome.storage.sync
+          .remove(remove)
+          .then(() =>
+            chrome.storage.sync.set({ [`pd:year:${card.id}:${year}`]: group }),
+          );
+      }),
+    { year, today },
   );
-  await page.getByRole("button", { name: "跟随系统", exact: true }).click();
-  await page.emulateMedia({ colorScheme: "light" });
-  assert.equal(
-    await page.evaluate(() =>
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--bg")
-        .trim(),
-    ),
-    "#fafafa",
+  await popup.waitForFunction(
+    () =>
+      document.querySelector('[data-testid="value-ratio"]').textContent ===
+      "$550/$600",
   );
-  await page.emulateMedia({ colorScheme: "dark" });
+  assert.equal(await popup.getByTestId("net-value").textContent(), "Ahead $50");
+  const data = await worker.evaluate(() => chrome.storage.sync.get(null));
   assert.equal(
-    await page.evaluate(() =>
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--bg")
-        .trim(),
-    ),
-    "#101010",
+    Object.values(data).find((v) => v?.nickname === "Aspire 1").last4,
+    "01007",
   );
-  await page.getByRole("button", { name: "浅色模式", exact: true }).click();
-  assert.equal(
-    await page.evaluate(() =>
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--bg")
-        .trim(),
-    ),
-    "#fafafa",
-  );
-  // Quick completion in the popup updates the full dashboard.
-  const quick = popup.locator(".quick-check:not([disabled])").first();
-  if (await quick.count()) {
-    const beforeComplete = Number(
-      await popup.getByTestId("due-count").textContent(),
-    );
-    await quick.click();
-    await popup.getByRole("button", { name: "完成", exact: true }).click();
-    await popup.getByRole("dialog").waitFor({ state: "hidden" });
-    await page.waitForFunction(
-      (before) =>
-        Number(
-          document.querySelector('[data-testid="due-count"]').textContent,
-        ) ===
-        before - 1,
-      beforeComplete,
-    );
-  }
-  // Add and configure a cardmember-year benefit without inventing a calendar-year deadline.
-  await page.getByRole("button", { name: "添加信用卡", exact: true }).click();
-  await page.getByLabel("搜索卡片").fill("CSP");
-  await page
-    .getByRole("button", { name: "Sapphire Preferred", exact: false })
-    .click();
-  await page.getByLabel("昵称（可选）").fill("My CSP");
-  await page.getByLabel("尾号（可选，4–5 位）").fill("1234");
-  await page.getByRole("button", { name: "添加到我的卡片" }).click();
-  await page.getByRole("dialog").waitFor({ state: "hidden" });
-  const csp = page.locator(".card-section").filter({
-    has: page.getByRole("heading", {
-      name: "Sapphire Preferred",
-      exact: true,
-    }),
-  });
-  await csp.getByRole("button", { name: "设置有效期", exact: true }).click();
-  const currentYear = new Date().getFullYear();
-  await page.getByLabel("开始日期").fill(`${currentYear}-01-01`);
-  await page.getByLabel("到期日期").fill(`${currentYear}-12-31`);
-  await page.getByRole("button", { name: "保存有效期" }).click();
-  await page.getByRole("dialog").waitFor({ state: "hidden" });
-  await csp.locator(".manual-period").waitFor();
-  // A previously opened UI also sees deletion events.
-  await page.getByRole("button", { name: "移除 My CSP", exact: true }).click();
-  await page.getByRole("button", { name: "移除卡片", exact: true }).click();
-  await page.getByRole("dialog").waitFor({ state: "hidden" });
-  const openTab = context.waitForEvent("page");
+  const newTab = context.waitForEvent("page");
   await popup
-    .getByRole("button", { name: "打开完整面板", exact: true })
+    .getByRole("button", { name: "Open dashboard", exact: true })
     .click();
-  const opened = await openTab;
-  await opened.waitForURL(url);
+  const opened = await newTab;
+  await opened.waitForURL(base + "index.html");
   await opened.close();
-  // Verify demo, narrow screens and both visual themes without touching a personal profile.
-  const preview = await context.newPage();
-  await preview.goto("http://127.0.0.1:5173/?demo=1");
-  await preview
+  const demo = await context.newPage();
+  await demo.goto(base + "index.html?demo=1");
+  await demo
     .getByRole("heading", { name: "The Platinum Card", exact: true })
     .waitFor();
-  const widths = await preview
+  const widths = await demo
     .locator(".period-grid")
-    .evaluateAll((els) =>
-      els.map((e) => Math.round(e.getBoundingClientRect().width)),
+    .evaluateAll((es) =>
+      es.map((e) => Math.round(e.getBoundingClientRect().width)),
     );
   assert.equal(new Set(widths).size, 1);
-  await preview.getByRole("button", { name: "浅色模式", exact: true }).click();
-  await preview
-    .getByRole("button", { name: "浅色模式", exact: true })
-    .waitFor();
-  await preview.waitForFunction(
-    () =>
-      document.documentElement.dataset.theme === "light" &&
-      !document.querySelector('button[aria-label="浅色模式"]').disabled,
-  );
-  await preview.screenshot({
-    path: "test-results/desktop-light.png",
-    fullPage: true,
-    animations: "disabled",
-  });
-  await preview.getByRole("button", { name: "深色模式", exact: true }).click();
-  await preview.waitForFunction(
-    () =>
-      document.documentElement.dataset.theme === "dark" &&
-      !document.querySelector('button[aria-label="深色模式"]').disabled,
-  );
-  await preview.screenshot({
+  await demo.screenshot({
     path: "docs/screenshots/dashboard-dark.png",
     animations: "disabled",
   });
-  await preview.screenshot({
-    path: "test-results/desktop-dark.png",
-    fullPage: true,
+  await demo.getByRole("button", { name: "Light mode", exact: true }).click();
+  await demo.waitForFunction(
+    () => document.documentElement.dataset.theme === "light",
+  );
+  await demo.screenshot({
+    path: "test-results/desktop-light.png",
     animations: "disabled",
   });
-  await preview.setViewportSize({ width: 390, height: 844 });
-  await preview.screenshot({
-    path: "test-results/mobile-dark.png",
-    fullPage: true,
-    animations: "disabled",
-  });
+  await demo.setViewportSize({ width: 390, height: 844 });
   assert.equal(
-    await preview.evaluate(() => document.documentElement.scrollWidth),
+    await demo.evaluate(() => document.documentElement.scrollWidth),
     390,
   );
+  await demo.screenshot({
+    path: "test-results/mobile-light.png",
+    fullPage: true,
+  });
   const demoPopup = await context.newPage();
-  await demoPopup.setViewportSize({ width: 430, height: 600 });
-  await demoPopup.goto(`chrome-extension://${extensionId}/popup.html?demo=1`);
+  await demoPopup.setViewportSize({ width: 430, height: 460 });
+  await demoPopup.goto(base + "popup.html?demo=1");
   await demoPopup.getByTestId("due-count").waitFor();
   await demoPopup
-    .getByRole("button", { name: "深色模式", exact: true })
+    .getByRole("button", { name: "Dark mode", exact: true })
     .click();
   await demoPopup.waitForFunction(
-    () =>
-      document.documentElement.dataset.theme === "dark" &&
-      !document.querySelector('button[aria-label="深色模式"]').disabled,
+    () => document.documentElement.dataset.theme === "dark",
   );
   await demoPopup.screenshot({
     path: "docs/screenshots/popup-dark.png",
     animations: "disabled",
   });
-  await demoPopup.screenshot({ path: "test-results/popup-dark.png" });
-  assert.equal(
-    await demoPopup.evaluate(() => document.documentElement.scrollWidth),
-    430,
-  );
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: real MV3 popup manifest and dashboard; 5-digit Amex/4-digit Chase suffixes; persisted historical dates; year isolation; hidden/restored perks retain records and update popup count; cross-surface theme sync, reload and system color scheme; popup completion; actual validity ranges; open full panel; equal timeline widths; light/dark/narrow layouts; no page errors.",
+    "PASS: real MV3; English default and synced Chinese preference; collapsed quarter list; numeric popup; 550/600 +50 calculation; immediate completion; anchored date editing and undo; multi-card filters; hide/restore; theme sync and inverse contrast; timeline widths; narrow layout; no runtime errors.",
   );
 } finally {
   await context.close();

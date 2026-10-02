@@ -3,6 +3,7 @@ import {
   benefitPeriods,
   isDate,
   type Theme,
+  type Language,
   validCompletion,
   type Card,
   type Wallet,
@@ -10,7 +11,14 @@ import {
 import { hydrateCard } from "./catalog";
 const prefix = "pd:";
 export type Mutation =
-  | { type: "identity"; id: string; nickname: string; last4: string }
+  | { type: "language"; language: Language }
+  | {
+      type: "identity";
+      id: string;
+      nickname: string;
+      last4: string;
+      annualFee?: number;
+    }
   | { type: "theme"; theme: Theme }
   | { type: "hidden"; id: string; benefitId: string; hidden: boolean }
   | {
@@ -46,11 +54,21 @@ export function decode(items: Items): Wallet {
         records[`${id}/${year}/${period}`] = date;
     }
   const theme = items["pd:theme"] as Theme | undefined;
-  return { cards, records, ...(theme ? { theme } : {}) };
+  const language = items["pd:language"] as Language | undefined;
+  return {
+    cards,
+    records,
+    ...(theme ? { theme } : {}),
+    ...(language ? { language } : {}),
+  };
 }
 export function change(items: Items, mutation: Mutation) {
   const next = { ...items };
-  if (mutation.type === "theme") {
+  if (mutation.type === "language") {
+    if (!["en", "zh"].includes(mutation.language))
+      throw new Error("Invalid language.");
+    next["pd:language"] = mutation.language;
+  } else if (mutation.type === "theme") {
     if (!["system", "light", "dark"].includes(mutation.theme))
       throw new Error("无效主题");
     next["pd:theme"] = mutation.theme;
@@ -67,8 +85,16 @@ export function change(items: Items, mutation: Mutation) {
     if (mutation.type === "identity") {
       if (mutation.last4 && !/^[0-9]{4,5}$/.test(mutation.last4))
         throw new Error("尾号需要为 4–5 位数字。");
+      if (
+        mutation.annualFee !== undefined &&
+        (!Number.isFinite(mutation.annualFee) || mutation.annualFee < 0)
+      )
+        throw new Error("Annual fee must be a non-negative number.");
       next[`${prefix}card:${card.id}`] = {
         ...card,
+        ...(mutation.annualFee !== undefined
+          ? { annualFee: mutation.annualFee }
+          : {}),
         nickname: mutation.nickname,
         last4: mutation.last4,
       };
@@ -117,7 +143,7 @@ export function change(items: Items, mutation: Mutation) {
             localDate(),
           ))
       )
-        throw new Error("完成日期必须在该福利周期内，且不能晚于今天。");
+        throw new Error("请选择不晚于今天的有效日期；尚未开始的周期不可完成。");
       const key = `${prefix}year:${card.id}:${mutation.year}`;
       const group = { ...((next[key] as Record<string, string>) ?? {}) };
       const periodKey = `${mutation.benefitId}/${mutation.index}`;

@@ -46,6 +46,8 @@ import {
   type Period,
   type DueItem,
   type Theme,
+  type Language,
+  annualValue,
 } from "./model";
 import {
   isExtension,
@@ -54,6 +56,8 @@ import {
   subscribe,
   type Mutation,
 } from "./storage";
+import { t, setLanguage } from "./i18n";
+import { CardFilter, DateEditor } from "./controls";
 import "./styles.css";
 const popup = window.location.pathname.endsWith("/popup.html");
 const money = (n: number) =>
@@ -107,13 +111,17 @@ function Modal({
     >
       <div className="modal-head">
         <h2>{title}</h2>
-        <button className="icon-button" aria-label="关闭" onClick={onClose}>
+        <button
+          className="icon-button"
+          aria-label={t("关闭")}
+          onClick={onClose}
+        >
           <X size={18} />
         </button>
       </div>
       {error && (
         <div className="error" role="alert">
-          {error}
+          {t(error)}
         </div>
       )}
       {children}
@@ -138,9 +146,16 @@ function App() {
     [demo, setDemo] = useState(
       new URLSearchParams(window.location.search).get("demo") === "1",
     ),
-    [theme, setTheme] = useState<Theme>(cachedTheme);
+    [theme, setTheme] = useState<Theme>(cachedTheme),
+    [language, setLanguageState] = useState<Language>(() => {
+      try {
+        return localStorage.getItem("pd-language") === "zh" ? "zh" : "en";
+      } catch {
+        return "en";
+      }
+    });
   const [year, setYear] = useState(new Date().getFullYear()),
-    [selected, setSelected] = useState("all"),
+    [selected, setSelected] = useState<string[] | null>(null),
     [add, setAdd] = useState(false),
     [benefitCard, setBenefitCard] = useState<Card | null>(null),
     [remove, setRemove] = useState<Card | null>(null),
@@ -156,6 +171,14 @@ function App() {
   const [search, setSearch] = useState(""),
     [product, setProduct] = useState(catalog[0].productId);
   const lock = useRef(false);
+  const [dateAnchor, setDateAnchor] = useState<HTMLElement | null>(null);
+  setLanguage(language);
+  useEffect(() => {
+    document.documentElement.lang = language === "en" ? "en" : "zh-CN";
+    try {
+      localStorage.setItem("pd-language", language);
+    } catch {}
+  }, [language]);
   useEffect(() => {
     let active = true;
     const load = () =>
@@ -164,6 +187,7 @@ function App() {
           if (active) {
             setWallet(w);
             setTheme(w.theme ?? cachedTheme());
+            setLanguageState(w.language ?? "en");
             setLoading(false);
           }
         })
@@ -227,9 +251,12 @@ function App() {
     ),
   };
   const shown = demo ? demoWallet : wallet,
-    cards = shown.cards.filter((c) => selected === "all" || c.id === selected),
+    cards = shown.cards.filter(
+      (c) => selected === null || selected.includes(c.id),
+    ),
     due = quarterDue(shown),
-    quarter = Math.floor(new Date().getMonth() / 3) + 1;
+    quarter = Math.floor(new Date().getMonth() / 3) + 1,
+    yearly = annualValue(shown, new Date().getFullYear());
   const activeHiddenCard = shown.cards.find((c) => c.id === hiddenCard?.id);
   const unset = shown.cards.reduce(
     (n, c) =>
@@ -248,7 +275,7 @@ function App() {
       setWallet(await mutate(m));
       return true;
     } catch (e) {
-      setError(e instanceof Error ? e.message : "保存失败");
+      setError(e instanceof Error ? e.message : t("保存失败"));
       return false;
     } finally {
       lock.current = false;
@@ -272,14 +299,32 @@ function App() {
     setSearch("");
     setProduct(catalog[0].productId);
   }
-  function openCompletion(card: Card, benefit: Benefit, period: Period) {
+  async function openCompletion(
+    card: Card,
+    benefit: Benefit,
+    period: Period,
+    anchor?: HTMLElement,
+  ) {
     const key = recordKey(card.id, benefit.id, period.recordYear, period.index);
-    setCompletion({ card, benefit, period, key });
-    setDate(
-      shown.records[key] ||
-        (period.end < localDate() ? period.end : localDate()),
-    );
-    setError("");
+    if (shown.records[key]) {
+      setDateAnchor(anchor ?? null);
+      setCompletion({ card, benefit, period, key });
+      setDate(shown.records[key] || localDate());
+      setError("");
+    } else
+      await save({
+        type: "complete",
+        id: card.id,
+        benefitId: benefit.id,
+        year: period.recordYear,
+        index: period.index,
+        date: localDate(),
+      });
+  }
+  async function changeLanguage() {
+    const next = language === "en" ? "zh" : "en";
+    if (await save({ type: "language", language: next }))
+      setLanguageState(next);
   }
   async function addCard(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -296,9 +341,10 @@ function App() {
       id: crypto.randomUUID(),
       nickname: String(f.get("nickname")).trim(),
       last4: String(f.get("last4")).trim(),
+      annualFee: Number(f.get("annualFee")),
     };
     if (await save({ type: "add", card })) {
-      setSelected("all");
+      setSelected(null);
       setAdd(false);
     }
   }
@@ -349,19 +395,24 @@ function App() {
   function DueList() {
     return (
       <>
-        {(popup || showAllDue ? due : due.slice(0, 4)).map((item) => (
+        {due.map((item) => (
           <div className="due-row" key={item.key}>
             <button
               className="quick-check"
               disabled={busy || demo || item.period.start > localDate()}
-              onClick={() =>
-                openCompletion(item.card, item.benefit, item.period)
+              onClick={(e) =>
+                void openCompletion(
+                  item.card,
+                  item.benefit,
+                  item.period,
+                  e.currentTarget,
+                )
               }
-              aria-label={`完成 ${item.card.nickname || item.card.name} ${item.benefit.name} ${item.period.label}`}
+              aria-label={`${t("完成")} ${item.card.nickname || item.card.name} ${item.benefit.name} ${t(item.period.label)}`}
               title={
                 item.period.start > localDate()
-                  ? `${item.period.start} 开始`
-                  : "标记完成"
+                  ? `${item.period.start} ${t("开始")}`
+                  : t("标记完成")
               }
             >
               <Check size={14} />
@@ -371,14 +422,14 @@ function App() {
               <span>
                 {item.card.nickname || item.card.name}
                 {item.card.last4 ? ` · ${item.card.last4}` : ""}{" "}
-                <span className="due-period">/ {item.period.label}</span>
+                <span className="due-period">/ {t(item.period.label)}</span>
               </span>
             </div>
             <div className="due-meta">
               <b>{value(item.benefit, item.period)}</b>
               <span>
-                {shortDate(item.period.end)} 到期
-                {item.period.start > localDate() ? " · 未开始" : ""}
+                {shortDate(item.period.end)} {t("到期")}
+                {item.period.start > localDate() ? t(" · 未开始") : ""}
               </span>
             </div>
           </div>
@@ -388,16 +439,10 @@ function App() {
             <CheckCheck size={18} />
             <span>
               {shown.cards.length
-                ? "本季度暂无待完成权益"
-                : "添加卡片后，这里会列出本季度到期的权益。"}
+                ? t("本季度暂无待完成权益")
+                : t("添加卡片后，这里会列出本季度到期的权益。")}
             </span>
           </div>
-        )}
-        {!popup && due.length > 4 && (
-          <button className="more-due" onClick={() => setShowAllDue((v) => !v)}>
-            {showAllDue ? "收起" : `查看全部 ${due.length} 项`}
-            <ChevronDown size={14} />
-          </button>
         )}
       </>
     );
@@ -407,30 +452,48 @@ function App() {
       <header className="app-header">
         <Brand />
         <div className="header-actions">
+          <button
+            className="language-toggle"
+            aria-label={
+              language === "en" ? "Switch to Chinese" : t("切换到英文")
+            }
+            disabled={busy}
+            onClick={() => void changeLanguage()}
+          >
+            {language === "en" ? t("中") : "EN"}
+          </button>
           {!popup && (
             <span className="sync">
               <Cloud size={14} />
               {demo ? "DEMO" : isExtension ? "Chrome Sync" : "Local preview"}
             </span>
           )}
-          <div className="theme-control" aria-label="主题">
-            {(["system", "light", "dark"] as Theme[]).map((t) => (
+          <div className="theme-control" aria-label={t("主题")}>
+            {(["system", "light", "dark"] as Theme[]).map((themeOption) => (
               <button
-                key={t}
-                className={theme === t ? "selected" : ""}
+                key={themeOption}
+                className={theme === themeOption ? "selected" : ""}
                 aria-label={
-                  { system: "跟随系统", light: "浅色模式", dark: "深色模式" }[t]
+                  {
+                    system: t("跟随系统"),
+                    light: t("浅色模式"),
+                    dark: t("深色模式"),
+                  }[themeOption]
                 }
                 title={
-                  { system: "跟随系统", light: "浅色模式", dark: "深色模式" }[t]
+                  {
+                    system: t("跟随系统"),
+                    light: t("浅色模式"),
+                    dark: t("深色模式"),
+                  }[themeOption]
                 }
-                aria-pressed={theme === t}
+                aria-pressed={theme === themeOption}
                 disabled={busy}
-                onClick={() => void changeTheme(t)}
+                onClick={() => void changeTheme(themeOption)}
               >
-                {t === "system" ? (
+                {themeOption === "system" ? (
                   <Monitor size={14} />
-                ) : t === "light" ? (
+                ) : themeOption === "light" ? (
                   <Sun size={14} />
                 ) : (
                   <Moon size={14} />
@@ -441,7 +504,7 @@ function App() {
           {!popup && (
             <button
               className="icon-button"
-              aria-label="关于 Perk Done"
+              aria-label={t("关于 Perk Done")}
               onClick={() => setHelp(true)}
             >
               <CircleHelp size={17} />
@@ -453,9 +516,9 @@ function App() {
         {!popup && (
           <div className="page-heading">
             <div>
-              <div className="eyebrow">A LITTLE LESS TO REMEMBER.</div>
-              <h1>Your perks, handled.</h1>
-              <p>只留下你想用的权益。其余的，藏起来就好。</p>
+              <div className="eyebrow">{t("A LITTLE LESS TO REMEMBER.")}</div>
+              <h1>{t("Your perks, handled.")}</h1>
+              <p>{t("只留下你想用的权益。其余的，藏起来就好。")}</p>
             </div>
             <button
               className="primary"
@@ -463,20 +526,20 @@ function App() {
               disabled={busy || loading}
             >
               <Plus size={16} />
-              添加信用卡
+              {t("添加信用卡")}
             </button>
           </div>
         )}
         {demo && (
           <div className="demo-banner">
-            <span>示例模式 · 不会保存示例记录</span>
+            <span>{t("示例模式 · 不会保存示例记录")}</span>
             <button
               onClick={() => {
                 setDemo(false);
-                setSelected("all");
+                setSelected(null);
               }}
             >
-              退出示例
+              {t("退出示例")}
               <X size={13} />
             </button>
           </div>
@@ -490,56 +553,95 @@ function App() {
           !remove &&
           !editCard && (
             <div className="error" role="alert">
-              {error}
-              <button aria-label="关闭错误" onClick={() => setError("")}>
+              {t(error)}
+              <button aria-label={t("关闭错误")} onClick={() => setError("")}>
                 <X size={14} />
               </button>
             </div>
           )}
         {loading ? (
           <div className="empty">
-            <p>读取权益中…</p>
+            <p>{t("读取权益中…")}</p>
           </div>
         ) : (
           <>
-            <section className="quarter-focus">
-              <div className="quarter-heading">
-                <div>
-                  <span className="eyebrow">
-                    THIS QUARTER / {new Date().getFullYear()} Q{quarter}
-                  </span>
-                  <h2>
+            {popup ? (
+              <section className="popup-stats" aria-label={t("钱包概览")}>
+                <div className="number-pair">
+                  <div>
+                    <span>{t("信用卡")}</span>
+                    <strong data-testid="card-count">
+                      {shown.cards.length}
+                    </strong>
+                  </div>
+                  <div>
+                    <span>{t("本季度待完成")}</span>
                     <strong data-testid="due-count">{due.length}</strong>
-                    <span>项权益，本季度到期</span>
-                  </h2>
+                  </div>
                 </div>
-                <span className="quarter-end">
-                  截至 {quarter * 3}/{[31, 30, 30, 31][quarter - 1]}
-                </span>
-              </div>
-              <div className="due-list">
-                <DueList />
-              </div>
-              {unset > 0 && (
-                <p className="unset-note">
-                  {unset} 项权益尚未设置实际有效期，暂不计入到期待办。
-                  {popup && (
-                    <button onClick={() => void openPanel()}>
-                      去设置
-                      <ArrowRight size={12} />
-                    </button>
+                <div className="return-stat">
+                  <span>
+                    {new Date().getFullYear()} / {t("年费与已使用权益")}
+                  </span>
+                  <div>
+                    <strong data-testid="value-ratio">
+                      {money(yearly.fees)}
+                      <i>/</i>
+                      {money(yearly.recovered)}
+                    </strong>
+                    <b data-testid="net-value">
+                      {yearly.net >= 0 ? t("赚了") : t("尚差")}{" "}
+                      {money(Math.abs(yearly.net))}
+                    </b>
+                  </div>
+                  <p>{t("按已完成权益的额度估算；房券不自动估值。")}</p>
+                  {yearly.missingFees > 0 && (
+                    <p>
+                      {yearly.missingFees} {t("张卡尚未设置年费")}
+                    </p>
                   )}
-                </p>
-              )}
-            </section>
+                </div>
+              </section>
+            ) : (
+              <section
+                className={`quarter-focus ${showAllDue ? "expanded" : "collapsed"}`}
+              >
+                <button
+                  className="quarter-disclosure"
+                  aria-expanded={showAllDue}
+                  aria-controls="quarter-list"
+                  onClick={() => setShowAllDue((v) => !v)}
+                >
+                  <span>
+                    <strong data-testid="due-count">{due.length}</strong>{" "}
+                    {t("项权益，本季度到期")}
+                  </span>
+                  <span>
+                    {new Date().getFullYear()} Q{quarter}
+                    <ChevronDown size={15} />
+                  </span>
+                </button>
+                {showAllDue && (
+                  <div id="quarter-list" className="due-list">
+                    <DueList />
+                    {unset > 0 && (
+                      <p className="unset-note">
+                        {unset}{" "}
+                        {t("项权益尚未设置实际有效期，暂不计入到期待办。")}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </section>
+            )}
             {popup ? (
               <footer className="popup-footer">
                 <span>
-                  {shown.cards.length} 张卡片 ·{" "}
+                  {shown.cards.length} {t("张卡片 ·")}{" "}
                   {isExtension ? "Chrome Sync" : "Local preview"}
                 </span>
                 <button className="primary" onClick={() => void openPanel()}>
-                  打开完整面板
+                  {t("打开完整面板")}
                   <ArrowUpRight size={14} />
                 </button>
               </footer>
@@ -547,29 +649,21 @@ function App() {
               <section className="tracker">
                 <div className="tracker-toolbar">
                   <div className="toolbar-left">
-                    <h2>我的权益</h2>
+                    <h2>{t("我的权益")}</h2>
                     <span className="card-count">
-                      {shown.cards.length} 张卡片
+                      {shown.cards.length} {t("张卡片")}
                     </span>
                     {shown.cards.length > 0 && (
-                      <select
-                        aria-label="筛选信用卡"
-                        value={selected}
-                        onChange={(e) => setSelected(e.target.value)}
-                      >
-                        <option value="all">全部信用卡</option>
-                        {shown.cards.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.nickname || c.name}
-                            {c.last4 ? ` · ${c.last4}` : ""}
-                          </option>
-                        ))}
-                      </select>
+                      <CardFilter
+                        cards={shown.cards}
+                        selected={selected}
+                        onChange={setSelected}
+                      />
                     )}
                   </div>
                   <div className="year-control">
                     <button
-                      aria-label="上一年"
+                      aria-label={t("上一年")}
                       disabled={year <= 2000}
                       onClick={() => setYear((y) => y - 1)}
                     >
@@ -577,7 +671,7 @@ function App() {
                     </button>
                     <span>{year}</span>
                     <button
-                      aria-label="下一年"
+                      aria-label={t("下一年")}
                       disabled={year >= 2100}
                       onClick={() => setYear((y) => y + 1)}
                     >
@@ -590,29 +684,34 @@ function App() {
                     <span className="empty-icon">
                       <CreditCard size={32} />
                     </span>
-                    <h3>从第一张信用卡开始</h3>
+                    <h3>{t("从第一张信用卡开始")}</h3>
                     <p>
-                      添加信用卡，保留你想用的权益。
+                      {t("添加信用卡，保留你想用的权益。")}
                       <br />
-                      全年、半年、季度、每月，自动对齐。
+                      {t("全年、半年、季度、每月，自动对齐。")}
                     </p>
                     <button className="primary" onClick={openAdd}>
                       <Plus size={16} />
-                      添加第一张信用卡
+                      {t("添加第一张信用卡")}
                     </button>
                     <button
                       className="text-button"
                       onClick={() => {
                         setDemo(true);
-                        setSelected("all");
+                        setSelected(null);
                       }}
                     >
-                      先看看示例
+                      {t("先看看示例")}
                       <ArrowUpRight size={14} />
                     </button>
                   </div>
                 ) : (
                   <div className="timeline-scroll">
+                    {cards.length === 0 && (
+                      <p className="filter-empty">
+                        {t("请选择至少一张信用卡查看权益。")}
+                      </p>
+                    )}
                     <div className="timeline">
                       <div className="month-row">
                         <div className="label-cell">PERKS / {year}</div>
@@ -657,8 +756,8 @@ function App() {
                             <div className="card-actions">
                               <button
                                 className="icon-button"
-                                aria-label={`编辑 ${card.nickname || card.name} 昵称与尾号`}
-                                title="编辑昵称与尾号"
+                                aria-label={`${t("编辑卡片")} ${card.nickname || card.name}`}
+                                title={t("编辑昵称与尾号")}
                                 disabled={demo || busy}
                                 onClick={() => {
                                   setEditCard(card);
@@ -672,8 +771,8 @@ function App() {
                                   href={card.source}
                                   target="_blank"
                                   rel="noreferrer"
-                                  aria-label={`${card.name} 官方条款`}
-                                  title="官方条款"
+                                  aria-label={`${card.name} ${t("官方条款")}`}
+                                  title={t("官方条款")}
                                 >
                                   <ArrowUpRight size={16} />
                                 </a>
@@ -684,15 +783,15 @@ function App() {
                                   setBenefitCard(card);
                                   setError("");
                                 }}
-                                title="添加福利"
+                                title={t("添加福利")}
                               >
                                 <Plus size={14} />
-                                福利
+                                {t("福利")}
                               </button>
                               <button
                                 className="icon-button"
                                 disabled={demo || busy}
-                                aria-label={`移除 ${card.nickname || card.name}`}
+                                aria-label={`${t("移除")} ${card.nickname || card.name}`}
                                 onClick={() => setRemove(card)}
                               >
                                 <Trash2 size={14} />
@@ -701,12 +800,16 @@ function App() {
                           </div>
                           {card.benefits.length === 0 && (
                             <div className="no-benefits">
-                              <p>{card.description || "这张卡还没有权益。"}</p>
+                              <p>
+                                {card.description
+                                  ? t(card.description)
+                                  : t("这张卡还没有权益。")}
+                              </p>
                               <button
                                 className="text-button"
                                 onClick={() => setBenefitCard(card)}
                               >
-                                添加第一项福利
+                                {t("添加第一项福利")}
                                 <Plus size={13} />
                               </button>
                             </div>
@@ -722,12 +825,14 @@ function App() {
                                 >
                                   <div className="benefit-label">
                                     <div className="benefit-name">
-                                      <b title={benefit.note}>{benefit.name}</b>
+                                      <b title={t(benefit.note ?? "")}>
+                                        {benefit.name}
+                                      </b>
                                       <button
                                         className="hide-perk"
                                         disabled={demo || busy}
-                                        aria-label={`隐藏 ${card.nickname || card.name} ${benefit.name}`}
-                                        title="隐藏此权益"
+                                        aria-label={`${t("隐藏")} ${card.nickname || card.name} ${benefit.name}`}
+                                        title={t("隐藏此权益")}
                                         onClick={() =>
                                           void save({
                                             type: "hidden",
@@ -741,7 +846,7 @@ function App() {
                                       </button>
                                     </div>
                                     <span>
-                                      {frequencies[benefit.frequency]} ·{" "}
+                                      {t(frequencies[benefit.frequency])} ·{" "}
                                       {value(benefit)}
                                       {benefit.decemberExtra
                                         ? " · DEC +$20"
@@ -758,8 +863,8 @@ function App() {
                                           <>
                                             <span>
                                               {benefit.schedule
-                                                ? "此有效期不在所选年份"
-                                                : "按银行账户实际有效期追踪"}
+                                                ? t("此有效期不在所选年份")
+                                                : t("按银行账户实际有效期追踪")}
                                             </span>
                                             <button
                                               disabled={demo || busy}
@@ -770,12 +875,16 @@ function App() {
                                             >
                                               <Settings2 size={13} />
                                               {benefit.schedule
-                                                ? "修改有效期"
-                                                : "设置有效期"}
+                                                ? t("修改有效期")
+                                                : t("设置有效期")}
                                             </button>
                                           </>
                                         ) : (
-                                          <span>此权益在 {year} 年不适用</span>
+                                          <span>
+                                            {t("此权益在")}
+                                            {year}
+                                            {t("年不适用")}
+                                          </span>
                                         )}
                                       </div>
                                     ) : (
@@ -808,16 +917,21 @@ function App() {
                                                 demo ||
                                                 status === "future"
                                               }
-                                              aria-label={`${card.nickname || card.name} ${benefit.name} ${p.recordYear} ${p.label} ${done ? `Done ${done}` : "标记完成"}`}
-                                              title={`${p.start} — ${p.end}${benefit.note ? `\n${benefit.note}` : ""}`}
-                                              onClick={() =>
-                                                openCompletion(card, benefit, p)
+                                              aria-label={`${card.nickname || card.name} ${benefit.name} ${p.recordYear} ${t(p.label)} ${done ? `Done ${done}` : t("标记完成")}`}
+                                              title={`${p.start} — ${p.end}${benefit.note ? `\n${t(benefit.note ?? "")}` : ""}`}
+                                              onClick={(e) =>
+                                                void openCompletion(
+                                                  card,
+                                                  benefit,
+                                                  p,
+                                                  e.currentTarget,
+                                                )
                                               }
                                             >
                                               <span className="period-top">
                                                 {benefit.frequency === "manual"
                                                   ? `${p.start} → ${p.end}`
-                                                  : p.label}
+                                                  : t(p.label)}
                                                 <span>{value(benefit, p)}</span>
                                               </span>
                                               <span className="period-state">
@@ -835,23 +949,23 @@ function App() {
                                                   <>
                                                     <span className="status-dot" />
                                                     {status === "future"
-                                                      ? "未开始"
+                                                      ? t("未开始")
                                                       : status === "expired"
-                                                        ? "未记录"
-                                                        : "待完成"}
+                                                        ? t("未记录")
+                                                        : t("待完成")}
                                                   </>
                                                 )}
                                               </span>
                                               {benefit.expiryOffsetDays && (
                                                 <span className="expiry-note">
-                                                  {shortDate(p.end)} 到期
+                                                  {shortDate(p.end)} {t("到期")}
                                                 </span>
                                               )}
                                             </button>
                                             {benefit.frequency === "manual" && (
                                               <button
                                                 className="schedule-edit"
-                                                aria-label={`修改 ${benefit.name} 有效期`}
+                                                aria-label={`${t("修改")} ${benefit.name} ${t("有效期")}`}
                                                 disabled={demo || busy}
                                                 onClick={() =>
                                                   setSchedule({ card, benefit })
@@ -877,12 +991,12 @@ function App() {
                                   setHiddenCard(card);
                                   setError("");
                                 }}
-                                title="Show hidden perks"
-                                aria-label={`Show hidden perks · ${card.nickname || card.name}`}
+                                title={t("Show hidden perks")}
+                                aria-label={`${t("Show hidden perks")} · ${card.nickname || card.name}`}
                               >
                                 <MoreHorizontal size={21} />
                                 <span className="hidden-tooltip">
-                                  Show hidden perks
+                                  {t("Show hidden perks")}
                                 </span>
                               </button>
                             </div>
@@ -895,21 +1009,21 @@ function App() {
                 <footer className="tracker-footer">
                   <span>
                     <Check size={13} />
-                    已完成
+                    {t("已完成")}
                     <span className="legend-dot" />
-                    待完成
+                    {t("待完成")}
                     <span className="legend-empty" />
-                    未开始 / 未记录
+                    {t("未开始 / 未记录")}
                   </span>
-                  <span>点击记录日期 · 隐藏不会删除历史</span>
+                  <span>{t("点击记录日期 · 隐藏不会删除历史")}</span>
                 </footer>
               </section>
             )}
             {!popup && (
               <footer className="page-footer">
-                <span>Less noise. More perks.</span>
+                <span>{t("Less noise. More perks.")}</span>
                 <button onClick={() => setHelp(true)}>
-                  福利条款与数据说明
+                  {t("福利条款与数据说明")}
                   <ArrowUpRight size={12} />
                 </button>
               </footer>
@@ -918,15 +1032,19 @@ function App() {
         )}
       </main>
       {add && (
-        <Modal error={error} title="添加信用卡" onClose={() => setAdd(false)}>
+        <Modal
+          error={t(error)}
+          title={t("添加信用卡")}
+          onClose={() => setAdd(false)}
+        >
           <form onSubmit={addCard}>
             <p className="modal-copy">
-              选择卡片，福利会自动添加。只保留你想追踪的即可。
+              {t("选择卡片，福利会自动添加。只保留你想追踪的即可。")}
             </p>
             <label>
-              搜索卡片
+              {t("搜索卡片")}
               <input
-                placeholder="CSP、栗子卡、白金…"
+                placeholder={t("CSP、栗子卡、白金…")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -953,7 +1071,7 @@ function App() {
                     <span>
                       <b>{p.name}</b>
                       <small>
-                        {p.bank} · {p.benefits.length} 项可追踪权益
+                        {p.bank} · {p.benefits.length} {t("项可追踪权益")}
                       </small>
                     </span>
                     {product === p.productId && <Check size={16} />}
@@ -970,8 +1088,8 @@ function App() {
                   <Plus size={17} />
                 </span>
                 <span>
-                  <b>自定义信用卡</b>
-                  <small>其他卡片或专属权益</small>
+                  <b>{t("自定义信用卡")}</b>
+                  <small>{t("其他卡片或专属权益")}</small>
                 </span>
                 {product === "custom" && <Check size={16} />}
               </button>
@@ -979,22 +1097,22 @@ function App() {
             {product === "custom" && (
               <div className="form-pair">
                 <label>
-                  卡片名称
+                  {t("卡片名称")}
                   <input name="name" required maxLength={80} />
                 </label>
                 <label>
-                  发卡银行
+                  {t("发卡银行")}
                   <input name="bank" required maxLength={60} />
                 </label>
               </div>
             )}
             <div className="form-pair">
               <label>
-                昵称（可选）
+                {t("昵称（可选）")}
                 <input name="nickname" maxLength={40} placeholder="Aspire 1" />
               </label>
               <label>
-                尾号（可选，4–5 位）
+                {t("尾号（可选，4–5 位）")}
                 <input
                   name="last4"
                   inputMode="numeric"
@@ -1004,19 +1122,34 @@ function App() {
                 />
               </label>
             </div>
+            <label>
+              {t("实际年费（USD）")}
+              <input
+                key={product}
+                name="annualFee"
+                type="number"
+                min="0"
+                max="100000"
+                step="0.01"
+                required
+                defaultValue={
+                  catalog.find((c) => c.productId === product)?.annualFee ?? 0
+                }
+              />
+            </label>
             <p className="field-hint">
-              Amex 可用后五位区分卡片，无需完整卡号。
+              {t("Amex 可用后五位区分卡片，无需完整卡号。")}
             </p>
             <button className="primary form-submit" disabled={busy}>
-              {busy ? "保存中…" : "添加到我的卡片"}
+              {busy ? t("保存中…") : t("添加到我的卡片")}
             </button>
           </form>
         </Modal>
       )}
       {benefitCard && (
         <Modal
-          error={error}
-          title="添加自定义福利"
+          error={t(error)}
+          title={t("添加自定义福利")}
           onClose={() => setBenefitCard(null)}
         >
           <form onSubmit={addBenefit}>
@@ -1024,17 +1157,17 @@ function App() {
               {benefitCard.nickname || benefitCard.name}
             </p>
             <label>
-              福利名称
+              {t("福利名称")}
               <input
                 name="name"
                 required
                 maxLength={80}
-                placeholder="年度旅行报销"
+                placeholder={t("年度旅行报销")}
               />
             </label>
             <div className="form-pair">
               <label>
-                每个周期的额度（USD）
+                {t("每个周期的额度（USD）")}
                 <input
                   type="number"
                   name="amount"
@@ -1046,106 +1179,57 @@ function App() {
                 />
               </label>
               <label>
-                重置周期
+                {t("重置周期")}
                 <select name="frequency" defaultValue="quarterly">
                   {Object.entries(frequencies).map(([key, label]) => (
                     <option key={key} value={key}>
-                      {label}
+                      {t(label)}
                     </option>
                   ))}
                 </select>
               </label>
             </div>
             <label>
-              备注（可选）
+              {t("备注（可选）")}
               <input
                 name="note"
                 maxLength={240}
-                placeholder="需要 enrollment"
+                placeholder={t("需要 enrollment")}
               />
             </label>
             <p className="field-hint">
-              非自然年权益请选择「实际有效期」，添加后填写银行显示的日期。
+              {t(
+                "非自然年权益请选择「实际有效期」，添加后填写银行显示的日期。",
+              )}
             </p>
             <button className="primary form-submit" disabled={busy}>
-              添加福利
+              {t("添加福利")}
             </button>
           </form>
         </Modal>
       )}
       {completion && (
-        <Modal
-          error={error}
-          title={shown.records[completion.key] ? "完成记录" : "标记福利完成"}
+        <DateEditor
+          item={completion}
+          anchor={dateAnchor}
+          date={date}
+          setDate={setDate}
           onClose={() => setCompletion(null)}
-        >
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void finish(date);
-            }}
-          >
-            <p className="modal-copy">
-              {completion.benefit.name}
-              <br />
-              {completion.card.nickname || completion.card.name} ·{" "}
-              {completion.period.label} ·{" "}
-              {value(completion.benefit, completion.period)}
-            </p>
-            <label>
-              完成日期
-              <input
-                type="date"
-                required
-                min={completion.period.start}
-                max={
-                  completion.period.end < localDate()
-                    ? completion.period.end
-                    : localDate()
-                }
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </label>
-            <p className="field-hint">
-              {completion.benefit.note || "记录你使用福利的日期。"}
-            </p>
-            <button
-              className="primary form-submit"
-              disabled={
-                busy ||
-                !validCompletion(
-                  date,
-                  completion.period.start,
-                  completion.period.end,
-                )
-              }
-            >
-              <Check size={16} />
-              {shown.records[completion.key] ? "保存日期" : "完成"}
-            </button>
-            {shown.records[completion.key] && (
-              <button
-                type="button"
-                className="undo"
-                disabled={busy}
-                onClick={() => void finish(null)}
-              >
-                撤销完成记录
-              </button>
-            )}
-          </form>
-        </Modal>
+          error={t(error)}
+          busy={busy}
+          onSave={() => void finish(date)}
+          onUndo={() => void finish(null)}
+        />
       )}
       {hiddenCard && (
         <Modal
-          error={error}
-          title="Hidden perks"
+          error={t(error)}
+          title={t("Hidden perks")}
           onClose={() => setHiddenCard(null)}
         >
           <p className="modal-copy">
-            {hiddenCard.nickname || hiddenCard.name} ·
-            隐藏的权益不计入待办，完成记录仍保留。
+            {hiddenCard.nickname || hiddenCard.name}
+            {t("· 隐藏的权益不计入待办，完成记录仍保留。")}
           </p>
           <div className="hidden-list">
             {activeHiddenCard?.benefits
@@ -1155,13 +1239,13 @@ function App() {
                   <span>
                     <b>{b.name}</b>
                     <small>
-                      {frequencies[b.frequency]} · {value(b)}
+                      {t(frequencies[b.frequency])} · {value(b)}
                     </small>
                   </span>
                   <button
                     className="secondary"
                     disabled={busy || demo}
-                    aria-label={`恢复 ${b.name}`}
+                    aria-label={`${t("恢复")} ${b.name}`}
                     onClick={() =>
                       void save({
                         type: "hidden",
@@ -1172,31 +1256,31 @@ function App() {
                     }
                   >
                     <Eye size={13} />
-                    恢复
+                    {t("恢复")}
                   </button>
                 </div>
               ))}
             {!activeHiddenCard?.benefits.some((b) => b.hidden) && (
-              <p className="field-hint">所有权益都已恢复显示。</p>
+              <p className="field-hint">{t("所有权益都已恢复显示。")}</p>
             )}
           </div>
         </Modal>
       )}
       {schedule && (
         <Modal
-          error={error}
-          title="设置实际有效期"
+          error={t(error)}
+          title={t("设置实际有效期")}
           onClose={() => setSchedule(null)}
         >
           <form onSubmit={saveSchedule}>
             <p className="modal-copy">
               {schedule.benefit.name}
               <br />
-              {schedule.benefit.note}
+              {t(schedule.benefit.note ?? "")}
             </p>
             <div className="form-pair">
               <label>
-                开始日期
+                {t("开始日期")}
                 <input
                   type="date"
                   name="start"
@@ -1205,7 +1289,7 @@ function App() {
                 />
               </label>
               <label>
-                到期日期
+                {t("到期日期")}
                 <input
                   type="date"
                   name="end"
@@ -1215,16 +1299,22 @@ function App() {
               </label>
             </div>
             <p className="field-hint">
-              请照银行账户填写。不会自动按自然年重置；下一周期可修改日期。旧记录保留，新日期区间单独计数。
+              {t(
+                "请照银行账户填写。不会自动按自然年重置；下一周期可修改日期。旧记录保留，新日期区间单独计数。",
+              )}
             </p>
             <button className="primary form-submit" disabled={busy}>
-              保存有效期
+              {t("保存有效期")}
             </button>
           </form>
         </Modal>
       )}
       {editCard && (
-        <Modal title="编辑卡片" error={error} onClose={() => setEditCard(null)}>
+        <Modal
+          title={t("编辑卡片")}
+          error={t(error)}
+          onClose={() => setEditCard(null)}
+        >
           <form
             onSubmit={async (e) => {
               e.preventDefault();
@@ -1235,6 +1325,7 @@ function App() {
                   id: editCard.id,
                   nickname: String(f.get("nickname")).trim(),
                   last4: String(f.get("last4")).trim(),
+                  annualFee: Number(f.get("annualFee")),
                 })
               )
                 setEditCard(null);
@@ -1243,7 +1334,7 @@ function App() {
             <p className="modal-copy">{editCard.name}</p>
             <div className="form-pair">
               <label>
-                昵称（可选）
+                {t("昵称（可选）")}
                 <input
                   name="nickname"
                   maxLength={40}
@@ -1251,7 +1342,7 @@ function App() {
                 />
               </label>
               <label>
-                尾号（可选，4–5 位）
+                {t("尾号（可选，4–5 位）")}
                 <input
                   name="last4"
                   inputMode="numeric"
@@ -1261,22 +1352,39 @@ function App() {
                 />
               </label>
             </div>
+            <label>
+              {t("实际年费（USD）")}
+              <input
+                name="annualFee"
+                type="number"
+                min="0"
+                max="100000"
+                step="0.01"
+                required
+                defaultValue={editCard.annualFee ?? 0}
+              />
+            </label>
             <button className="primary form-submit" disabled={busy}>
-              保存卡片
+              {t("保存卡片")}
             </button>
           </form>
         </Modal>
       )}
       {remove && (
-        <Modal error={error} title="移除信用卡" onClose={() => setRemove(null)}>
+        <Modal
+          error={t(error)}
+          title={t("移除信用卡")}
+          onClose={() => setRemove(null)}
+        >
           <p className="modal-copy">
-            移除 {remove.nickname || remove.name}
+            {t("移除")}
+            {remove.nickname || remove.name}
             {remove.last4 ? ` · ${remove.last4}` : ""}
-            ？所有年度完成记录也会删除。
+            {t("？所有年度完成记录也会删除。")}
           </p>
           <div className="dialog-actions">
             <button onClick={() => setRemove(null)} className="secondary">
-              取消
+              {t("取消")}
             </button>
             <button
               className="primary"
@@ -1284,35 +1392,42 @@ function App() {
               onClick={async () => {
                 if (await save({ type: "remove", id: remove.id })) {
                   setRemove(null);
-                  setSelected("all");
+                  setSelected(null);
                 }
               }}
             >
-              移除卡片
+              {t("移除卡片")}
             </button>
           </div>
         </Modal>
       )}
       {help && (
-        <Modal title="关于 Perk Done" onClose={() => setHelp(false)}>
+        <Modal title={t("关于 Perk Done")} onClose={() => setHelp(false)}>
           <div className="about">
             <p>
-              扩展图标打开紧凑弹窗，用于查看本季度到期的权益和快速完成；完整面板用于管理卡片、时间轴、历史记录和隐藏权益。
+              {t(
+                "扩展图标打开紧凑弹窗，用于查看本季度到期的权益和快速完成；完整面板用于管理卡片、时间轴、历史记录和隐藏权益。",
+              )}
             </p>
             <p>
-              本季度待办包含尚未完成且到期日在今天至本季度末之间的周期（含尚未开始的月份）。隐藏的权益、已过期周期、未设置有效期的房券或账户周年额度不会计入。
+              {t(
+                "本季度待办包含尚未完成且到期日在今天至本季度末之间的周期（含尚未开始的月份）。隐藏的权益、已过期周期、未设置有效期的房券或账户周年额度不会计入。",
+              )}
             </p>
             <p>
-              信用卡目录来自随扩展打包的 JSON，核对日期 2026-10-01；无 API
-              或后台抓取。点击卡片箭头查看官方条款，实际资格和额度以银行账户为准。
+              {t(
+                "信用卡目录来自随扩展打包的 JSON，核对日期 2026-10-01；无 API 或后台抓取。点击卡片箭头查看官方条款，实际资格和额度以银行账户为准。",
+              )}
             </p>
             <p>
-              Chrome Sync
-              需要登录并启用同步。这里只能确认使用了同步存储区域，无法确认账号同步状态。离线可使用，同一年度数据跨设备同时修改可能以后写入者为准。
+              {t(
+                "Chrome Sync 需要登录并启用同步。这里只能确认使用了同步存储区域，无法确认账号同步状态。离线可使用，同一年度数据跨设备同时修改可能以后写入者为准。",
+              )}
             </p>
             <p>
-              不读取网页、交易或银行登录。只存产品、昵称、可选 4–5
-              位尾号、隐藏设置、有效期、完成日期和主题。网页预览使用独立的本地存储；示例不保存。
+              {t(
+                "不读取网页、交易或银行登录。只存产品、昵称、可选 4–5 位尾号、隐藏设置、有效期、完成日期和主题。网页预览使用独立的本地存储；示例不保存。",
+              )}
             </p>
           </div>
         </Modal>

@@ -1,5 +1,6 @@
 export type Frequency =
   "annual" | "semiannual" | "quarterly" | "monthly" | "manual";
+export type Language = "en" | "zh";
 export type Theme = "system" | "light" | "dark";
 export type Benefit = {
   id: string;
@@ -28,10 +29,16 @@ export type Card = {
   verified?: string;
   description?: string;
   aliases?: string[];
+  annualFee?: number;
 };
 export type Product = Omit<Card, "id" | "nickname" | "last4">;
 export type Records = Record<string, string>;
-export type Wallet = { cards: Card[]; records: Records; theme?: Theme };
+export type Wallet = {
+  cards: Card[];
+  records: Records;
+  theme?: Theme;
+  language?: Language;
+};
 export type Period = {
   index: number | string;
   recordYear: number;
@@ -149,10 +156,10 @@ export function periodAmount(benefit: Benefit, startMonth: number) {
 export function validCompletion(
   date: string,
   start: string,
-  end: string,
+  _end: string,
   today = localDate(),
 ) {
-  return isDate(date) && date >= start && date <= end && date <= today;
+  return isDate(date) && date <= today && start <= today;
 }
 export type DueItem = {
   card: Card;
@@ -194,4 +201,43 @@ export function quarterDue(wallet: Wallet, today = localDate()): DueItem[] {
       a.card.name.localeCompare(b.card.name) ||
       a.benefit.name.localeCompare(b.benefit.name),
   );
+}
+
+// Face value of completed cash-equivalent perks, attributed to their calendar period.
+// Hidden completions still count: hiding a perk does not undo value already used.
+export function annualValue(wallet: Wallet, year: number) {
+  let recovered = 0;
+  const seen = new Set<string>();
+  for (const card of wallet.cards)
+    for (const benefit of card.benefits) {
+      if (benefit.frequency === "manual") {
+        for (const [key, date] of Object.entries(wallet.records)) {
+          const parts = key.split("/");
+          if (
+            parts[0] === card.id &&
+            parts[2] === benefit.id &&
+            Number(date.slice(0, 4)) === year &&
+            !seen.has(key)
+          ) {
+            recovered += benefit.amount;
+            seen.add(key);
+          }
+        }
+      } else
+        for (const p of benefitPeriods(benefit, year)) {
+          const key = recordKey(card.id, benefit.id, p.recordYear, p.index);
+          if (wallet.records[key] && !seen.has(key)) {
+            recovered += periodAmount(benefit, p.startMonth);
+            seen.add(key);
+          }
+        }
+    }
+  const fees = wallet.cards.reduce((n, c) => n + (c.annualFee ?? 0), 0);
+  recovered = Math.round(recovered * 100) / 100;
+  return {
+    fees: Math.round(fees * 100) / 100,
+    recovered,
+    net: Math.round((recovered - fees) * 100) / 100,
+    missingFees: wallet.cards.filter((c) => c.annualFee === undefined).length,
+  };
 }

@@ -14,6 +14,7 @@ export function hydrateCard(card: Card): Card {
   );
   return {
     ...card,
+    annualFee: card.annualFee ?? product.annualFee,
     name: product.name,
     bank: product.bank,
     source: product.source,
