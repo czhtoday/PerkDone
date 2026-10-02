@@ -16,8 +16,8 @@ npm run build
 ```
 
 For behavior changes, check the relevant popup/dashboard flows in both themes.
-For storage changes, preserve existing records and test migration. The README
-explains how to run the actual-extension browser checks.
+For storage changes, preserve existing records and test migration. The [development notes](docs/development.md)
+explain how to run the actual-extension browser checks.
 
 Catalog contributions should cite official issuer terms and include a
 verification date. Keep product and perk IDs stable, distinguish calendar-year
