@@ -1,9 +1,12 @@
 import data from "./data/cards.json";
 import type { Card, Product } from "./model";
-export const catalog = data.products as Product[];
+const products = data.products as Product[];
+export const catalog = products.filter(
+  (p) => p.annualFee !== 0 || p.benefits.length > 0,
+);
 // Existing cards retain stable IDs, custom perks, hidden state and manually configured dates.
 export function hydrateCard(card: Card): Card {
-  const product = catalog.find((p) => p.productId === card.productId);
+  const product = products.find((p) => p.productId === card.productId);
   if (!product) return card;
   const benefits = product.benefits.map((b) => {
     const old = card.benefits.find((x) => x.id === b.id);

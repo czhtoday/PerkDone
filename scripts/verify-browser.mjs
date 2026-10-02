@@ -1,3 +1,4 @@
+import catalogData from "../src/data/cards.json" with { type: "json" };
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, rmSync, readFileSync } from "node:fs";
@@ -43,11 +44,14 @@ try {
     await page.getByRole("button", { name: "Add a card", exact: true }).click();
     if (!search) {
       await page.waitForFunction(
-        () =>
-          document.querySelectorAll(".product img").length === 10 &&
+        (expected) =>
+          document.querySelectorAll(".product img").length === expected &&
           [...document.querySelectorAll(".product img")].every(
             (i) => i.complete && i.naturalWidth > 0,
           ),
+        catalogData.products.filter(
+          (p) => (p.annualFee !== 0 || p.benefits.length) && p.image,
+        ).length,
       );
       assert.ok(
         await page
@@ -143,6 +147,31 @@ try {
     .first()
     .evaluate((e) => getComputedStyle(e).color);
   assert.equal(doneState, "rgb(8, 123, 230)");
+  await page.waitForFunction(() => {
+    const cell = document.querySelector(".period.done");
+    return (
+      cell &&
+      getComputedStyle(cell).borderColor ===
+        getComputedStyle(cell.querySelector(".period-state")).color
+    );
+  });
+  const marker = await page
+    .locator(".period.done .completion-circle")
+    .first()
+    .evaluate((e) => ({
+      fill: getComputedStyle(e).backgroundColor,
+      shape: getComputedStyle(e).borderRadius,
+      checked: !!e.querySelector("svg"),
+      border: getComputedStyle(e.closest(".period")).borderColor,
+    }));
+  assert.equal(marker.fill, doneState);
+  assert.equal(marker.shape, "50%");
+  assert.equal(marker.checked, true);
+  assert.equal(marker.border, doneState);
+  assert.equal(
+    await page.locator(".period:not(.done) .completion-circle svg").count(),
+    0,
+  );
   const popup = await context.newPage();
   await popup.setViewportSize({ width: 430, height: 600 });
   await popup.goto(base + "popup.html");

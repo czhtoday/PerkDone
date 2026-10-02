@@ -1515,7 +1515,7 @@ input::placeholder {
 .period.done,
 .period.done:hover:not(:disabled) {
   background: var(--selected-bg);
-  border-color: var(--selected-border);
+  border-color: var(--blue);
   color: var(--text);
   box-shadow: none;
 }
@@ -1618,4 +1618,38 @@ input::placeholder {
 .card-art > span {
   font-size: 7px;
   letter-spacing: 0;
+}
+
+/* Completion uses both shape and color, with the same quiet surface in each theme. */
+.completion-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  border: 1.5px solid var(--muted);
+  border-radius: 50%;
+}
+.period.done .completion-circle {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--surface);
+}
+.period.future .completion-circle,
+.period.expired .completion-circle {
+  opacity: 0.5;
+}
+.compact .completion-circle {
+  width: 12px;
+  height: 12px;
+  flex-basis: 12px;
+}
+.compact .completion-circle svg {
+  width: 8px;
+  height: 8px;
+}
+.period:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
 }

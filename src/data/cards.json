@@ -437,6 +437,38 @@
           "frequency": "manual",
           "note": "续卡房券；以 IHG 账户实际有效期为准。",
           "valueLabel": "50,000 points / night"
+        },
+        {
+          "id": "food",
+          "name": "IHG Food & Beverage Voucher",
+          "amount": 25,
+          "frequency": "quarterly",
+          "note": "每季签发并于当季末到期；仅参与 IHG 酒店的合格房账餐饮。"
+        },
+        {
+          "id": "airline",
+          "name": "Airline Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "自然年直接向航空公司购买机票累计满 $250；至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "instacart",
+          "name": "Instacart Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "doordash",
+          "name": "DoorDash Non-restaurant Promo",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需在 2026-09-01 或之后激活指定 DashPass；每月一次非餐厅优惠至 2027-12-31。",
+          "validFrom": "2026-09-01",
+          "validUntil": "2027-12-31"
         }
       ],
       "aliases": ["IHG", "洲际", "Premier"],
@@ -444,6 +476,1713 @@
       "annualFee": 150,
       "image": "cards/chase-ihg-premier.png",
       "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/ihgpremiercardart2026.png"
+    },
+    {
+      "productId": "amex-business-platinum",
+      "name": "Business Platinum",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 895,
+      "source": "https://www.americanexpress.com/us/credit-cards/business/business-credit-cards/american-express-business-platinum-credit-card-amex/",
+      "verified": "2026-10-01",
+      "aliases": ["商务白金", "Biz Plat"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Hotel Credit · FHR / THC",
+          "amount": 300,
+          "frequency": "semiannual",
+          "note": "预付 Amex Travel FHR / THC；THC 至少两晚。"
+        },
+        {
+          "id": "hilton",
+          "name": "Hilton for Business Credit",
+          "amount": 50,
+          "frequency": "quarterly",
+          "note": "需要注册权益和 Hilton for Business；直接向 Hilton 酒店支付。"
+        },
+        {
+          "id": "airline",
+          "name": "Airline Fee Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "选择一家指定航空公司；仅合格杂费。"
+        },
+        {
+          "id": "clear",
+          "name": "CLEAR+ Credit",
+          "amount": 219,
+          "frequency": "annual",
+          "note": "CLEAR+ 会员费；不含税费。"
+        },
+        {
+          "id": "dell",
+          "name": "Dell Credit",
+          "amount": 150,
+          "frequency": "annual",
+          "note": "注册后直接在美国 Dell 消费。"
+        },
+        {
+          "id": "dell-spend",
+          "name": "Dell Spend-earned Credit",
+          "amount": 1000,
+          "frequency": "annual",
+          "note": "注册并在自然年累计美国 Dell 消费满 $5,000 才获得额外额度。"
+        },
+        {
+          "id": "adobe",
+          "name": "Adobe Spend-earned Credit",
+          "amount": 250,
+          "frequency": "annual",
+          "note": "注册并在自然年累计美国 Adobe 消费满 $600。"
+        },
+        {
+          "id": "chatgpt",
+          "name": "ChatGPT Business Credit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "需要注册；美国 ChatGPT Business 订阅，非个人 Plus / Pro。"
+        },
+        {
+          "id": "indeed",
+          "name": "Indeed Credit",
+          "amount": 90,
+          "frequency": "quarterly",
+          "note": "注册后直接在 Indeed 消费。"
+        },
+        {
+          "id": "wireless",
+          "name": "Wireless Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；直接向美国无线电话服务商支付。"
+        }
+      ],
+      "image": "cards/amex-business-platinum.png",
+      "imageSource": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/open/category/cardarts/business-platinum.png"
+    },
+    {
+      "productId": "amex-business-gold",
+      "name": "Business Gold",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 375,
+      "source": "https://www.americanexpress.com/us/credit-cards/business/business-credit-cards/american-express-business-gold-card-amex/61493/",
+      "verified": "2026-10-01",
+      "aliases": ["商务金", "Biz Gold"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "flexible",
+          "name": "Flexible Business Credit",
+          "amount": 20,
+          "frequency": "monthly",
+          "note": "注册后用于美国 Grubhub、办公用品店和 UPS.com 发货。"
+        },
+        {
+          "id": "chatgpt",
+          "name": "ChatGPT Business Credit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "需要注册；美国 ChatGPT Business 订阅，非个人 Plus / Pro。"
+        },
+        {
+          "id": "squarespace",
+          "name": "Squarespace Credit",
+          "amount": 150,
+          "frequency": "annual",
+          "note": "注册后符合条件的美国 Squarespace 消费。"
+        },
+        {
+          "id": "walmart",
+          "name": "Walmart+ Membership",
+          "amount": 12.95,
+          "frequency": "monthly",
+          "note": "月付 Walmart+ 会员费，另加适用税费；不含 Plus Up。"
+        }
+      ],
+      "image": "cards/amex-business-gold.png",
+      "imageSource": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/open/category/cardarts/business-gold.png"
+    },
+    {
+      "productId": "amex-hilton-business",
+      "name": "Hilton Honors Business",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 195,
+      "source": "https://www.americanexpress.com/us/credit-cards/business/business-credit-cards/hilton-honors/",
+      "verified": "2026-10-01",
+      "aliases": ["Hilton Biz", "希尔顿商务"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hilton",
+          "name": "Hilton Credit",
+          "amount": 60,
+          "frequency": "quarterly",
+          "note": "每季度直接向 Hilton 酒店支付；房券不再是固定权益。"
+        }
+      ],
+      "image": "cards/amex-hilton-business.png",
+      "imageSource": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/open/category/cardarts/hilton-honors.png"
+    },
+    {
+      "productId": "amex-brilliant",
+      "name": "Marriott Bonvoy Brilliant",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 650,
+      "source": "https://www.americanexpress.com/us/credit-cards/card/marriott-bonvoy-brilliant/",
+      "verified": "2026-10-01",
+      "aliases": ["万豪大白", "Brilliant"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "dining",
+          "name": "Dining Credit",
+          "amount": 25,
+          "frequency": "monthly",
+          "note": "全球符合条件的餐厅消费。"
+        },
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡后签发；以账户实际有效期为准。",
+          "valueLabel": "85,000 points / night"
+        }
+      ],
+      "image": "cards/amex-brilliant.png",
+      "imageSource": "https://icm.aexp-static.com/acquisition/card-art/NUS000000313_480x304_straight_withname.png"
+    },
+    {
+      "productId": "amex-marriott-business",
+      "name": "Marriott Bonvoy Business",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 125,
+      "source": "https://www.americanexpress.com/us/credit-cards/business/business-credit-cards/amex-marriott-bonvoy-business-credit-card/",
+      "verified": "2026-10-01",
+      "aliases": ["万豪商务"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡后签发；以账户实际有效期为准。",
+          "valueLabel": "35,000 points / night"
+        },
+        {
+          "id": "spend-night",
+          "name": "Spend-earned Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "自然年消费满 $60,000 后签发；填写实际有效期。",
+          "valueLabel": "35,000 points / night"
+        }
+      ],
+      "image": "cards/amex-marriott-business.png",
+      "imageSource": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/open/category/cardarts/amex-marriott-bonvoy-business.png"
+    },
+    {
+      "productId": "amex-bevy",
+      "name": "Marriott Bonvoy Bevy",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 250,
+      "source": "https://www.americanexpress.com/us/credit-cards/card/marriott-bonvoy-bevy/",
+      "verified": "2026-10-01",
+      "aliases": [],
+      "description": "",
+      "benefits": [
+        {
+          "id": "spend-night",
+          "name": "Spend-earned Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "自然年消费满 $15,000 后签发；没有自动续卡房券。",
+          "valueLabel": "50,000 points / night"
+        }
+      ],
+      "image": "cards/amex-bevy.png",
+      "imageSource": "https://icm.aexp-static.com/acquisition/card-art/NUS000000311_480x304_straight_withname.png"
+    },
+    {
+      "productId": "amex-green",
+      "name": "American Express Green",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 150,
+      "source": "https://global.americanexpress.com/card-benefits/detail/hundred-clear-credit/amex-green",
+      "verified": "2026-10-01",
+      "aliases": ["绿卡"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "clear",
+          "name": "CLEAR+ Credit",
+          "amount": 219,
+          "frequency": "annual",
+          "note": "自然年 CLEAR+ 会员费额度。"
+        }
+      ],
+      "image": "cards/amex-green.png",
+      "imageSource": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/green-card.png"
+    },
+    {
+      "productId": "amex-bcp",
+      "name": "Blue Cash Preferred",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 95,
+      "source": "https://www.americanexpress.com/us/credit-cards/card/blue-cash-preferred/",
+      "verified": "2026-10-01",
+      "aliases": ["BCP"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "disney",
+          "name": "Disney Streaming Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；美国 DisneyPlus.com、Hulu.com 或 Stream.ESPN.com 订阅。"
+        }
+      ],
+      "image": "cards/amex-bcp.png",
+      "imageSource": "https://icm.aexp-static.com/acquisition/card-art/NUS000000264_480x304_straight_withname.png"
+    },
+    {
+      "productId": "amex-bce",
+      "name": "Blue Cash Everyday",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 0,
+      "source": "https://www.americanexpress.com/us/credit-cards/card/blue-cash-everyday/",
+      "verified": "2026-10-01",
+      "aliases": ["BCE"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "disney",
+          "name": "Disney Streaming Credit",
+          "amount": 7,
+          "frequency": "monthly",
+          "note": "需要注册；美国 DisneyPlus.com、Hulu.com 或 Stream.ESPN.com 订阅。"
+        }
+      ],
+      "image": "cards/amex-bce.png",
+      "imageSource": "https://icm.aexp-static.com/acquisition/card-art/NUS000000305_480x304_straight_withname.png"
+    },
+    {
+      "productId": "amex-delta-gold",
+      "name": "Delta SkyMiles Gold",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 150,
+      "source": "https://www.delta.com/us/en/skymiles/airline-credit-cards/american-express-personal-cards",
+      "verified": "2026-10-01",
+      "aliases": ["Delta gold", "达美"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "stays",
+          "name": "Delta Stays Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "自然年预付 Delta Stays 酒店或度假屋；需使用本卡。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit · After Renewal",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；指定美国网约车服务。仅首次续卡后开始。"
+        },
+        {
+          "id": "flight-spend",
+          "name": "Spend-earned Delta Flight Credit",
+          "amount": 200,
+          "frequency": "manual",
+          "note": "自然年消费满 $10,000 后签发的机票额度。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/amex-delta-gold.png",
+      "imageSource": "https://www.delta.com/content/dam/delta-com/products/skymiles/credit-cards/amex26-gold-personal-160x101.png"
+    },
+    {
+      "productId": "amex-delta-platinum",
+      "name": "Delta SkyMiles Platinum",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 350,
+      "source": "https://www.delta.com/us/en/skymiles/airline-credit-cards/american-express-personal-cards",
+      "verified": "2026-10-01",
+      "aliases": ["Delta platinum", "达美"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "stays",
+          "name": "Delta Stays Credit",
+          "amount": 150,
+          "frequency": "annual",
+          "note": "自然年预付 Delta Stays 酒店或度假屋；需使用本卡。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；指定美国网约车服务。"
+        },
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；符合条件的美国 Resy 餐厅。"
+        },
+        {
+          "id": "companion",
+          "name": "Renewal Companion Certificate",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡签发；符合条件舱位/目的地，税费另付。",
+          "valueLabel": "1 companion ticket"
+        }
+      ],
+      "image": "cards/amex-delta-platinum.png",
+      "imageSource": "https://www.delta.com/content/dam/delta-com/products/skymiles/credit-cards/amex26-plat-personal-160x101.png"
+    },
+    {
+      "productId": "amex-delta-reserve",
+      "name": "Delta SkyMiles Reserve",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 650,
+      "source": "https://www.delta.com/us/en/skymiles/airline-credit-cards/american-express-personal-cards",
+      "verified": "2026-10-01",
+      "aliases": ["Delta reserve", "达美"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "stays",
+          "name": "Delta Stays Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "自然年预付 Delta Stays 酒店或度假屋；需使用本卡。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；指定美国网约车服务。"
+        },
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 20,
+          "frequency": "monthly",
+          "note": "需要注册；符合条件的美国 Resy 餐厅。"
+        },
+        {
+          "id": "companion",
+          "name": "Renewal Companion Certificate",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡签发；符合条件舱位/目的地，税费另付。",
+          "valueLabel": "1 companion ticket"
+        }
+      ],
+      "image": "cards/amex-delta-reserve.png",
+      "imageSource": "https://www.delta.com/content/dam/delta-com/products/skymiles/credit-cards/amex26-res-personal-160x101.png"
+    },
+    {
+      "productId": "amex-delta-gold-business",
+      "name": "Delta SkyMiles Gold Business",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 150,
+      "source": "https://www.delta.com/us/en/skymiles/airline-credit-cards/american-express-business-cards",
+      "verified": "2026-10-01",
+      "aliases": ["Delta gold", "达美"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "stays",
+          "name": "Delta Stays Credit",
+          "amount": 150,
+          "frequency": "annual",
+          "note": "自然年预付 Delta Stays 酒店或度假屋；需使用本卡。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit · After Renewal",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；指定美国网约车服务。仅首次续卡后开始。"
+        },
+        {
+          "id": "flight-spend",
+          "name": "Spend-earned Delta Flight Credit",
+          "amount": 200,
+          "frequency": "manual",
+          "note": "自然年消费满 $10,000 后签发的机票额度。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/amex-delta-gold-business.png",
+      "imageSource": "https://www.delta.com/content/dam/delta-com/products/skymiles/credit-cards/amex26-gold-business-145x92.png"
+    },
+    {
+      "productId": "amex-delta-platinum-business",
+      "name": "Delta SkyMiles Platinum Business",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 350,
+      "source": "https://www.delta.com/us/en/skymiles/airline-credit-cards/american-express-business-cards",
+      "verified": "2026-10-01",
+      "aliases": ["Delta platinum", "达美"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "stays",
+          "name": "Delta Stays Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "自然年预付 Delta Stays 酒店或度假屋；需使用本卡。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；指定美国网约车服务。"
+        },
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；符合条件的美国 Resy 餐厅。"
+        },
+        {
+          "id": "companion",
+          "name": "Renewal Companion Certificate",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡签发；符合条件舱位/目的地，税费另付。",
+          "valueLabel": "1 companion ticket"
+        }
+      ],
+      "image": "cards/amex-delta-platinum-business.png",
+      "imageSource": "https://www.delta.com/content/dam/delta-com/products/skymiles/credit-cards/amex26-plat-business-145x92.png"
+    },
+    {
+      "productId": "amex-delta-reserve-business",
+      "name": "Delta SkyMiles Reserve Business",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 650,
+      "source": "https://www.delta.com/us/en/skymiles/airline-credit-cards/american-express-business-cards",
+      "verified": "2026-10-01",
+      "aliases": ["Delta reserve", "达美"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "stays",
+          "name": "Delta Stays Credit",
+          "amount": 250,
+          "frequency": "annual",
+          "note": "自然年预付 Delta Stays 酒店或度假屋；需使用本卡。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要注册；指定美国网约车服务。"
+        },
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 20,
+          "frequency": "monthly",
+          "note": "需要注册；符合条件的美国 Resy 餐厅。"
+        },
+        {
+          "id": "companion",
+          "name": "Renewal Companion Certificate",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡签发；符合条件舱位/目的地，税费另付。",
+          "valueLabel": "1 companion ticket"
+        }
+      ],
+      "image": "cards/amex-delta-reserve-business.png",
+      "imageSource": "https://www.delta.com/content/dam/delta-com/products/skymiles/credit-cards/amex26-res-business-145x92.png"
+    },
+    {
+      "productId": "chase-hyatt",
+      "name": "World of Hyatt",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 95,
+      "source": "https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card",
+      "verified": "2026-10-01",
+      "aliases": ["Hyatt", "凯悦"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡后签发；以账户实际有效期为准。",
+          "valueLabel": "Category 1–4"
+        },
+        {
+          "id": "spend-night",
+          "name": "Spend-earned Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "自然年消费满 $15,000 后签发；填写有效期。",
+          "valueLabel": "Category 1–4"
+        }
+      ],
+      "image": "cards/chase-hyatt.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/world_of_hyatt_card.png"
+    },
+    {
+      "productId": "chase-hyatt-business",
+      "name": "World of Hyatt Business",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 199,
+      "source": "https://creditcards.chase.com/business-credit-cards/world-of-hyatt/hyatt-business-card",
+      "verified": "2026-10-01",
+      "aliases": ["Hyatt Biz", "凯悦商务"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hyatt-1",
+          "name": "Hyatt Credit · 1",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年内第一笔单次满 $50 的合格 Hyatt 消费。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "hyatt-2",
+          "name": "Hyatt Credit · 2",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年内第二笔单次满 $50 的合格 Hyatt 消费。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/chase-hyatt-business.png",
+      "imageSource": "https://creditcards.chase.com/bcs/api/images/file/public-card-marketplace/card-art/world-hyatt-biz.png"
+    },
+    {
+      "productId": "chase-aeroplan",
+      "name": "Air Canada Aeroplan",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 195,
+      "source": "https://creditcards.chase.com/travel-credit-cards/aircanada/aeroplan",
+      "verified": "2026-10-01",
+      "aliases": ["加航", "Aeroplan"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "air-canada",
+          "name": "Air Canada Credit",
+          "amount": 50,
+          "frequency": "semiannual",
+          "note": "每半年符合条件的 Air Canada 消费；以银行当前升级条款为准。"
+        }
+      ],
+      "image": "cards/chase-aeroplan.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/AirCanada_Aeroplan_cardart.png"
+    },
+    {
+      "productId": "chase-united-explorer",
+      "name": "United Explorer",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 150,
+      "source": "https://creditcards.chase.com/travel-credit-cards/united/united-explorer",
+      "verified": "2026-10-01",
+      "aliases": ["美联航", "explorer"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel-1",
+          "name": "United Hotels Credit · 1",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年内分别用于前两笔合格预付 United Hotels 订单，每笔至少 $50。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "hotel-2",
+          "name": "United Hotels Credit · 2",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年内分别用于前两笔合格预付 United Hotels 订单，每笔至少 $50。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 5,
+          "frequency": "monthly",
+          "note": "每年重新注册；符合条件的网约车消费。"
+        },
+        {
+          "id": "instacart-1",
+          "name": "Instacart Credit · 1",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "jsx",
+          "name": "JSX Credit",
+          "amount": 100,
+          "frequency": "manual",
+          "note": "周年年直接向 JSX 购买机票。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-1",
+          "name": "Avis / Budget TravelBank · 1",
+          "amount": 25,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-2",
+          "name": "Avis / Budget TravelBank · 2",
+          "amount": 25,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "spend-travel",
+          "name": "Spend-earned United TravelBank",
+          "amount": 100,
+          "frequency": "manual",
+          "note": "自然年消费满 $10,000 后签发的 TravelBank。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/chase-united-explorer.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/united_explorer_new_card.png"
+    },
+    {
+      "productId": "chase-united-quest",
+      "name": "United Quest",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 350,
+      "source": "https://creditcards.chase.com/travel-credit-cards/united/united-quest",
+      "verified": "2026-10-01",
+      "aliases": ["美联航", "quest"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Renowned Hotels Credit",
+          "amount": 150,
+          "frequency": "manual",
+          "note": "周年年预付 Renowned Hotels and Resorts 酒店额度。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 8,
+          "frequency": "monthly",
+          "note": "每年重新注册；符合条件的网约车消费。12 月额外 $4。",
+          "decemberExtra": 4
+        },
+        {
+          "id": "instacart-1",
+          "name": "Instacart Credit · 1",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "instacart-2",
+          "name": "Instacart Credit · 2",
+          "amount": 5,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "jsx",
+          "name": "JSX Credit",
+          "amount": 150,
+          "frequency": "manual",
+          "note": "周年年直接向 JSX 购买机票。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-1",
+          "name": "Avis / Budget TravelBank · 1",
+          "amount": 40,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-2",
+          "name": "Avis / Budget TravelBank · 2",
+          "amount": 40,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "travelbank",
+          "name": "United TravelBank Credit",
+          "amount": 200,
+          "frequency": "manual",
+          "note": "开卡及每次周年签发 TravelBank；以实际有效期为准。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/chase-united-quest.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/united_quest_new_card.png"
+    },
+    {
+      "productId": "chase-united-club",
+      "name": "United Club",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 695,
+      "source": "https://creditcards.chase.com/travel-credit-cards/united/club-infinite",
+      "verified": "2026-10-01",
+      "aliases": ["美联航", "club"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Renowned Hotels Credit",
+          "amount": 200,
+          "frequency": "manual",
+          "note": "周年年预付 Renowned Hotels and Resorts 酒店额度。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 12,
+          "frequency": "monthly",
+          "note": "每年重新注册；符合条件的网约车消费。12 月额外 $6。",
+          "decemberExtra": 6
+        },
+        {
+          "id": "instacart-1",
+          "name": "Instacart Credit · 1",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "instacart-2",
+          "name": "Instacart Credit · 2",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "jsx",
+          "name": "JSX Credit",
+          "amount": 200,
+          "frequency": "manual",
+          "note": "周年年直接向 JSX 购买机票。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-1",
+          "name": "Avis / Budget TravelBank · 1",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-2",
+          "name": "Avis / Budget TravelBank · 2",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/chase-united-club.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/united_club_new_infinite_card.png"
+    },
+    {
+      "productId": "chase-united-business",
+      "name": "United Business",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 150,
+      "source": "https://creditcards.chase.com/business-credit-cards/united/united-business-card",
+      "verified": "2026-10-01",
+      "aliases": ["美联航", "business"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel-1",
+          "name": "United Hotels Credit · 1",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年内分别用于前两笔合格预付 United Hotels 订单，每笔至少 $50。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "hotel-2",
+          "name": "United Hotels Credit · 2",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年内分别用于前两笔合格预付 United Hotels 订单，每笔至少 $50。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 8,
+          "frequency": "monthly",
+          "note": "每年重新注册；符合条件的网约车消费。12 月额外 $4。",
+          "decemberExtra": 4
+        },
+        {
+          "id": "instacart-1",
+          "name": "Instacart Credit · 1",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "jsx",
+          "name": "JSX Credit",
+          "amount": 100,
+          "frequency": "manual",
+          "note": "周年年直接向 JSX 购买机票。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-1",
+          "name": "Avis / Budget TravelBank · 1",
+          "amount": 25,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-2",
+          "name": "Avis / Budget TravelBank · 2",
+          "amount": 25,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "united-flights",
+          "name": "United Flight Purchase Credit",
+          "amount": 125,
+          "frequency": "annual",
+          "note": "自然年完成五笔各满 $100 的合格 United 机票购买。"
+        },
+        {
+          "id": "farelock",
+          "name": "FareLock Credit",
+          "amount": 25,
+          "frequency": "manual",
+          "note": "周年年购买符合条件的 United FareLock。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/chase-united-business.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/united_biz_new_card.png"
+    },
+    {
+      "productId": "chase-united-club-business",
+      "name": "United Club Business",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 695,
+      "source": "https://creditcards.chase.com/business-credit-cards/united/united-club-business",
+      "verified": "2026-10-01",
+      "aliases": ["美联航", "club-business"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Renowned Hotels Credit",
+          "amount": 200,
+          "frequency": "manual",
+          "note": "周年年预付 Renowned Hotels and Resorts 酒店额度。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "rideshare",
+          "name": "Rideshare Credit",
+          "amount": 12,
+          "frequency": "monthly",
+          "note": "每年重新注册；符合条件的网约车消费。12 月额外 $6。",
+          "decemberExtra": 6
+        },
+        {
+          "id": "instacart-1",
+          "name": "Instacart Credit · 1",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "instacart-2",
+          "name": "Instacart Credit · 2",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "jsx",
+          "name": "JSX Credit",
+          "amount": 200,
+          "frequency": "manual",
+          "note": "周年年直接向 JSX 购买机票。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-1",
+          "name": "Avis / Budget TravelBank · 1",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "avis-2",
+          "name": "Avis / Budget TravelBank · 2",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年前两次通过 MileagePlus Travel 预订的至少两天租车，签发 TravelBank；按账户期限使用。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "farelock",
+          "name": "FareLock Credit",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "周年年购买符合条件的 United FareLock。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/chase-united-club-business.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/united_club_biz_new_card.png"
+    },
+    {
+      "productId": "chase-csr-business",
+      "name": "Sapphire Reserve for Business",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 795,
+      "source": "https://creditcards.chase.com/business-credit-cards/sapphire/reserve",
+      "verified": "2026-10-01",
+      "aliases": ["CSR Business", "商务蓝宝石"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "travel",
+          "name": "Travel Credit",
+          "amount": 300,
+          "frequency": "manual",
+          "note": "每账户周年年额度；填写银行显示的实际周期，重置可能随账单日（非自然年）。",
+          "valueLabel": "$300 / cardmember year"
+        },
+        {
+          "id": "edit",
+          "name": "The Edit Hotel Credit",
+          "amount": 500,
+          "frequency": "annual",
+          "note": "2026 起自然年最高 $500；每笔合格预付订单最高 $250，至少两晚。",
+          "validFrom": "2026-01-01"
+        },
+        {
+          "id": "select-hotels-2026",
+          "name": "Select Hotels · 2026",
+          "amount": 250,
+          "frequency": "annual",
+          "note": "2026 年限定；Chase Travel 指定酒店品牌预付至少两晚。",
+          "validFrom": "2026-01-01",
+          "validUntil": "2026-12-31"
+        },
+        {
+          "id": "lyft",
+          "name": "Lyft Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "合格 Lyft 月度应用内额度，至 2027-09-30。",
+          "validUntil": "2027-09-30"
+        },
+        {
+          "id": "doordash-dining",
+          "name": "DoorDash Restaurant Promo",
+          "amount": 5,
+          "frequency": "monthly",
+          "note": "需激活 DashPass；每月合格餐厅订单优惠，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "doordash-1",
+          "name": "DoorDash Non-restaurant · 1",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需激活 DashPass；每月两次独立的 $10 非餐厅优惠之一，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "doordash-2",
+          "name": "DoorDash Non-restaurant · 2",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需激活 DashPass；每月两次独立的 $10 非餐厅优惠之二，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "google",
+          "name": "Google Workspace Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "每自然年直接向 Google Workspace 支付的合格费用。"
+        },
+        {
+          "id": "ziprecruiter",
+          "name": "ZipRecruiter Credit",
+          "amount": 200,
+          "frequency": "semiannual",
+          "note": "每半年直接向 ZipRecruiter 支付的合格费用。"
+        },
+        {
+          "id": "giftcards",
+          "name": "Giftcards.com Credit",
+          "amount": 50,
+          "frequency": "semiannual",
+          "note": "每半年指定 giftcards.com/reservebusiness 合格礼卡。"
+        }
+      ],
+      "image": "cards/chase-csr-business.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/sapphire_reserve_biz_card.png"
+    },
+    {
+      "productId": "chase-ihg-business",
+      "name": "IHG One Rewards Business",
+      "bank": "Chase",
+      "color": "neutral",
+      "annualFee": 200,
+      "source": "https://creditcards.chase.com/business-credit-cards/IHG/business-premier",
+      "verified": "2026-10-01",
+      "aliases": ["IHG Biz", "洲际商务", "IHG Premier Business"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡后签发；以账户实际有效期为准。",
+          "valueLabel": "50,000 points / night"
+        },
+        {
+          "id": "spend-night",
+          "name": "Spend-earned Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "自然年消费满 $60,000 后签发；以账户实际有效期为准。",
+          "valueLabel": "50,000 points / night"
+        },
+        {
+          "id": "food",
+          "name": "IHG Food & Beverage Voucher",
+          "amount": 25,
+          "frequency": "quarterly",
+          "note": "每季签发并于当季末到期；仅参与 IHG 酒店的合格房账餐饮。"
+        },
+        {
+          "id": "airline",
+          "name": "Airline Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "自然年直接向航空公司购买机票累计满 $250；至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "expensify",
+          "name": "Expensify Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "自然年合格 Expensify 消费。"
+        },
+        {
+          "id": "instacart",
+          "name": "Instacart Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "doordash",
+          "name": "DoorDash Non-restaurant Promo",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需在 2026-09-01 或之后激活指定 DashPass；每月一次非餐厅优惠至 2027-12-31。",
+          "validFrom": "2026-09-01",
+          "validUntil": "2027-12-31"
+        }
+      ],
+      "image": "cards/chase-ihg-business.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/ihg-one-rewards-biz-card2026.png"
+    },
+    {
+      "productId": "capitalone-venture-x",
+      "name": "Venture X",
+      "bank": "Capital One",
+      "color": "neutral",
+      "annualFee": 395,
+      "source": "https://www.capitalone.com/credit-cards/venture-x/",
+      "verified": "2026-10-01",
+      "aliases": ["VX", "Venture X"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "travel",
+          "name": "Travel Portal Credit",
+          "amount": 300,
+          "frequency": "manual",
+          "note": "周年年通过指定 Capital One Travel 门户预订；不是随意旅行消费报销。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/capitalone-venture-x.png",
+      "imageSource": "https://ecm.capitalone.com/WCM/card/products/venturex-cg-static-card-1000x630-2.png"
+    },
+    {
+      "productId": "capitalone-venture-x-business",
+      "name": "Venture X Business",
+      "bank": "Capital One",
+      "color": "neutral",
+      "annualFee": 395,
+      "source": "https://www.capitalone.com/small-business/credit-cards/venture-x-business/",
+      "verified": "2026-10-01",
+      "aliases": ["VX", "Venture X Biz"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "travel",
+          "name": "Travel Portal Credit",
+          "amount": 300,
+          "frequency": "manual",
+          "note": "周年年通过指定 Capital One Business Travel 门户预订；不是随意旅行消费报销。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/capitalone-venture-x-business.png",
+      "imageSource": "https://ecm.capitalone.com/WCM/card/products/vxb-card-alt-at-2x.png"
+    },
+    {
+      "productId": "citi-strata-premier",
+      "name": "Citi Strata Premier",
+      "bank": "Citi",
+      "color": "neutral",
+      "annualFee": 95,
+      "source": "https://www.citi.com/credit-cards/citi-strata-premier-credit-card",
+      "verified": "2026-10-01",
+      "aliases": ["Citi Premier"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Citi Travel Hotel Benefit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "每自然年一次 Citi Travel 酒店订单，税费前至少 $500；结账优惠。"
+        }
+      ],
+      "image": "cards/citi-strata-premier.webp",
+      "imageSource": "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-strata-premier-credit-card/citi-strata-premier-credit-card_306x192.webp"
+    },
+    {
+      "productId": "citi-strata-elite",
+      "name": "Citi Strata Elite",
+      "bank": "Citi",
+      "color": "neutral",
+      "annualFee": 595,
+      "source": "https://www.citi.com/credit-cards/citi-strata-elite-credit-card",
+      "verified": "2026-10-01",
+      "aliases": ["Citi Elite"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Citi Travel Hotel Benefit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "每自然年一次 Citi Travel 至少两晚酒店订单；不含税费。"
+        },
+        {
+          "id": "splurge",
+          "name": "Splurge Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "每年选择至多两个指定品牌：1stDibs、AA、Best Buy、Future、Live Nation；有排除项。"
+        },
+        {
+          "id": "blacklane",
+          "name": "Blacklane Credit",
+          "amount": 100,
+          "frequency": "semiannual",
+          "note": "每半年符合条件的 Blacklane 预订。"
+        }
+      ],
+      "image": "cards/citi-strata-elite.webp",
+      "imageSource": "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-strata-elite-credit-card/citi-strata-elite-credit-card_306x192.webp"
+    },
+    {
+      "productId": "citi-aa-executive",
+      "name": "AAdvantage Executive",
+      "bank": "Citi",
+      "color": "neutral",
+      "annualFee": 695,
+      "source": "https://www.citi.com/credit-cards/citi-aadvantage-executive-world-legend-mastercard",
+      "verified": "2026-10-01",
+      "aliases": ["AA Executive"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "vacations",
+          "name": "American Airlines Vacations Credit",
+          "amount": 250,
+          "frequency": "semiannual",
+          "note": "每半年符合条件的 aavacations.com 套餐或体验。"
+        },
+        {
+          "id": "lyft",
+          "name": "Lyft Credit · 3 Rides Required",
+          "amount": 15,
+          "frequency": "monthly",
+          "note": "每月完成三次合格 Lyft 行程后获得额度。"
+        },
+        {
+          "id": "avis",
+          "name": "Avis / Budget Credit",
+          "amount": 120,
+          "frequency": "annual",
+          "note": "自然年通过 avis.com 或 budget.com 直接预付的合格租车。"
+        },
+        {
+          "id": "inflight",
+          "name": "Inflight / Admirals Club Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "自然年符合条件的 AA 机上或 Admirals Club 消费。"
+        }
+      ],
+      "image": "cards/citi-aa-executive.webp",
+      "imageSource": "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-aadvantage-executive-world-legend-mastercard/citi-aadvantage-executive-world-legend-mastercard_306x192.webp"
+    },
+    {
+      "productId": "citi-aa-globe",
+      "name": "AAdvantage Globe",
+      "bank": "Citi",
+      "color": "neutral",
+      "annualFee": 350,
+      "source": "https://www.citi.com/credit-cards/citi-aadvantage-globe-mastercard",
+      "verified": "2026-10-01",
+      "aliases": ["AA Globe"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "splurge",
+          "name": "Splurge Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "每年选择至多两个指定品牌：1stDibs、AAdvantage Hotels、Future、Live Nation；有排除项。"
+        },
+        {
+          "id": "inflight",
+          "name": "American Airlines Inflight Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "自然年符合条件的 AA 机上消费。"
+        },
+        {
+          "id": "turo",
+          "name": "Turo Credit",
+          "amount": 240,
+          "frequency": "manual",
+          "note": "每次合格 Turo 行程最高 $30，年度合计最高 $240；需关联账户。 填写银行显示的实际周期。"
+        },
+        {
+          "id": "companion",
+          "name": "Renewal Companion Certificate",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "第二持卡年起续卡签发；合格美国本土往返，另付 $99 和税费。",
+          "valueLabel": "1 companion ticket"
+        }
+      ],
+      "image": "cards/citi-aa-globe.webp",
+      "imageSource": "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-aadvantage-globe-mastercard/citi-aadvantage-globe-mastercard_306x192.webp"
+    },
+    {
+      "productId": "bofa-premium",
+      "name": "Premium Rewards",
+      "bank": "Bank of America",
+      "color": "neutral",
+      "annualFee": 95,
+      "source": "https://www.bankofamerica.com/credit-cards/products/premium-rewards-credit-card/?var2=pid~35179",
+      "verified": "2026-10-01",
+      "aliases": ["BofA PR"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "airline",
+          "name": "Airline Incidental Credit",
+          "amount": 100,
+          "frequency": "annual",
+          "note": "自然年指定美国航空公司的合格杂费，非一般机票消费。"
+        }
+      ],
+      "image": "cards/bofa-premium.png",
+      "imageSource": "https://www.privatebank.bankofamerica.com/content/dam/ML/solutions/redesign/credit-cards/bofa_prmsigcm_v_metal.png"
+    },
+    {
+      "productId": "bofa-elite",
+      "name": "Premium Rewards Elite",
+      "bank": "Bank of America",
+      "color": "neutral",
+      "annualFee": 550,
+      "source": "https://www.bankofamerica.com/credit-cards/products/premium-rewards-elite-credit-card/?var2=pid~35179",
+      "verified": "2026-10-01",
+      "aliases": ["BofA PRE"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "airline",
+          "name": "Airline Incidental Credit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "自然年指定美国航空公司的合格杂费，非一般机票消费。"
+        },
+        {
+          "id": "lifestyle",
+          "name": "Lifestyle Credit",
+          "amount": 150,
+          "frequency": "annual",
+          "note": "自然年指定流媒体、外卖、健身和网约车服务商。"
+        }
+      ],
+      "image": "cards/bofa-elite.png",
+      "imageSource": "https://www.privatebank.bankofamerica.com/content/dam/ML/solutions/redesign/credit-cards/bofa_prmeltcm_v_infinite.png"
+    },
+    {
+      "productId": "bilt-obsidian",
+      "name": "Bilt Obsidian",
+      "bank": "Column / Bilt",
+      "color": "neutral",
+      "annualFee": 95,
+      "source": "https://www.bilt.com/terms/bilt-card-offer-terms",
+      "verified": "2026-10-01",
+      "aliases": ["Bilt 2.0"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Bilt Travel Hotel Credit",
+          "amount": 50,
+          "frequency": "semiannual",
+          "note": "每半年 Bilt Travel 至少两晚酒店订单；预订时选择使用额度。"
+        }
+      ],
+      "image": "cards/bilt-obsidian.png",
+      "imageSource": "https://img.bilt.com/43819/1768329514-vail.png"
+    },
+    {
+      "productId": "bilt-palladium",
+      "name": "Bilt Palladium",
+      "bank": "Column / Bilt",
+      "color": "neutral",
+      "annualFee": 495,
+      "source": "https://www.bilt.com/terms/bilt-card-offer-terms",
+      "verified": "2026-10-01",
+      "aliases": ["Bilt 2.0"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Bilt Travel Hotel Credit",
+          "amount": 200,
+          "frequency": "semiannual",
+          "note": "每半年 Bilt Travel 至少两晚酒店订单；预订时选择使用额度。"
+        },
+        {
+          "id": "bilt-cash",
+          "name": "Annual Bilt Cash",
+          "amount": 0,
+          "frequency": "annual",
+          "note": "每自然年发放 $200 Bilt Cash；受兑换和到期限制，不自动计入现金回本。",
+          "valueLabel": "$200 Bilt Cash"
+        }
+      ],
+      "image": "cards/bilt-palladium.png",
+      "imageSource": "https://img.bilt.com/43819/1768329505-aspen.png"
+    },
+    {
+      "productId": "wf-journey",
+      "name": "Autograph Journey",
+      "bank": "Wells Fargo",
+      "color": "neutral",
+      "annualFee": 95,
+      "source": "https://creditcards.wellsfargo.com/autograph-journey-visa-credit-card/",
+      "verified": "2026-10-01",
+      "aliases": ["WF Journey"],
+      "description": "",
+      "benefits": [
+        {
+          "id": "airline",
+          "name": "Annual Airline Credit",
+          "amount": 50,
+          "frequency": "manual",
+          "note": "第一笔单次满 $50 的合格航空消费；续卡周期从年费收取后的下月一号开始。 填写银行显示的实际周期。"
+        }
+      ],
+      "image": "cards/wf-journey.png",
+      "imageSource": "https://creditcards.wellsfargo.com/W-Card-MarketPlace/v9-1-26/images/Products/AutographJourney/WF_Autograph_Journey_Card_d.png"
+    },
+    {
+      "productId": "amex-platinum-schwab",
+      "name": "Platinum · Charles Schwab",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 895,
+      "source": "https://www.schwab.com/credit-cards/platinum-card",
+      "verified": "2026-10-01",
+      "aliases": ["Schwab Plat", "嘉信白金"],
+      "description": "个人白金共通权益；专属资产关系奖励请按账户条件添加自定义权益。",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Hotel Credit · FHR / THC",
+          "amount": 300,
+          "frequency": "semiannual",
+          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。"
+        },
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 100,
+          "frequency": "quarterly",
+          "note": "需要 enrollment；符合条件的美国 Resy 餐厅消费。"
+        },
+        {
+          "id": "lululemon",
+          "name": "lululemon Credit",
+          "amount": 75,
+          "frequency": "quarterly",
+          "note": "需要 enrollment；美国非 outlet 门店或官网符合条件消费。"
+        },
+        {
+          "id": "digital",
+          "name": "Digital Entertainment",
+          "amount": 25,
+          "frequency": "monthly",
+          "note": "需要 enrollment；指定服务商的合格订阅。"
+        },
+        {
+          "id": "uber",
+          "name": "Uber Cash",
+          "amount": 15,
+          "frequency": "monthly",
+          "note": "美国 Uber / Uber Eats；绑定卡片并选择 Amex 付款。12 月额外 $20。",
+          "decemberExtra": 20
+        },
+        {
+          "id": "airline",
+          "name": "Airline Fee Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "需选择航空公司，适用合格航空杂费。"
+        },
+        {
+          "id": "clear",
+          "name": "CLEAR+ Credit",
+          "amount": 219,
+          "frequency": "annual",
+          "note": "需要 enrollment；会员费报销，税费除外。"
+        },
+        {
+          "id": "saks",
+          "name": "Saks Fifth Avenue Credit",
+          "amount": 50,
+          "frequency": "semiannual",
+          "note": "历史权益，2026-06-30 后结束；保留上半年记录。",
+          "validUntil": "2026-06-30",
+          "source": "https://www.nerdwallet.com/travel/news/amex-platinum-saks-credit"
+        },
+        {
+          "id": "oura",
+          "name": "Oura Ring Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "需要 enrollment；ouraring.com 的合格 Oura Ring 购买。"
+        },
+        {
+          "id": "uber-one",
+          "name": "Uber One Membership",
+          "amount": 120,
+          "frequency": "annual",
+          "note": "用符合条件的卡支付 Uber One 会员费，最高年度额度；非 Uber Cash。"
+        },
+        {
+          "id": "equinox",
+          "name": "Equinox Credit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "需要 enrollment；符合条件的 Equinox 会员或 Equinox+。"
+        },
+        {
+          "id": "walmart",
+          "name": "Walmart+ Membership",
+          "amount": 12.95,
+          "frequency": "monthly",
+          "note": "每月符合条件的 Walmart+ 会员费，另加适用税费；不含 Plus Up。"
+        }
+      ]
+    },
+    {
+      "productId": "amex-platinum-morgan-stanley",
+      "name": "Platinum · Morgan Stanley",
+      "bank": "American Express",
+      "color": "neutral",
+      "annualFee": 895,
+      "source": "https://apply.americanexpress.com/amex-morgan-stanley-credit-cards/?page_url=38",
+      "verified": "2026-10-01",
+      "aliases": ["MS Plat", "摩根白金"],
+      "description": "个人白金共通权益；专属资产关系奖励请按账户条件添加自定义权益。",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Hotel Credit · FHR / THC",
+          "amount": 300,
+          "frequency": "semiannual",
+          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。"
+        },
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 100,
+          "frequency": "quarterly",
+          "note": "需要 enrollment；符合条件的美国 Resy 餐厅消费。"
+        },
+        {
+          "id": "lululemon",
+          "name": "lululemon Credit",
+          "amount": 75,
+          "frequency": "quarterly",
+          "note": "需要 enrollment；美国非 outlet 门店或官网符合条件消费。"
+        },
+        {
+          "id": "digital",
+          "name": "Digital Entertainment",
+          "amount": 25,
+          "frequency": "monthly",
+          "note": "需要 enrollment；指定服务商的合格订阅。"
+        },
+        {
+          "id": "uber",
+          "name": "Uber Cash",
+          "amount": 15,
+          "frequency": "monthly",
+          "note": "美国 Uber / Uber Eats；绑定卡片并选择 Amex 付款。12 月额外 $20。",
+          "decemberExtra": 20
+        },
+        {
+          "id": "airline",
+          "name": "Airline Fee Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "需选择航空公司，适用合格航空杂费。"
+        },
+        {
+          "id": "clear",
+          "name": "CLEAR+ Credit",
+          "amount": 219,
+          "frequency": "annual",
+          "note": "需要 enrollment；会员费报销，税费除外。"
+        },
+        {
+          "id": "saks",
+          "name": "Saks Fifth Avenue Credit",
+          "amount": 50,
+          "frequency": "semiannual",
+          "note": "历史权益，2026-06-30 后结束；保留上半年记录。",
+          "validUntil": "2026-06-30",
+          "source": "https://www.nerdwallet.com/travel/news/amex-platinum-saks-credit"
+        },
+        {
+          "id": "oura",
+          "name": "Oura Ring Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "需要 enrollment；ouraring.com 的合格 Oura Ring 购买。"
+        },
+        {
+          "id": "uber-one",
+          "name": "Uber One Membership",
+          "amount": 120,
+          "frequency": "annual",
+          "note": "用符合条件的卡支付 Uber One 会员费，最高年度额度；非 Uber Cash。"
+        },
+        {
+          "id": "equinox",
+          "name": "Equinox Credit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "需要 enrollment；符合条件的 Equinox 会员或 Equinox+。"
+        },
+        {
+          "id": "walmart",
+          "name": "Walmart+ Membership",
+          "amount": 12.95,
+          "frequency": "monthly",
+          "note": "每月符合条件的 Walmart+ 会员费，另加适用税费；不含 Plus Up。"
+        }
+      ],
+      "image": "cards/amex-platinum-morgan-stanley.svg",
+      "imageSource": "https://apply.americanexpress.com/wp-content/themes/openforum/morgan-stanley/images/chg_plat_metal_morgan.svg"
+    },
+    {
+      "productId": "chase-bountiful",
+      "name": "Marriott Bonvoy Bountiful",
+      "bank": "Chase",
+      "annualFee": 250,
+      "color": "neutral",
+      "source": "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy/bountiful",
+      "verified": "2026-10-01",
+      "description": "",
+      "aliases": ["万豪", "Bountiful"],
+      "benefits": [
+        {
+          "id": "spend-night",
+          "name": "Spend-earned Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "自然年消费满 $15,000 后签发；没有自动续卡房券。",
+          "valueLabel": "50,000 points / night"
+        },
+        {
+          "id": "doordash",
+          "name": "DoorDash Non-restaurant Promo",
+          "amount": 10,
+          "frequency": "quarterly",
+          "note": "激活指定 DashPass 后，每自然季度一次 $10 非餐厅订单优惠，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        }
+      ],
+      "image": "cards/chase-bountiful.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/marriott_bonvoy_bountiful_card.png"
     }
   ]
 }

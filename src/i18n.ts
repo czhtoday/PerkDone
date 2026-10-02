@@ -1,9 +1,11 @@
 import type { Language } from "./model";
+import catalogTranslations from "./data/catalog-translations.json";
 let language: Language = "en";
 export function setLanguage(value: Language) {
   language = value;
 }
 const translations: Record<string, string> = {
+  ...catalogTranslations,
   本季度: "This quarter",
   净赚: "Net earned",
   "你是薅羊毛之神！": "Perk legend!",

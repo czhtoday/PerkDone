@@ -953,7 +953,15 @@ function App() {
                                               <span className="period-state">
                                                 {done ? (
                                                   <>
-                                                    <Check size={13} />
+                                                    <span
+                                                      className="completion-circle"
+                                                      aria-hidden="true"
+                                                    >
+                                                      <Check
+                                                        size={10}
+                                                        strokeWidth={3}
+                                                      />
+                                                    </span>
                                                     <span>
                                                       Done
                                                       <span className="done-date">
@@ -963,7 +971,10 @@ function App() {
                                                   </>
                                                 ) : (
                                                   <>
-                                                    <span className="status-dot" />
+                                                    <span
+                                                      className="completion-circle"
+                                                      aria-hidden="true"
+                                                    />
                                                     {status === "future"
                                                       ? t("未开始")
                                                       : status === "expired"

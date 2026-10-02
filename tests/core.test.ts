@@ -10,7 +10,9 @@ import {
   type Card,
 } from "../src/model";
 import { change, checkQuota, decode } from "../src/storage";
-import { catalog } from "../src/catalog";
+import { catalog, hydrateCard } from "../src/catalog";
+import catalogData from "../src/data/cards.json";
+import { setLanguage, t } from "../src/i18n";
 const card: Card = {
   ...catalog[0],
   id: "test",
@@ -230,6 +232,7 @@ describe("quarterly deadlines and actual schedules", () => {
       nickname: "",
       last4: "",
     };
+    ihg.benefits = ihg.benefits.filter((b) => b.id === "united");
     const due = quarterDue({ cards: [ihg], records: {} }, "2027-01-01");
     expect(due).toHaveLength(1);
     expect(due[0].period.recordYear).toBe(2026);
@@ -390,16 +393,17 @@ describe("upgrades and preferences", () => {
       "dark",
     );
   });
-  it("ships the ten requested card products with source links and stable unique IDs", () => {
-    expect(catalog.length).toBeGreaterThanOrEqual(10);
+  it("ships the expanded eligible catalog with source links and stable unique IDs", () => {
+    expect(catalog.length).toBeGreaterThanOrEqual(45);
     expect(new Set(catalog.map((c) => c.productId)).size).toBe(catalog.length);
     for (const c of catalog) {
       expect(c.source).toMatch(/^https:\/\//);
       expect(new Set(c.benefits.map((b) => b.id)).size).toBe(c.benefits.length);
     }
+    expect(catalog.some((c) => c.productId === "amex-hilton")).toBe(false);
     expect(
-      catalog.find((c) => c.productId === "amex-hilton")?.benefits,
-    ).toEqual([]);
+      catalog.every((c) => c.annualFee !== 0 || c.benefits.length > 0),
+    ).toBe(true);
   });
 });
 
@@ -476,5 +480,74 @@ describe("wallet value and language", () => {
     });
     expect(decode(items).language).toBe("zh");
     expect(decode(items).cards[0].annualFee).toBe(0);
+  });
+});
+
+describe("expanded catalog safety", () => {
+  it("each product fits one Chrome Sync item", () => {
+    for (const product of catalog) {
+      const saved = {
+        ...product,
+        id: product.productId,
+        nickname: "My card",
+        last4: "51007",
+      };
+      expect(() =>
+        checkQuota({ ["pd:card:" + saved.id]: saved }),
+      ).not.toThrow();
+    }
+  });
+  it("keeps unlisted legacy cards accessible without deleting records", () => {
+    const legacy = catalogData.products.find(
+      (p) => p.productId === "amex-hilton",
+    )!;
+    const saved = {
+      ...legacy,
+      id: "old",
+      nickname: "Hilton",
+      last4: "1007",
+    } as unknown as Card;
+    expect(hydrateCard(saved).productId).toBe("amex-hilton");
+    expect(decode({ "pd:card:old": saved }).cards).toHaveLength(1);
+  });
+  it("keeps anniversary credits manual and United monthly amounts distinct", () => {
+    const quest = catalog.find((p) => p.productId === "chase-united-quest")!;
+    expect(quest.benefits.find((b) => b.id === "hotel")?.frequency).toBe(
+      "manual",
+    );
+    expect(
+      quest.benefits
+        .filter((b) => b.id.startsWith("instacart"))
+        .map((b) => b.amount),
+    ).toEqual([10, 5]);
+    const ride = quest.benefits.find((b) => b.id === "rideshare")!;
+    expect(ride.amount * 12 + (ride.decemberExtra ?? 0)).toBe(100);
+    expect(
+      benefitPeriods(
+        quest.benefits.find((b) => b.id === "travelbank")!,
+        2026,
+      ),
+    ).toHaveLength(0);
+  });
+  it("does not turn noncash Bilt benefits into cash recovery", () => {
+    const product = catalog.find((p) => p.productId === "bilt-palladium")!;
+    const c = { ...product, id: "bilt", nickname: "", last4: "" };
+    expect(
+      annualValue(
+        { cards: [c], records: { "bilt/2026/bilt-cash/0": "2026-10-01" } },
+        2026,
+      ).recovered,
+    ).toBe(0);
+  });
+  it("shows new catalog notes in English and Chinese", () => {
+    const note = catalog
+      .find((p) => p.productId === "amex-business-platinum")!
+      .benefits.find((b) => b.id === "chatgpt")!.note!;
+    setLanguage("en");
+    expect(t(note)).toContain("ChatGPT Business");
+    expect(t(note)).not.toMatch(/[\u4e00-\u9fff]/);
+    setLanguage("zh");
+    expect(t(note)).toBe(note);
+    setLanguage("en");
   });
 });

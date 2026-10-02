@@ -16,11 +16,11 @@ A small Chrome extension for keeping track of credit card perks — without anot
 - **Multiple cards per product:** distinguish cards with nicknames and optional **4–5 digit suffixes**, including Amex's last five digits. Card titles use the nickname when set, otherwise the official product name, with the suffix appended on the same line. Existing suffixes can be edited without losing records.
 - **One-click completion:** click an unfinished period to save today immediately. Click `Done(6/21)` to open a small anchored date editor with Save date and Undo completion. Historical periods can be logged today; upcoming periods cannot be completed.
 - **Hidden perks:** use the eye icon beside a perk to hide it from the timeline and quarter's todo count. The card's `…` control says **Show hidden perks** on hover or keyboard focus and lets you restore them. Hidden perks retain their completion history.
-- **Official card artwork:** ten bundled issuer images, available offline in card headers and the product picker. Custom cards use a simple fallback icon.
+- **Official card artwork:** bundled official issuer images, available offline in card headers and the product picker. Custom cards use a simple fallback icon.
 - **Custom cards and perks:** add products not in the bundled catalog.
 - **Actual validity dates:** set bank-reported ranges for cardmember-year credits and certificates instead of treating them as calendar-year credits.
 
-English is the default language. The **中 / EN** button switches to Chinese or English; this preference syncs with the wallet. Completed cells and selected controls use a distinct soft gray fill in both themes. Done and its checkmark use blue. The compact popup shows fees in gray, earned value in blue, and a small emoji with progress or net-earnings encouragement.
+English is the default language. The **中 / EN** button switches to Chinese or English; this preference syncs with the wallet. Completed cells and selected controls use a distinct soft gray fill in both themes. Unfinished periods use an empty circle; completed periods use a solid blue check circle and a thin blue border, preserving the date. The compact popup shows fees in gray, earned value in blue, and a small emoji with progress or net-earnings encouragement.
 
 ## Install locally / 本地安装
 
@@ -37,7 +37,7 @@ npm ci
 npm run dev      # local preview; independent browser-local storage
 npm test         # model, storage, migration, deadline and catalog tests
 npm run build    # creates dist, ready for Load unpacked
-npm run package  # creates release/perk-done-0.3.2.zip
+npm run package  # creates release/perk-done-0.4.0.zip
 ```
 
 Preview routes:
@@ -52,28 +52,25 @@ The preview server is for development only. The installed extension contains its
 
 Edit **[`src/data/cards.json`](src/data/cards.json)** to maintain the products and benefits. No API, secret keys, recurring fetches, remote scripts, database, or scraping service is used.
 
-Currently included:
+**48 selectable products**, reviewed October 1, 2026:
 
-| Bank | Product |
+| Issuer | Included families |
 | --- | --- |
-| American Express | The Platinum Card — U.S. personal |
-| American Express | Gold |
-| American Express | Hilton Honors Aspire |
-| American Express | Hilton Honors Surpass |
-| American Express | Hilton Honors — no annual fee |
-| Chase | Sapphire Preferred / CSP |
-| Chase | Sapphire Reserve / CSR |
-| Chase | Marriott Bonvoy Boundless |
-| Chase | The Ritz-Carlton Card / 栗子卡 |
-| Chase | IHG One Rewards Premier |
+| American Express | Platinum (personal, Business, Schwab, Morgan Stanley), Gold / Business Gold, Green, Hilton Aspire / Surpass / Business, Marriott Brilliant / Bevy / Business, Delta Gold / Platinum / Reserve (personal and Business), Blue Cash Preferred / Everyday |
+| Chase | Sapphire Preferred / Reserve / Reserve for Business, Marriott Boundless / Bountiful, Ritz-Carlton, IHG Premier / Business, Hyatt / Hyatt Business, Aeroplan, United Explorer / Quest / Club / Business / Club Business |
+| Capital One | Venture X / Venture X Business |
+| Citi | Strata Premier / Elite, AAdvantage Executive / Globe |
+| Bank of America | Premium Rewards / Premium Rewards Elite |
+| Column / Bilt | Bilt Obsidian / Palladium |
+| Wells Fargo | Autograph Journey |
 
-The no-fee Hilton Honors card is available to add, but has no fixed recurring reimbursement or annual free-night award; the app does not invent one. Add any personal offers as custom perks.
+See the [complete catalog review](docs/catalog-review.md) for each product's official source, fee, tracked perks, eligibility decisions and deferred candidates. Zero-fee products without recurring credits are omitted from the picker. Previously added Hilton Honors cards remain accessible; Blue Cash Everyday stays eligible because it has a monthly streaming credit.
 
-This is a **trackable-perk catalog**, not a list of every card's points earning, insurance, status, signup bonus, or conditional merchant offer. Enrollment requirements and issuer rules still apply. Variants such as Business, Schwab, and Morgan Stanley Platinum may have different terms.
+This is a **trackable-perk catalog**, not a list of every card's points earning, insurance, status, signup bonus, or conditional merchant offer. Enrollment requirements and issuer rules still apply. Business and co-branded variants have independent catalog IDs and notes. Relationship-specific rewards can be added as custom perks.
 
 ### Card artwork
 
-Artwork is downloaded from American Express and Chase public product pages and bundled in `public/cards/`. Each catalog product includes a local `image` path and the original `imageSource` URL. [`public/cards/sources.json`](public/cards/sources.json) records the exact sources. Existing cards pick up artwork from the catalog when loaded. The extension never fetches issuer images at runtime and needs no host permissions. Card imagery and trademarks belong to their respective issuers; the app uses them for product identification and is not affiliated with those issuers.
+Artwork is downloaded from public issuer and co-brand product pages and bundled in `public/cards/`. Products with verified artwork include a local `image` path and the original `imageSource` URL. There are 47 local images for 48 selectable products; Schwab currently uses the fallback icon rather than another card’s artwork. [`public/cards/sources.json`](public/cards/sources.json) records the exact sources. Existing cards pick up artwork from the catalog when loaded. The extension never fetches issuer images at runtime and needs no host permissions. Card imagery and trademarks belong to their respective issuers; the app uses them for product identification and is not affiliated with those issuers.
 
 ### Updating JSON
 
@@ -154,6 +151,6 @@ For an existing Chrome-for-Testing installation, pass its executable path throug
 
 ## Publishing
 
-`release/perk-done-0.3.2.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
+`release/perk-done-0.4.0.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
 
 The GitHub repository stores the source. Rebuild locally for Load unpacked. Chrome Web Store distribution additionally needs a developer registration, a one-time registration fee, listing screenshots, and a publicly accessible privacy policy.
