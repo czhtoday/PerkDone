@@ -1,0 +1,419 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-01",
+  "products": [
+    {
+      "productId": "amex-aspire",
+      "name": "Hilton Honors Aspire",
+      "bank": "American Express",
+      "color": "neutral",
+      "source": "https://www.americanexpress.com/us/credit-cards/card/hilton-honors-aspire/",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "flight",
+          "name": "Flight Credit",
+          "amount": 50,
+          "frequency": "quarterly",
+          "note": "每季度额度；适用航空公司直购或 Amex Travel 符合条件的机票。"
+        },
+        {
+          "id": "resort",
+          "name": "Hilton Resort Credit",
+          "amount": 200,
+          "frequency": "semiannual",
+          "note": "每半年额度；仅限参与活动的 Hilton Resorts。"
+        },
+        {
+          "id": "clear",
+          "name": "CLEAR+ Credit",
+          "amount": 219,
+          "frequency": "annual",
+          "note": "自然年额度，用于 CLEAR+ 会员费；税费除外。"
+        },
+        {
+          "id": "free-night",
+          "name": "Free Night Reward",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "开卡首年及续卡房券；填写 Hilton 账户显示的实际有效期。",
+          "valueLabel": "1 free night"
+        }
+      ],
+      "aliases": ["Aspire", "希尔顿"],
+      "description": ""
+    },
+    {
+      "productId": "amex-surpass",
+      "name": "Hilton Honors Surpass",
+      "bank": "American Express",
+      "color": "neutral",
+      "source": "https://www.americanexpress.com/us/credit-cards/card/hilton-honors-surpass/",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "hilton",
+          "name": "Hilton Credit",
+          "amount": 50,
+          "frequency": "quarterly",
+          "note": "每季度额度；直接向 Hilton 旗下符合条件酒店支付。"
+        },
+        {
+          "id": "free-night",
+          "name": "Spend-earned Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "自然年消费满 $15,000 后获得；仅在已达标并收到房券后填写有效期。",
+          "valueLabel": "1 free night"
+        }
+      ],
+      "aliases": ["Surpass"],
+      "description": ""
+    },
+    {
+      "productId": "amex-platinum",
+      "name": "The Platinum Card",
+      "bank": "American Express",
+      "color": "neutral",
+      "source": "https://global.americanexpress.com/card-benefits/view-all/platinum",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Hotel Credit · FHR / THC",
+          "amount": 300,
+          "frequency": "semiannual",
+          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。"
+        },
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 100,
+          "frequency": "quarterly",
+          "note": "需要 enrollment；符合条件的美国 Resy 餐厅消费。"
+        },
+        {
+          "id": "lululemon",
+          "name": "lululemon Credit",
+          "amount": 75,
+          "frequency": "quarterly",
+          "note": "需要 enrollment；美国非 outlet 门店或官网符合条件消费。"
+        },
+        {
+          "id": "digital",
+          "name": "Digital Entertainment",
+          "amount": 25,
+          "frequency": "monthly",
+          "note": "需要 enrollment；指定服务商的合格订阅。"
+        },
+        {
+          "id": "uber",
+          "name": "Uber Cash",
+          "amount": 15,
+          "frequency": "monthly",
+          "note": "美国 Uber / Uber Eats；绑定卡片并选择 Amex 付款。12 月额外 $20。",
+          "decemberExtra": 20
+        },
+        {
+          "id": "airline",
+          "name": "Airline Fee Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "需选择航空公司，适用合格航空杂费。"
+        },
+        {
+          "id": "clear",
+          "name": "CLEAR+ Credit",
+          "amount": 219,
+          "frequency": "annual",
+          "note": "需要 enrollment；会员费报销，税费除外。"
+        },
+        {
+          "id": "saks",
+          "name": "Saks Fifth Avenue Credit",
+          "amount": 50,
+          "frequency": "semiannual",
+          "note": "历史权益，2026-06-30 后结束；保留上半年记录。",
+          "validUntil": "2026-06-30",
+          "source": "https://www.nerdwallet.com/travel/news/amex-platinum-saks-credit"
+        },
+        {
+          "id": "oura",
+          "name": "Oura Ring Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "需要 enrollment；ouraring.com 的合格 Oura Ring 购买。"
+        },
+        {
+          "id": "uber-one",
+          "name": "Uber One Membership",
+          "amount": 120,
+          "frequency": "annual",
+          "note": "用符合条件的卡支付 Uber One 会员费，最高年度额度；非 Uber Cash。"
+        },
+        {
+          "id": "equinox",
+          "name": "Equinox Credit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "需要 enrollment；符合条件的 Equinox 会员或 Equinox+。"
+        },
+        {
+          "id": "walmart",
+          "name": "Walmart+ Membership",
+          "amount": 12.95,
+          "frequency": "monthly",
+          "note": "每月符合条件的 Walmart+ 会员费，另加适用税费；不含 Plus Up。"
+        }
+      ],
+      "aliases": ["白金", "Platinum", "Amex Platinum"],
+      "description": "美国个人版；Morgan Stanley、Schwab 或 Business 变体请核对专属条款。"
+    },
+    {
+      "productId": "amex-gold",
+      "name": "American Express Gold",
+      "bank": "American Express",
+      "color": "neutral",
+      "source": "https://www.americanexpress.com/us/credit-cards/card/gold-card/",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "resy",
+          "name": "Resy Credit",
+          "amount": 50,
+          "frequency": "semiannual",
+          "note": "需要 enrollment；每半年符合条件 Resy 消费额度。"
+        },
+        {
+          "id": "dunkin",
+          "name": "Dunkin’ Credit",
+          "amount": 7,
+          "frequency": "monthly",
+          "note": "需要 enrollment；美国 Dunkin 合格消费。"
+        },
+        {
+          "id": "dining",
+          "name": "Dining Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要 enrollment；仅限当前指定餐饮商户。"
+        },
+        {
+          "id": "uber",
+          "name": "Uber Cash",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "美国 Uber / Uber Eats；绑定卡片并选择 Amex 付款。"
+        }
+      ],
+      "aliases": ["Gold", "黄金"],
+      "description": ""
+    },
+    {
+      "productId": "amex-hilton",
+      "name": "Hilton Honors",
+      "bank": "American Express",
+      "color": "neutral",
+      "source": "https://www.americanexpress.com/us/credit-cards/card/hilton-honors/",
+      "verified": "2026-10-01",
+      "benefits": [],
+      "aliases": ["Hilton honor", "希尔顿无年费"],
+      "description": "无年费版没有固定周期的报销额度，也没有年度免费房券。可以添加自定义权益。"
+    },
+    {
+      "productId": "chase-csp",
+      "name": "Sapphire Preferred",
+      "bank": "Chase",
+      "color": "neutral",
+      "source": "https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "hotel",
+          "name": "Chase Travel Hotel Credit",
+          "amount": 100,
+          "frequency": "manual",
+          "note": "当前官网额度为每账户周年年 $100；填写银行账户的实际额度周期（非自然年）。",
+          "valueLabel": "$100 / cardmember year"
+        },
+        {
+          "id": "doordash",
+          "name": "DoorDash Non-restaurant Promo",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需激活 DashPass；每月一次合格非餐厅订单优惠，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        }
+      ],
+      "aliases": ["CSP", "蓝宝石首选"],
+      "description": ""
+    },
+    {
+      "productId": "chase-csr",
+      "name": "Sapphire Reserve",
+      "bank": "Chase",
+      "color": "neutral",
+      "source": "https://creditcards.chase.com/rewards-credit-cards/sapphire/reserve",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "travel",
+          "name": "Travel Credit",
+          "amount": 300,
+          "frequency": "manual",
+          "note": "每账户周年年额度；填写银行显示的实际周期，重置可能随账单日（非自然年）。",
+          "valueLabel": "$300 / cardmember year"
+        },
+        {
+          "id": "edit",
+          "name": "The Edit Hotel Credit",
+          "amount": 500,
+          "frequency": "annual",
+          "note": "2026 起自然年最高 $500；每笔合格预付订单最高 $250，至少两晚。",
+          "validFrom": "2026-01-01"
+        },
+        {
+          "id": "select-hotels-2026",
+          "name": "Select Hotels · 2026",
+          "amount": 250,
+          "frequency": "annual",
+          "note": "2026 年限定；Chase Travel 指定酒店品牌预付至少两晚。",
+          "validFrom": "2026-01-01",
+          "validUntil": "2026-12-31"
+        },
+        {
+          "id": "dining",
+          "name": "Exclusive Tables Dining",
+          "amount": 150,
+          "frequency": "semiannual",
+          "note": "OpenTable 的 Sapphire Exclusive Tables 合格餐厅，每半年额度。"
+        },
+        {
+          "id": "stubhub",
+          "name": "StubHub / viagogo Credit",
+          "amount": 150,
+          "frequency": "semiannual",
+          "note": "需要 activation；每半年合格购票额度，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "lyft",
+          "name": "Lyft Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "合格 Lyft 月度应用内额度，至 2027-09-30。",
+          "validUntil": "2027-09-30"
+        },
+        {
+          "id": "peloton",
+          "name": "Peloton Membership",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需要 activation；合格 Peloton 会员费，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "doordash-dining",
+          "name": "DoorDash Restaurant Promo",
+          "amount": 5,
+          "frequency": "monthly",
+          "note": "需激活 DashPass；每月合格餐厅订单优惠，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "doordash-1",
+          "name": "DoorDash Non-restaurant · 1",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需激活 DashPass；每月两次独立的 $10 非餐厅优惠之一，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "doordash-2",
+          "name": "DoorDash Non-restaurant · 2",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "需激活 DashPass；每月两次独立的 $10 非餐厅优惠之二，至 2027-12-31。",
+          "validUntil": "2027-12-31"
+        }
+      ],
+      "aliases": ["CSR", "蓝宝石储备"],
+      "description": ""
+    },
+    {
+      "productId": "chase-marriott-boundless",
+      "name": "Marriott Bonvoy Boundless",
+      "bank": "Chase",
+      "color": "neutral",
+      "source": "https://marriott.chase.com/boundless",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡后房券；填写 Marriott 账户实际签发日和到期日。",
+          "valueLabel": "35,000 points / night"
+        }
+      ],
+      "aliases": ["Marriott", "万豪", "Boundless"],
+      "description": ""
+    },
+    {
+      "productId": "chase-ritz",
+      "name": "The Ritz-Carlton Card",
+      "bank": "Chase",
+      "color": "neutral",
+      "source": "https://marriott.chase.com/ritz-carlton",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "airline",
+          "name": "Annual Travel Credit",
+          "amount": 300,
+          "frequency": "annual",
+          "note": "自然年合格航空杂费；需要致电卡背面号码申请报销。"
+        },
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡房券；填写 Marriott 账户实际有效期。",
+          "valueLabel": "85,000 points / night"
+        }
+      ],
+      "aliases": ["栗子", "栗子卡", "Ritz"],
+      "description": ""
+    },
+    {
+      "productId": "chase-ihg-premier",
+      "name": "IHG One Rewards Premier",
+      "bank": "Chase",
+      "color": "neutral",
+      "source": "https://creditcards.chase.com/travel-credit-cards/ihg-rewards-club/premier",
+      "verified": "2026-10-01",
+      "benefits": [
+        {
+          "id": "united",
+          "name": "United TravelBank Cash",
+          "amount": 25,
+          "frequency": "semiannual",
+          "note": "需注册关联 MileagePlus；上半年入账的 $25 于 7/15 到期，下半年于次年 1/15 到期。",
+          "expiryOffsetDays": 15
+        },
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡房券；以 IHG 账户实际有效期为准。",
+          "valueLabel": "50,000 points / night"
+        }
+      ],
+      "aliases": ["IHG", "洲际", "Premier"],
+      "description": ""
+    }
+  ]
+}
