@@ -28,5 +28,14 @@
   },
   "engines": {
     "node": ">=24"
-  }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/czhtoday/PerkDone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/czhtoday/PerkDone/issues"
+  },
+  "homepage": "https://github.com/czhtoday/PerkDone#readme"
 }

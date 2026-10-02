@@ -2,7 +2,7 @@
 
 A small Chrome extension for keeping track of credit card perks — without another account, a bank connection, or a server.
 
-**TypeScript · React · Manifest V3 · Chrome Sync**
+**TypeScript · React · Manifest V3 · Chrome Sync · [MIT License](LICENSE)**
 
 ![Perk Done dark dashboard](docs/screenshots/dashboard-dark.png)
 
@@ -150,8 +150,16 @@ The browser test uses a temporary Chromium profile and the actual unpacked exten
 
 For an existing Chrome-for-Testing installation, pass its executable path through `CHROME_EXECUTABLE`.
 
+## Open source and contributions
+
+Original project code and documentation are available under the standard [MIT License](LICENSE). You can fork, study, modify, redistribute, and use them commercially while retaining the copyright and license notices. Third-party card artwork, trademarks, and dependencies retain their own rights; see [third-party notices](THIRD_PARTY_NOTICES.md). The MIT license does not grant reuse rights to issuer artwork.
+
+Bug reports, catalog corrections, and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup and contribution guidelines. `private: true` in `package.json` prevents accidental npm publication; it does not restrict the GitHub project's MIT license.
+
 ## Publishing
 
-`release/perk-done-0.4.1.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
+`npm run package` reads the built manifest version and creates `release/perk-done-<version>.zip` (currently `0.4.1`). It checks that manifest and package versions agree. The ZIP includes the built extension, project license, third-party notices, and bundled-library licenses. Source, development dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
 
-The GitHub repository stores the source. Rebuild locally for Load unpacked. Chrome Web Store distribution additionally needs a developer registration, a one-time registration fee, listing screenshots, and a publicly accessible privacy policy.
+See the [first-release and update guide / 商店上架与更新指南](docs/store-publishing.md) for step-by-step instructions, image requirements, ready-to-use English listing text, storage permission justification, privacy disclosures, and reviewer instructions. The public [privacy policy](https://github.com/czhtoday/PerkDone/blob/main/PRIVACY.md) can be linked from the store listing.
+
+GitHub pushes update the source only. Store releases require a developer registration, a one-time registration fee, two-step verification, listing assets, and review. Future releases need a higher manifest version and a new complete ZIP uploaded to the same store item; Chrome then automatically distributes published updates.

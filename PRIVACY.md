@@ -1,15 +1,63 @@
-# Perk Done 隐私政策
+# Perk Done Privacy Policy / 隐私政策
 
-版本：0.3.2 · 更新日期：2026-10-01
+Version: 0.4.1 · Last updated: October 1, 2026
 
-Perk Done 用于手动追踪信用卡福利。只保存您主动添加的卡片产品、昵称、可选的后 4–5 位卡片尾号、自定义福利、福利隐藏状态、您填写的实际有效期、完成日期，实际年费，以及主题和语言偏好。请不要在昵称或备注中输入完整卡号、密码或其他敏感信息。
+## What the extension stores
 
-扩展使用 Chrome 的 `storage.sync` API 存储数据。启用 Chrome 同步后，Google 依据浏览器同步服务及其隐私政策处理跨设备同步；未启用同步时，数据保存在当前设备。主题与语言还会在当前浏览器的本地存储中缓存，以减少打开时的闪烁。Perk Done 不运行自有服务器，不向开发者上传上述记录，不出售数据。
+Perk Done manually tracks credit-card benefits. It stores the card products you
+add, nicknames, optional last four or five digits, custom perks, hidden-perk
+settings, validity dates you enter, completion dates, configured annual fees,
+and theme/language preferences. It does not require full card numbers, bank
+credentials, or transaction information. Avoid putting these in nicknames or
+custom text.
 
-本版本不连接银行、不读取交易或浏览历史、不注入网页，不包含分析、广告或第三方追踪组件。信用卡目录是随扩展发布的静态 JSON，无 API 或后台抓取。打开银行官方链接是您主动发起的访问，网站适用各自隐私政策。
+## Storage and sharing
 
-隐藏权益只影响显示和待办计数，不删除历史。您可以撤销完成记录或移除卡片；移除卡片会删除该卡所有年度记录。卸载扩展可能删除当前设备的扩展数据。跨设备同步和删除由 Chrome 服务处理。
+Wallet records and preferences use Chrome's `chrome.storage.sync` API. When
+Chrome Sync is enabled, Google handles cross-device synchronization under its
+browser sync service and privacy policy. With sync disabled, records remain on
+the current device. Theme and language are also cached locally to avoid display
+flicker.
 
-开发预览使用本地浏览器存储，与扩展钱包独立。示例卡片和完成记录不会保存；主题与语言选择会作为真实的偏好保存。
+Perk Done operates no backend and does not upload wallet records to its
+developer. It does not sell these records or use them for advertising. There
+are no analytics, advertising, or third-party tracking components. It does not
+connect to banks, read transactions or browsing history, or inject content into
+webpages. The card catalog and artwork are bundled with the extension; it does
+not fetch them from issuers at runtime. If you choose to open an issuer link,
+that website's own privacy policy applies.
 
-联系项目维护者：[PerkDone GitHub Issues](https://github.com/czhtoday/PerkDone/issues)
+## Feedback email
+
+The Feedback button opens your email application addressed to
+`perkdonedev@gmail.com`. Nothing is sent automatically. If you send an email,
+the developer receives your email address and whatever information you include
+and uses it to respond to feedback or support requests. Your email provider
+handles delivery under its own policies. Avoid sending full card numbers or
+bank credentials. You can request deletion of feedback emails at the same
+address. Public GitHub issues are visible to others and subject to GitHub's
+policies.
+
+## Managing your records
+
+Hiding a perk preserves its history. You can undo completions or remove a card;
+removing a card deletes that card's annual records. Uninstalling may delete
+extension data on the current device. Chrome handles synchronization and
+cross-device deletion. Keep an independent backup of important records.
+
+The development web preview uses a separate browser-local wallet and does not
+automatically transfer records to the installed extension. Demo cards and
+completion records are not saved; theme and language choices are saved as
+preferences.
+
+Contact: [perkdonedev@gmail.com](mailto:perkdonedev@gmail.com)
+
+## 中文说明
+
+Perk Done 保存您手动添加的卡片产品、昵称、可选的后 4–5 位尾号、自定义权益、隐藏状态、实际有效期、完成日期、年费，以及主题和语言偏好。无需完整卡号、银行密码或交易信息，请勿在自定义文字中填写这些信息。
+
+记录使用 Chrome 的 `storage.sync` 保存。开启 Chrome 同步后，Google 按其同步服务和隐私政策处理跨设备同步；未开启时，记录保存在当前设备。主题和语言也会缓存在本地。项目没有自有服务器，不向开发者上传钱包记录，不出售记录，不含广告、分析或第三方追踪组件，不连接银行、不读取交易或浏览历史、不注入网页。卡片目录和图片随扩展打包；用户主动打开的官网适用其自身隐私政策。
+
+Feedback 按钮只打开邮件软件，不自动发送邮件。如果您主动发邮件到 perkdonedev@gmail.com，开发者会收到您的邮箱地址及邮件内容，用于反馈和支持。邮件服务商负责传输；可联系该邮箱要求删除反馈邮件。GitHub Issues 是公开的，请勿提交私人卡片记录。
+
+隐藏权益保留历史；撤销完成会移除该次完成状态；移除卡片会删除该卡所有年度记录。卸载可能删除本地扩展数据，跨设备同步和删除由 Chrome 处理。开发网页预览和扩展钱包独立，示例记录不保存，但主题和语言偏好会保存。重要记录请另外备份。
