@@ -100,10 +100,30 @@ try {
       return [s.backgroundColor, s.color];
     });
   assert.notEqual(...colors);
+  assert.ok(
+    Number(colors[0].match(/\d+/)[0]) >= 220,
+    "Light done cells should stay soft gray",
+  );
+  const doneState = await page
+    .locator(".period.done .period-state")
+    .first()
+    .evaluate((e) => getComputedStyle(e).color);
+  assert.equal(doneState, "rgb(8, 123, 230)");
   const popup = await context.newPage();
   await popup.setViewportSize({ width: 430, height: 600 });
   await popup.goto(base + "popup.html");
   await popup.getByTestId("card-count").waitFor();
+  await popup
+    .getByTestId("net-value")
+    .filter({ hasText: "Keep going!" })
+    .waitFor();
+  assert.equal(await popup.locator(".return-emoji").textContent(), "💪");
+  assert.ok(
+    (await popup
+      .locator(".popup")
+      .evaluate((e) => e.getBoundingClientRect().height)) < 360,
+    "Popup should stay compact",
+  );
   assert.equal(await popup.getByTestId("card-count").textContent(), "1");
   assert.equal(
     await popup.locator(".due-row,.quarter-focus,.tracker").count(),
@@ -142,6 +162,11 @@ try {
   await popup.waitForFunction(
     () => document.documentElement.dataset.theme === "dark",
   );
+  await page.waitForFunction(
+    () =>
+      getComputedStyle(document.querySelector(".period.done"))
+        .backgroundColor === "rgb(41, 41, 41)",
+  );
   const darkColors = await page
     .locator(".period.done")
     .first()
@@ -150,6 +175,17 @@ try {
       return [s.backgroundColor, s.color];
     });
   assert.notEqual(...darkColors);
+  assert.ok(
+    Number(darkColors[0].match(/\d+/)[0]) < 70,
+    "Dark done cells should stay dark gray",
+  );
+  assert.equal(
+    await page
+      .locator(".period.done .period-state")
+      .first()
+      .evaluate((e) => getComputedStyle(e).color),
+    "rgb(50, 155, 255)",
+  );
   assert.notEqual(colors[0], darkColors[0]);
   await page.getByRole("button", { name: "Switch to Chinese" }).click();
   await popup.getByText("本季度待完成", { exact: true }).waitFor();
@@ -157,7 +193,7 @@ try {
   await page.reload();
   await page.getByRole("heading", { name: "我的权益", exact: true }).waitFor();
   await page.getByRole("button", { name: "切换到英文" }).click();
-  await popup.getByText("Remaining this quarter", { exact: true }).waitFor();
+  await popup.getByText("Perks to finish", { exact: true }).waitFor();
   // Direct fixture writes use only the isolated test profile. All six Aspire cash credits completed.
   await worker.evaluate(
     ({ year, today }) =>
@@ -184,7 +220,10 @@ try {
       document.querySelector('[data-testid="value-ratio"]').textContent ===
       "$550/$600",
   );
-  assert.equal(await popup.getByTestId("net-value").textContent(), "Ahead $50");
+  assert.equal(
+    await popup.getByTestId("net-value").textContent(),
+    "Net earned $50",
+  );
   const data = await worker.evaluate(() => chrome.storage.sync.get(null));
   assert.equal(
     Object.values(data).find((v) => v?.nickname === "Aspire 1").last4,
@@ -239,13 +278,13 @@ try {
   await demoPopup.waitForFunction(
     () => document.documentElement.dataset.theme === "dark",
   );
-  await demoPopup.screenshot({
+  await demoPopup.locator(".popup").screenshot({
     path: "docs/screenshots/popup-dark.png",
     animations: "disabled",
   });
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: real MV3; English default and synced Chinese preference; collapsed quarter list; numeric popup; 550/600 +50 calculation; immediate completion; anchored date editing and undo; multi-card filters; hide/restore; theme sync and inverse contrast; timeline widths; narrow layout; no runtime errors.",
+    "PASS: real MV3; English default and synced Chinese preference; collapsed quarter list; numeric popup; 550/600 +50 calculation; immediate completion; anchored date editing and undo; multi-card filters; hide/restore; theme sync and soft-gray completion contrast; timeline widths; narrow layout; no runtime errors.",
   );
 } finally {
   await context.close();

@@ -577,22 +577,52 @@ function App() {
                   <div>
                     <span>{t("本季度待完成")}</span>
                     <strong data-testid="due-count">{due.length}</strong>
+                    <small>{t("本季度")}</small>
                   </div>
                 </div>
                 <div className="return-stat">
                   <span>
-                    {new Date().getFullYear()} / {t("年费与已使用权益")}
+                    {new Date().getFullYear()} {t("年费与已使用权益")}
                   </span>
-                  <div>
+                  <div className="return-row">
                     <strong data-testid="value-ratio">
-                      {money(yearly.fees)}
+                      <span className="fee-value">{money(yearly.fees)}</span>
                       <i>/</i>
-                      {money(yearly.recovered)}
+                      <span className="earned-value">
+                        {money(yearly.recovered)}
+                      </span>
                     </strong>
-                    <b data-testid="net-value">
-                      {yearly.net >= 0 ? t("赚了") : t("尚差")}{" "}
-                      {money(Math.abs(yearly.net))}
-                    </b>
+                    <div
+                      className={`return-message ${shown.cards.length && yearly.net >= 0 ? "recovered" : "waiting"}`}
+                    >
+                      <span className="return-emoji" aria-hidden="true">
+                        {!shown.cards.length
+                          ? "🌱"
+                          : yearly.net > 0
+                            ? "👑"
+                            : yearly.net === 0
+                              ? "✨"
+                              : "💪"}
+                      </span>
+                      <b data-testid="net-value">
+                        {!shown.cards.length
+                          ? t("从第一张卡开始")
+                          : yearly.net > 0
+                            ? `${t("净赚")} ${money(yearly.net)}`
+                            : yearly.net === 0
+                              ? t("回本啦！")
+                              : t("加油！")}
+                      </b>
+                      <small>
+                        {!shown.cards.length
+                          ? t("让权益发挥价值。")
+                          : yearly.net > 0
+                            ? t("你是薅羊毛之神！")
+                            : yearly.net === 0
+                              ? t("接下来都是赚的。")
+                              : t("向回本再近一步。")}
+                      </small>
+                    </div>
                   </div>
                   <p>{t("按已完成权益的额度估算；房券不自动估值。")}</p>
                   {yearly.missingFees > 0 && (

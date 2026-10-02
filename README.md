@@ -12,14 +12,14 @@ A small Chrome extension for keeping track of credit card perks — without anot
 
 - **Toolbar popup:** numbers only — total cards, remaining quarter perks, and annual fees / completed credit value with the difference.
 - **Full dashboard:** jump straight to an equal-width annual timeline; the quarter deadline list is collapsed until you open it. Select any combination of cards with the multi-select filter. Monthly, quarterly, semiannual, and calendar-year perks share the same 12-month axis.
-- **Monochrome UI:** black, white, and gray, with light, dark, and system themes. Theme preferences sync between extension surfaces and devices.
+- **Restrained UI:** black, white, and gray with a blue accent for completion and earned value, with light, dark, and system themes. Theme preferences sync between extension surfaces and devices.
 - **Multiple cards per product:** distinguish cards with nicknames and optional **4–5 digit suffixes**, including Amex's last five digits. Existing suffixes can be edited without losing records.
 - **One-click completion:** click an unfinished period to save today immediately. Click `Done(6/21)` to open a small anchored date editor with Save date and Undo completion. Historical periods can be logged today; upcoming periods cannot be completed.
 - **Hidden perks:** use the eye icon beside a perk to hide it from the timeline and quarter's todo count. The card's `…` control says **Show hidden perks** on hover or keyboard focus and lets you restore them. Hidden perks retain their completion history.
 - **Custom cards and perks:** add products not in the bundled catalog.
 - **Actual validity dates:** set bank-reported ranges for cardmember-year credits and certificates instead of treating them as calendar-year credits.
 
-English is the default language. The **中 / EN** button switches to Chinese or English; this preference syncs with the wallet. Completed cells and selected controls use inverse black/white fills for clear contrast in both themes.
+English is the default language. The **中 / EN** button switches to Chinese or English; this preference syncs with the wallet. Completed cells and selected controls use a distinct soft gray fill in both themes. Done and its checkmark use blue. The compact popup shows fees in gray, earned value in blue, and a small emoji with progress or net-earnings encouragement.
 
 ## Install locally / 本地安装
 
@@ -36,7 +36,7 @@ npm ci
 npm run dev      # local preview; independent browser-local storage
 npm test         # model, storage, migration, deadline and catalog tests
 npm run build    # creates dist, ready for Load unpacked
-npm run package  # creates release/perk-done-0.3.0.zip
+npm run package  # creates release/perk-done-0.3.1.zip
 ```
 
 Preview routes:
@@ -121,7 +121,7 @@ The discontinued Saks perk's 2026-06-30 cutoff is documented by [NerdWallet's re
 
 ## Annual fees and used value
 
-The popup uses the current calendar year across **all cards**, independent of dashboard filters. The first number sums actual annual fees (editable when adding or editing a card); the second sums the face value of completed credit periods. Example: Aspire $550 / $600 → **Ahead $50**. Undo reduces used value. Hidden completed credits still count.
+The popup uses the current calendar year across **all cards**, independent of dashboard filters. The first number sums actual annual fees (editable when adding or editing a card); the second sums the face value of completed credit periods. Example: Aspire $550 / $600 → **Net earned $50**. Undo reduces used value. Hidden completed credits still count.
 
 A completion assumes the entire period credit was used. This is an estimate, not bank-verified reimbursement or a measure of actual profit. Free-night certificates have zero automatic cash value; signup bonuses, points, taxes and additional spending are excluded. Calendar perks are attributed to their timeline year, even when recorded later. Manual credits use the completion-date year, including retained records from earlier date ranges. Annual fees represent current configured fees, not a historical billing ledger; adjust for waivers, introductory offers or personal pricing. Catalog defaults are the public standard annual fees.
 
@@ -149,6 +149,6 @@ For an existing Chrome-for-Testing installation, pass its executable path throug
 
 ## Publishing
 
-`release/perk-done-0.3.0.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
+`release/perk-done-0.3.1.zip` contains only the built extension. Source, dependencies, tests, screenshots, and personal records are excluded. The extension has not been published to the Chrome Web Store.
 
 The GitHub repository stores the source. Rebuild locally for Load unpacked. Chrome Web Store distribution additionally needs a developer registration, a one-time registration fee, listing screenshots, and a publicly accessible privacy policy.

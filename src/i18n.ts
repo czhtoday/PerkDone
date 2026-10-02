@@ -4,6 +4,15 @@ export function setLanguage(value: Language) {
   language = value;
 }
 const translations: Record<string, string> = {
+  本季度: "This quarter",
+  净赚: "Net earned",
+  "你是薅羊毛之神！": "Perk legend!",
+  "回本啦！": "Broke even!",
+  "接下来都是赚的。": "Every next perk is a win.",
+  "加油！": "Keep going!",
+  "向回本再近一步。": "Every perk gets you closer.",
+  从第一张卡开始: "Add your first card",
+  "让权益发挥价值。": "Make your perks count.",
   无效主题: "Invalid theme.",
   "卡片已移除，请重新打开面板。":
     "This card was removed. Reopen the dashboard.",
@@ -198,8 +207,8 @@ const translations: Record<string, string> = {
   移除卡片: "Remove card",
   钱包概览: "Wallet overview",
   信用卡: "Cards",
-  本季度待完成: "Remaining this quarter",
-  年费与已使用权益: "Annual fees / Used value",
+  本季度待完成: "Perks to finish",
+  年费与已使用权益: "Annual fee / Earned",
   赚了: "Ahead",
   尚差: "To break even",
   "按已完成权益的额度估算；房券不自动估值。":
@@ -253,6 +262,8 @@ const chinese: Record<string, string> = {
 };
 export function t(text: string) {
   return language === "zh"
-    ? (chinese[text] ?? text)
+    ? text === "年费与已使用权益"
+      ? "年费 / 已赚回"
+      : (chinese[text] ?? text)
     : (translations[text] ?? text);
 }
