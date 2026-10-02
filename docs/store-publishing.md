@@ -18,10 +18,10 @@
 
 ### 图片准备
 
-- 扩展图标：`public/icons/128.png`，128 × 128 PNG，已随 ZIP 打包。
-- 至少一张真实使用截图，建议 1280 × 800；最多五张。展示浅色与深色时间表、小窗口即可，使用演示数据。
-- 小推广图：440 × 280 PNG 或 JPEG；用自己的 Perk Done 标识和简短介绍。
-- `docs/screenshots/` 的图片用于 README，不能直接假定尺寸符合商店。商店图片需要单独按上述尺寸制作；不要上传个人真实记录。
+- 商店图标：`docs/store-assets/store-icon-128.png`，128 × 128 PNG，带透明留白。扩展安装包内另有工具栏图标。
+- 已准备三张 1280 × 800 截图：`docs/store-assets/dashboard-dark-1280x800.png`、`dashboard-light-1280x800.png` 和 `popup-overview-1280x800.png`。使用演示数据，均为 24-bit RGB PNG，无 alpha。
+- 已准备小推广图：`docs/store-assets/promo-440x280.png`，440 × 280 RGB PNG。
+- `docs/screenshots/` 的图片用于 README；上架使用 `docs/store-assets/`。整套图片另打包在 `release/perk-done-store-assets.zip`。不要上传个人真实记录。
 
 详见 [Google 图片要求](https://developer.chrome.com/docs/webstore/images) 与 [Listing 字段](https://developer.chrome.com/docs/webstore/cws-dashboard-listing)。
 
