@@ -1689,3 +1689,114 @@ input::placeholder {
     display: none;
   }
 }
+
+/* Match the popup’s root canvas to the surface, including scrollbar corners. */
+html:has(.popup-body) {
+  background: var(--surface);
+}
+body.popup-body {
+  color-scheme: inherit;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--strong-border);
+  border: 2px solid var(--surface);
+  border-radius: 8px;
+}
+.hide-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  margin: 5px 0 0;
+  font-weight: 400;
+}
+.hide-hint svg {
+  flex-shrink: 0;
+}
+.hide-perk {
+  opacity: 0.7;
+}
+.benefit-row:hover .hide-perk,
+.hide-perk:focus-visible,
+.hide-perk:hover:not(:disabled) {
+  opacity: 1;
+  color: var(--blue);
+  background: var(--subtle);
+}
+.period.in-progress {
+  border-color: var(--strong-border);
+  background: var(--subtle);
+}
+.period.in-progress .period-state {
+  color: var(--blue);
+}
+.amount-progress {
+  display: block;
+  font-size: 11px;
+  margin-top: 7px;
+  color: var(--secondary);
+}
+.amount-progress small {
+  font-size: inherit;
+}
+.amount-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.amount-input input {
+  min-width: 0;
+  width: 100%;
+}
+.date-popover label > small {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+}
+.reorder-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.reorder-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: grab;
+}
+.reorder-list li.drag-over {
+  border-color: var(--blue);
+}
+.reorder-list b {
+  flex: 1;
+  font-size: 13px;
+}
+.drag-handle {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.period-state .amount-progress {
+  margin-top: 0;
+  margin-left: auto;
+  font-size: 10px;
+}
+
+.amount-limit {
+  white-space: nowrap;
+  flex-shrink: 0;
+}

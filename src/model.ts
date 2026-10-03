@@ -8,6 +8,9 @@ export type Benefit = {
   amount: number;
   frequency: Frequency;
   decemberExtra?: number;
+  amountChanges?: { from: string; amount: number }[];
+  trackAmount?: boolean;
+  windows?: { start: string; end: string }[];
   note?: string;
   valueLabel?: string;
   hidden?: boolean;
@@ -38,6 +41,7 @@ export type Records = Record<string, string>;
 export type Wallet = {
   cards: Card[];
   records: Records;
+  progress?: Record<string, { amount: number; date: string }>;
   theme?: Theme;
   language?: Language;
 };
@@ -49,6 +53,7 @@ export type Period = {
   label: string;
   start: string;
   end: string;
+  deadlineKnown?: boolean;
 };
 export const frequencies: Record<Frequency, string> = {
   annual: "全年",
@@ -106,9 +111,48 @@ export function periods(frequency: Frequency, year: number): Period[] {
   }));
 }
 export function benefitPeriods(benefit: Benefit, year: number): Period[] {
+  if (
+    (benefit.validFrom && benefit.validFrom > `${year}-12-31`) ||
+    (benefit.validUntil && benefit.validUntil < `${year}-01-01`)
+  )
+    return [];
+  if (benefit.windows)
+    return benefit.windows.flatMap((w, index) =>
+      w.start <= `${year}-12-31` && w.end >= `${year}-01-01`
+        ? [
+            {
+              index,
+              recordYear: Number(w.start.slice(0, 4)),
+              startMonth: Number(w.start.slice(5, 7)) - 1,
+              span: 12,
+              label: "限时优惠",
+              ...w,
+            },
+          ]
+        : [],
+    );
   if (benefit.frequency === "manual") {
     const s = benefit.schedule;
-    if (!s || s.start > `${year}-12-31` || s.end < `${year}-01-01`) return [];
+    if (!s)
+      return [
+        {
+          index: "undated",
+          recordYear: year,
+          startMonth: 0,
+          span: 12,
+          label: "自由记录",
+          start:
+            benefit.validFrom && benefit.validFrom > `${year}-01-01`
+              ? benefit.validFrom
+              : `${year}-01-01`,
+          end:
+            benefit.validUntil && benefit.validUntil < `${year}-12-31`
+              ? benefit.validUntil
+              : `${year}-12-31`,
+          deadlineKnown: false,
+        },
+      ];
+    if (s.start > `${year}-12-31` || s.end < `${year}-01-01`) return [];
     return [
       {
         index: `${s.start}_${s.end}`,
@@ -150,9 +194,18 @@ export function recordKey(
 ) {
   return `${cardId}/${year}/${benefitId}/${index}`;
 }
-export function periodAmount(benefit: Benefit, startMonth: number) {
+export function periodAmount(
+  benefit: Benefit,
+  startMonth: number,
+  year = new Date().getFullYear(),
+) {
+  const start = `${year}-${String(startMonth + 1).padStart(2, "0")}-01`;
+  const changed = benefit.amountChanges
+    ?.filter((v) => v.from <= start)
+    .sort((a, b) => b.from.localeCompare(a.from))[0];
   return (
-    benefit.amount + (startMonth === 11 ? (benefit.decemberExtra ?? 0) : 0)
+    (changed?.amount ?? benefit.amount) +
+    (startMonth === 11 ? (benefit.decemberExtra ?? 0) : 0)
   );
 }
 export function validCompletion(
@@ -187,6 +240,7 @@ export function quarterDue(wallet: Wallet, today = localDate()): DueItem[] {
             period.index,
           );
           if (
+            period.deadlineKnown !== false &&
             period.end >= today &&
             period.end <= end &&
             !wallet.records[key] &&
@@ -213,23 +267,33 @@ export function annualValue(wallet: Wallet, year: number) {
   for (const card of wallet.cards)
     for (const benefit of card.benefits) {
       if (benefit.frequency === "manual") {
-        for (const [key, date] of Object.entries(wallet.records)) {
+        for (const [key, date] of Object.entries({
+          ...wallet.progress,
+          ...wallet.records,
+        })) {
           const parts = key.split("/");
           if (
             parts[0] === card.id &&
             parts[2] === benefit.id &&
-            Number(date.slice(0, 4)) === year &&
+            Number(
+              (typeof date === "string" ? date : date.date).slice(0, 4),
+            ) === year &&
             !seen.has(key)
           ) {
-            recovered += benefit.amount;
+            recovered += wallet.progress?.[key]?.amount ?? benefit.amount;
             seen.add(key);
           }
         }
       } else
         for (const p of benefitPeriods(benefit, year)) {
           const key = recordKey(card.id, benefit.id, p.recordYear, p.index);
-          if (wallet.records[key] && !seen.has(key)) {
-            recovered += periodAmount(benefit, p.startMonth);
+          if (
+            (wallet.records[key] || wallet.progress?.[key]) &&
+            !seen.has(key)
+          ) {
+            recovered +=
+              wallet.progress?.[key]?.amount ??
+              periodAmount(benefit, p.startMonth, p.recordYear);
             seen.add(key);
           }
         }

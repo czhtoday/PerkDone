@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "verifiedAt": "2026-10-01",
+  "verifiedAt": "2026-10-03",
   "products": [
     {
       "productId": "amex-aspire",
@@ -22,7 +22,8 @@
           "name": "Hilton Resort Credit",
           "amount": 200,
           "frequency": "semiannual",
-          "note": "每半年额度；仅限参与活动的 Hilton Resorts。"
+          "note": "每半年额度；仅限参与活动的 Hilton Resorts。",
+          "trackAmount": true
         },
         {
           "id": "clear",
@@ -89,7 +90,8 @@
           "name": "Hotel Credit · FHR / THC",
           "amount": 300,
           "frequency": "semiannual",
-          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。"
+          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。",
+          "trackAmount": true
         },
         {
           "id": "resy",
@@ -125,7 +127,8 @@
           "name": "Airline Fee Credit",
           "amount": 200,
           "frequency": "annual",
-          "note": "需选择航空公司，适用合格航空杂费。"
+          "note": "需选择航空公司，适用合格航空杂费。",
+          "trackAmount": true
         },
         {
           "id": "clear",
@@ -241,23 +244,24 @@
       "bank": "Chase",
       "color": "neutral",
       "source": "https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "benefits": [
         {
           "id": "hotel",
           "name": "Chase Travel Hotel Credit",
           "amount": 100,
           "frequency": "manual",
-          "note": "当前官网额度为每账户周年年 $100；填写银行账户的实际额度周期（非自然年）。",
-          "valueLabel": "$100 / cardmember year"
+          "note": "当前官网额度为每账户周年年 $100；填写银行账户的实际额度周期（非自然年）。 日期可选；未填写时可直接记录，不推算到期日。",
+          "valueLabel": "$100 / cardmember year",
+          "trackAmount": true
         },
         {
           "id": "doordash",
           "name": "DoorDash Non-restaurant Promo",
           "amount": 10,
           "frequency": "monthly",
-          "note": "需激活 DashPass；每月一次合格非餐厅订单优惠，至 2027-12-31。",
-          "validUntil": "2027-12-31"
+          "note": "需激活 DashPass；合格非餐厅订单每月 $10 优惠，至 2029-12-31。CSR 两次优惠需分开使用。",
+          "validUntil": "2029-12-31"
         }
       ],
       "aliases": ["CSP", "蓝宝石首选"],
@@ -272,15 +276,16 @@
       "bank": "Chase",
       "color": "neutral",
       "source": "https://creditcards.chase.com/rewards-credit-cards/sapphire/reserve",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "benefits": [
         {
           "id": "travel",
           "name": "Travel Credit",
           "amount": 300,
           "frequency": "manual",
-          "note": "每账户周年年额度；填写银行显示的实际周期，重置可能随账单日（非自然年）。",
-          "valueLabel": "$300 / cardmember year"
+          "note": "每账户周年年额度；填写银行显示的实际周期，重置可能随账单日（非自然年）。 日期可选；未填写时可直接记录，不推算到期日。",
+          "valueLabel": "$300 / cardmember year",
+          "trackAmount": true
         },
         {
           "id": "edit",
@@ -288,7 +293,8 @@
           "amount": 500,
           "frequency": "annual",
           "note": "2026 起自然年最高 $500；每笔合格预付订单最高 $250，至少两晚。",
-          "validFrom": "2026-01-01"
+          "validFrom": "2026-01-01",
+          "trackAmount": true
         },
         {
           "id": "select-hotels-2026",
@@ -297,7 +303,8 @@
           "frequency": "annual",
           "note": "2026 年限定；Chase Travel 指定酒店品牌预付至少两晚。",
           "validFrom": "2026-01-01",
-          "validUntil": "2026-12-31"
+          "validUntil": "2026-12-31",
+          "trackAmount": true
         },
         {
           "id": "dining",
@@ -332,27 +339,33 @@
         },
         {
           "id": "doordash-dining",
-          "name": "DoorDash Restaurant Promo",
+          "name": "DoorDash Monthly Promo",
           "amount": 5,
           "frequency": "monthly",
-          "note": "需激活 DashPass；每月合格餐厅订单优惠，至 2027-12-31。",
-          "validUntil": "2027-12-31"
+          "note": "2026-10-01 起每月 $15，适用合格餐厅与非餐厅订单；此前为餐厅 $5。需激活 DashPass，至 2029-12-31。",
+          "validUntil": "2029-12-31",
+          "amountChanges": [
+            {
+              "from": "2026-10-01",
+              "amount": 15
+            }
+          ]
         },
         {
           "id": "doordash-1",
           "name": "DoorDash Non-restaurant · 1",
           "amount": 10,
           "frequency": "monthly",
-          "note": "需激活 DashPass；每月两次独立的 $10 非餐厅优惠之一，至 2027-12-31。",
-          "validUntil": "2027-12-31"
+          "note": "需激活 DashPass；合格非餐厅订单每月 $10 优惠，至 2029-12-31。CSR 两次优惠需分开使用。",
+          "validUntil": "2029-12-31"
         },
         {
           "id": "doordash-2",
           "name": "DoorDash Non-restaurant · 2",
           "amount": 10,
           "frequency": "monthly",
-          "note": "需激活 DashPass；每月两次独立的 $10 非餐厅优惠之二，至 2027-12-31。",
-          "validUntil": "2027-12-31"
+          "note": "需激活 DashPass；合格非餐厅订单每月 $10 优惠，至 2029-12-31。CSR 两次优惠需分开使用。",
+          "validUntil": "2029-12-31"
         }
       ],
       "aliases": ["CSR", "蓝宝石储备"],
@@ -367,7 +380,7 @@
       "bank": "Chase",
       "color": "neutral",
       "source": "https://marriott.chase.com/boundless",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "benefits": [
         {
           "id": "free-night",
@@ -376,6 +389,47 @@
           "frequency": "manual",
           "note": "续卡后房券；填写 Marriott 账户实际签发日和到期日。",
           "valueLabel": "35,000 points / night"
+        },
+        {
+          "id": "airline-2026",
+          "name": "Airline Credit · 2026",
+          "amount": 50,
+          "frequency": "annual",
+          "windows": [
+            {
+              "start": "2026-07-01",
+              "end": "2026-12-31"
+            }
+          ],
+          "note": "单次优惠，非永久年度报销。现有合格持卡人须激活，2026 下半年航空直购满 $250 得 $50；2026-06-04 至 12-31 申请的新卡首期从 6/4 开始。"
+        },
+        {
+          "id": "airline-new-2027",
+          "name": "Airline Credit · New-card Offer",
+          "amount": 50,
+          "frequency": "annual",
+          "windows": [
+            {
+              "start": "2027-01-01",
+              "end": "2027-06-30"
+            }
+          ],
+          "hidden": true,
+          "note": "仅限 2026-06-04 至 12-31 申请的新卡：2027 上半年航空直购满 $250 得 $50。合格时从隐藏权益恢复；老卡不适用。"
+        },
+        {
+          "id": "airline-existing-h1-2026",
+          "name": "Airline Credit · Existing Card H1",
+          "amount": 50,
+          "frequency": "annual",
+          "windows": [
+            {
+              "start": "2026-01-01",
+              "end": "2026-06-30"
+            }
+          ],
+          "hidden": true,
+          "note": "仅限 2026-01-07 前已持卡且完成激活者；2026 上半年航空直购满 $250 得 $50。历史记录项，合格时恢复。"
         }
       ],
       "aliases": ["Marriott", "万豪", "Boundless"],
@@ -420,7 +474,7 @@
       "bank": "Chase",
       "color": "neutral",
       "source": "https://creditcards.chase.com/travel-credit-cards/ihg-rewards-club/premier",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "benefits": [
         {
           "id": "united",
@@ -436,21 +490,21 @@
           "amount": 0,
           "frequency": "manual",
           "note": "续卡房券；以 IHG 账户实际有效期为准。",
-          "valueLabel": "50,000 points / night"
+          "valueLabel": "50k-point certificate"
         },
         {
           "id": "food",
           "name": "IHG Food & Beverage Voucher",
           "amount": 25,
           "frequency": "quarterly",
-          "note": "每季签发并于当季末到期；仅参与 IHG 酒店的合格房账餐饮。"
+          "note": "每季度一张 $25 IHG 餐饮券，当季到期；一次性使用，未用满作废。老卡权益生效日期以银行通知为准。"
         },
         {
           "id": "airline",
           "name": "Airline Credit",
           "amount": 100,
           "frequency": "annual",
-          "note": "自然年直接向航空公司购买机票累计满 $250；至 2027-12-31。",
+          "note": "每自然年一笔至少 $250 的航空公司直购机票可获 $100 报销，至 2027-12-31。老卡权益生效日期以银行通知为准。",
           "validUntil": "2027-12-31"
         },
         {
@@ -466,7 +520,7 @@
           "name": "DoorDash Non-restaurant Promo",
           "amount": 10,
           "frequency": "monthly",
-          "note": "需在 2026-09-01 或之后激活指定 DashPass；每月一次非餐厅优惠至 2027-12-31。",
+          "note": "每月 $10 非餐厅优惠，至 2027-12-31；仅限 2026-09-01 起新激活 Chase DashPass 者，并须保持会员有效。",
           "validFrom": "2026-09-01",
           "validUntil": "2027-12-31"
         }
@@ -493,7 +547,8 @@
           "name": "Hotel Credit · FHR / THC",
           "amount": 300,
           "frequency": "semiannual",
-          "note": "预付 Amex Travel FHR / THC；THC 至少两晚。"
+          "note": "预付 Amex Travel FHR / THC；THC 至少两晚。",
+          "trackAmount": true
         },
         {
           "id": "hilton",
@@ -507,7 +562,8 @@
           "name": "Airline Fee Credit",
           "amount": 200,
           "frequency": "annual",
-          "note": "选择一家指定航空公司；仅合格杂费。"
+          "note": "选择一家指定航空公司；仅合格杂费。",
+          "trackAmount": true
         },
         {
           "id": "clear",
@@ -1481,7 +1537,7 @@
       "color": "neutral",
       "annualFee": 795,
       "source": "https://creditcards.chase.com/business-credit-cards/sapphire/reserve",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "aliases": ["CSR Business", "商务蓝宝石"],
       "description": "",
       "benefits": [
@@ -1490,16 +1546,24 @@
           "name": "Travel Credit",
           "amount": 300,
           "frequency": "manual",
-          "note": "每账户周年年额度；填写银行显示的实际周期，重置可能随账单日（非自然年）。",
-          "valueLabel": "$300 / cardmember year"
+          "note": "每账户周年年额度；填写银行显示的实际周期，重置可能随账单日（非自然年）。 日期可选；未填写时可直接记录，不推算到期日。",
+          "valueLabel": "$300 / cardmember year",
+          "trackAmount": true
         },
         {
           "id": "edit",
           "name": "The Edit Hotel Credit",
           "amount": 500,
           "frequency": "annual",
-          "note": "2026 起自然年最高 $500；每笔合格预付订单最高 $250，至少两晚。",
-          "validFrom": "2026-01-01"
+          "note": "2026 自然年 $500；2027-01-01 起提升至 $1,000，每笔最高 $250，预付至少两晚。",
+          "validFrom": "2026-01-01",
+          "trackAmount": true,
+          "amountChanges": [
+            {
+              "from": "2027-01-01",
+              "amount": 1000
+            }
+          ]
         },
         {
           "id": "select-hotels-2026",
@@ -1508,7 +1572,8 @@
           "frequency": "annual",
           "note": "2026 年限定；Chase Travel 指定酒店品牌预付至少两晚。",
           "validFrom": "2026-01-01",
-          "validUntil": "2026-12-31"
+          "validUntil": "2026-12-31",
+          "trackAmount": true
         },
         {
           "id": "lyft",
@@ -1574,7 +1639,7 @@
       "color": "neutral",
       "annualFee": 200,
       "source": "https://creditcards.chase.com/business-credit-cards/IHG/business-premier",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "aliases": ["IHG Biz", "洲际商务", "IHG Premier Business"],
       "description": "",
       "benefits": [
@@ -1584,7 +1649,7 @@
           "amount": 0,
           "frequency": "manual",
           "note": "续卡后签发；以账户实际有效期为准。",
-          "valueLabel": "50,000 points / night"
+          "valueLabel": "50k-point certificate"
         },
         {
           "id": "spend-night",
@@ -1599,14 +1664,14 @@
           "name": "IHG Food & Beverage Voucher",
           "amount": 25,
           "frequency": "quarterly",
-          "note": "每季签发并于当季末到期；仅参与 IHG 酒店的合格房账餐饮。"
+          "note": "每季度一张 $25 IHG 餐饮券，当季到期；一次性使用，未用满作废。老卡权益生效日期以银行通知为准。"
         },
         {
           "id": "airline",
           "name": "Airline Credit",
           "amount": 100,
           "frequency": "annual",
-          "note": "自然年直接向航空公司购买机票累计满 $250；至 2027-12-31。",
+          "note": "每自然年一笔至少 $250 的航空公司直购机票可获 $100 报销，至 2027-12-31。老卡权益生效日期以银行通知为准。",
           "validUntil": "2027-12-31"
         },
         {
@@ -1629,7 +1694,7 @@
           "name": "DoorDash Non-restaurant Promo",
           "amount": 10,
           "frequency": "monthly",
-          "note": "需在 2026-09-01 或之后激活指定 DashPass；每月一次非餐厅优惠至 2027-12-31。",
+          "note": "每月 $10 非餐厅优惠，至 2027-12-31；仅限 2026-09-01 起新激活 Chase DashPass 者，并须保持会员有效。",
           "validFrom": "2026-09-01",
           "validUntil": "2027-12-31"
         }
@@ -1644,7 +1709,7 @@
       "color": "neutral",
       "annualFee": 395,
       "source": "https://www.capitalone.com/credit-cards/venture-x/",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "aliases": ["VX", "Venture X"],
       "description": "",
       "benefits": [
@@ -1653,7 +1718,8 @@
           "name": "Travel Portal Credit",
           "amount": 300,
           "frequency": "manual",
-          "note": "周年年通过指定 Capital One Travel 门户预订；不是随意旅行消费报销。 填写银行显示的实际周期。"
+          "note": "周年年通过指定 Capital One Travel 门户预订；不是随意旅行消费报销。 填写银行显示的实际周期。 日期可选；未填写时可直接记录，不推算到期日。",
+          "trackAmount": true
         }
       ],
       "image": "cards/capitalone-venture-x.png",
@@ -1675,7 +1741,8 @@
           "name": "Travel Portal Credit",
           "amount": 300,
           "frequency": "manual",
-          "note": "周年年通过指定 Capital One Business Travel 门户预订；不是随意旅行消费报销。 填写银行显示的实际周期。"
+          "note": "周年年通过指定 Capital One Business Travel 门户预订；不是随意旅行消费报销。 填写银行显示的实际周期。 日期可选；未填写时可直接记录，不推算到期日。",
+          "trackAmount": true
         }
       ],
       "image": "cards/capitalone-venture-x-business.png",
@@ -1710,7 +1777,7 @@
       "color": "neutral",
       "annualFee": 595,
       "source": "https://www.citi.com/credit-cards/citi-strata-elite-credit-card",
-      "verified": "2026-10-01",
+      "verified": "2026-10-03",
       "aliases": ["Citi Elite"],
       "description": "",
       "benefits": [
@@ -1726,14 +1793,16 @@
           "name": "Splurge Credit",
           "amount": 200,
           "frequency": "annual",
-          "note": "每年选择至多两个指定品牌：1stDibs、AA、Best Buy、Future、Live Nation；有排除项。"
+          "note": "每年选择至多两个指定品牌：1stDibs、AA、Best Buy、Future、Live Nation；有排除项。",
+          "trackAmount": true
         },
         {
           "id": "blacklane",
           "name": "Blacklane Credit",
           "amount": 100,
           "frequency": "semiannual",
-          "note": "每半年符合条件的 Blacklane 预订。"
+          "note": "每半年符合条件的 Blacklane 预订。",
+          "trackAmount": true
         }
       ],
       "image": "cards/citi-strata-elite.webp",
@@ -1842,7 +1911,8 @@
           "name": "Airline Incidental Credit",
           "amount": 100,
           "frequency": "annual",
-          "note": "自然年指定美国航空公司的合格杂费，非一般机票消费。"
+          "note": "自然年指定美国航空公司的合格杂费，非一般机票消费。",
+          "trackAmount": true
         }
       ],
       "image": "cards/bofa-premium.png",
@@ -1864,14 +1934,16 @@
           "name": "Airline Incidental Credit",
           "amount": 300,
           "frequency": "annual",
-          "note": "自然年指定美国航空公司的合格杂费，非一般机票消费。"
+          "note": "自然年指定美国航空公司的合格杂费，非一般机票消费。",
+          "trackAmount": true
         },
         {
           "id": "lifestyle",
           "name": "Lifestyle Credit",
           "amount": 150,
           "frequency": "annual",
-          "note": "自然年指定流媒体、外卖、健身和网约车服务商。"
+          "note": "自然年指定流媒体、外卖、健身和网约车服务商。",
+          "trackAmount": true
         }
       ],
       "image": "cards/bofa-elite.png",
@@ -1967,7 +2039,8 @@
           "name": "Hotel Credit · FHR / THC",
           "amount": 300,
           "frequency": "semiannual",
-          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。"
+          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。",
+          "trackAmount": true
         },
         {
           "id": "resy",
@@ -2003,7 +2076,8 @@
           "name": "Airline Fee Credit",
           "amount": 200,
           "frequency": "annual",
-          "note": "需选择航空公司，适用合格航空杂费。"
+          "note": "需选择航空公司，适用合格航空杂费。",
+          "trackAmount": true
         },
         {
           "id": "clear",
@@ -2067,7 +2141,8 @@
           "name": "Hotel Credit · FHR / THC",
           "amount": 300,
           "frequency": "semiannual",
-          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。"
+          "note": "Amex Travel 预付 FHR / THC，THC 至少两晚。",
+          "trackAmount": true
         },
         {
           "id": "resy",
@@ -2103,7 +2178,8 @@
           "name": "Airline Fee Credit",
           "amount": 200,
           "frequency": "annual",
-          "note": "需选择航空公司，适用合格航空杂费。"
+          "note": "需选择航空公司，适用合格航空杂费。",
+          "trackAmount": true
         },
         {
           "id": "clear",
@@ -2183,6 +2259,84 @@
       ],
       "image": "cards/chase-bountiful.png",
       "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/marriott_bonvoy_bountiful_card.png"
+    },
+    {
+      "productId": "chase-ihg-premier-select",
+      "name": "IHG One Rewards Premier Select",
+      "bank": "Chase",
+      "color": "neutral",
+      "source": "https://creditcards.chase.com/travel-credit-cards/ihg-rewards-club/premier-select",
+      "verified": "2026-10-03",
+      "benefits": [
+        {
+          "id": "united",
+          "name": "United TravelBank Cash",
+          "amount": 25,
+          "frequency": "semiannual",
+          "note": "需注册关联 MileagePlus；上半年入账的 $25 于 7/15 到期，下半年于次年 1/15 到期。",
+          "expiryOffsetDays": 15,
+          "validFrom": "2026-10-01"
+        },
+        {
+          "id": "free-night",
+          "name": "Anniversary Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "note": "续卡房券最多 60,000 点，可补点。日期可选，直接点击完成；实际到期日以 IHG 账户为准。",
+          "valueLabel": "60k-point certificate",
+          "validFrom": "2026-10-01"
+        },
+        {
+          "id": "food",
+          "name": "IHG Food & Beverage Voucher",
+          "amount": 75,
+          "frequency": "quarterly",
+          "note": "每季度 $75 IHG 餐饮券，当季到期，只能使用一次；未用满部分作废。合格消费须记入参与酒店房账。",
+          "validFrom": "2026-10-01"
+        },
+        {
+          "id": "airline",
+          "name": "Airline Credit",
+          "amount": 200,
+          "frequency": "annual",
+          "note": "每自然年一笔至少 $250 的航空公司直购机票可获 $200 报销，至 2027-12-31。",
+          "validUntil": "2027-12-31",
+          "validFrom": "2026-10-01"
+        },
+        {
+          "id": "instacart",
+          "name": "Instacart Credit",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "激活指定 Instacart+ 会员后，每月独立订单优惠；不可合并，至 2027-12-31。",
+          "validUntil": "2027-12-31",
+          "validFrom": "2026-10-01"
+        },
+        {
+          "id": "doordash",
+          "name": "DoorDash Non-restaurant Promo",
+          "amount": 10,
+          "frequency": "monthly",
+          "note": "每月 $10 非餐厅优惠，至 2027-12-31；仅限 2026-09-01 起新激活 Chase DashPass 者，并须保持会员有效。",
+          "validFrom": "2026-10-01",
+          "validUntil": "2027-12-31"
+        },
+        {
+          "id": "spend-night",
+          "name": "Spend-earned Free Night",
+          "amount": 0,
+          "frequency": "manual",
+          "valueLabel": "60k-point certificate",
+          "hidden": true,
+          "note": "自然年消费满 $40,000 可获额外 60,000 点房券；只在收到房券后恢复并记录，日期可选。",
+          "validFrom": "2026-10-01"
+        }
+      ],
+      "aliases": ["IHG Select", "IHG 350", "IHG高端卡"],
+      "description": "IHG Premier Select · $350 annual fee. Existing-account eligibility and activation requirements apply.",
+      "annualFee": 350,
+      "image": "/cards/chase-ihg-premier-select.png",
+      "imageSource": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/ihg_premier_select_card.png"
     }
   ]
 }

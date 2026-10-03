@@ -219,6 +219,109 @@ try {
   await filter.getByRole("button", { name: "Select all" }).click();
   assert.equal(await page.locator(".card-section").count(), 3);
   await page.keyboard.press("Escape");
+  // Undated certificates remain one-click; hotel credits use a small amount editor.
+  const aspireSection = page.locator(".card-section").filter({
+    has: page.getByRole("heading", { name: "Aspire 1 01007", exact: true }),
+  });
+  const certificate = aspireSection
+    .locator(".benefit-row")
+    .filter({ hasText: "Free Night Reward" });
+  await certificate.locator(".period").click();
+  await certificate.locator(".period.done").waitFor();
+  assert.equal(
+    await page.locator("dialog[open],.date-popover:popover-open").count(),
+    0,
+  );
+  const cspSection = page.locator(".card-section").filter({
+    has: page.getByRole("heading", { name: "My CSP 1234", exact: true }),
+  });
+  const hotel = cspSection
+    .locator(".benefit-row")
+    .filter({ hasText: "Chase Travel Hotel Credit" });
+  await hotel.locator(".period").click();
+  const amountEditor = page.locator(".date-popover:popover-open");
+  await amountEditor.waitFor();
+  await page.screenshot({
+    path: "test-results/amount-editor.png",
+    animations: "disabled",
+  });
+  assert.equal(await page.locator("dialog[open]").count(), 0);
+  await amountEditor.locator("input[type=number]").fill("40");
+  await amountEditor
+    .getByRole("button", { name: "Save amount", exact: true })
+    .click();
+  await hotel.locator(".period.in-progress").waitFor();
+  const progressBox = await hotel.locator(".amount-progress").boundingBox();
+  const periodBox = await hotel.locator(".period").boundingBox();
+  assert.ok(
+    progressBox.y + progressBox.height <= periodBox.y + periodBox.height,
+    "Amount progress must be inside the visible cell",
+  );
+  await page.screenshot({
+    path: "test-results/amount-progress.png",
+    animations: "disabled",
+  });
+  assert.match(
+    await hotel.locator(".amount-progress").textContent(),
+    /\$40 \/ \$100.*\$60 left/,
+  );
+  const partialItems = await worker.evaluate(() =>
+    chrome.storage.sync.get(null),
+  );
+  assert.equal(
+    Object.values(partialItems)
+      .flatMap((v) => Object.values(v ?? {}))
+      .find((v) => v?.amount === 40)?.amount,
+    40,
+  );
+  await page.reload();
+  await hotel.locator(".period.in-progress").waitFor();
+  await hotel.locator(".period").click();
+  assert.equal(
+    await amountEditor.locator("input[type=number]").inputValue(),
+    "40",
+  );
+  await amountEditor.locator("input[type=number]").fill("100");
+  await amountEditor.locator("input[type=number]").press("Enter");
+  await hotel.locator(".period.done").waitFor();
+  await hotel.locator(".period.done").click();
+  await amountEditor
+    .getByRole("button", { name: "Undo completion", exact: true })
+    .click();
+  await hotel.locator(".period:not(.done):not(.in-progress)").waitFor();
+  // Accessible arrow reordering and drag/drop both persist independently of filters.
+  await page.getByRole("button", { name: "Rearrange", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Move up My Gold 23456", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Save order", exact: true }).click();
+  await page.waitForFunction(
+    () =>
+      [...document.querySelectorAll(".card-title h3")]
+        .map((n) => n.textContent)
+        .join("|") === "Aspire 1 01007|My Gold 23456|My CSP 1234",
+  );
+  await page.getByRole("button", { name: "Rearrange", exact: true }).click();
+  const rows = page.locator(".reorder-list li");
+  await rows
+    .filter({ hasText: "My CSP 1234" })
+    .dragTo(rows.filter({ hasText: "Aspire 1 01007" }));
+  await page.getByRole("button", { name: "Save order", exact: true }).click();
+  await page.reload();
+  await page.waitForFunction(
+    () =>
+      [...document.querySelectorAll(".card-title h3")]
+        .map((n) => n.textContent)
+        .join("|") === "My CSP 1234|Aspire 1 01007|My Gold 23456",
+  );
+  await page.getByRole("button", { name: "Choose cards" }).click();
+  await filter.getByLabel("My Gold 23456").uncheck();
+  assert.deepEqual(await page.locator(".card-title h3").allTextContents(), [
+    "My CSP 1234",
+    "Aspire 1 01007",
+  ]);
+  await filter.getByRole("button", { name: "Select all" }).click();
+  await page.keyboard.press("Escape");
   await page
     .getByRole("button", {
       name: "Hide Aspire 1 01007 Flight Credit",
@@ -249,6 +352,15 @@ try {
     () =>
       getComputedStyle(document.querySelector(".period.done"))
         .backgroundColor === "rgb(41, 41, 41)",
+  );
+  await popup.waitForFunction(
+    () =>
+      getComputedStyle(document.documentElement).backgroundColor ===
+      "rgb(21, 21, 21)",
+  );
+  assert.equal(
+    await popup.evaluate(() => getComputedStyle(document.body).backgroundColor),
+    "rgb(21, 21, 21)",
   );
   const darkColors = await page
     .locator(".period.done")
@@ -379,7 +491,7 @@ try {
   });
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: real MV3; English default and synced Chinese preference; collapsed quarter list; numeric popup; 550/600 +50 calculation; immediate completion; anchored date editing and undo; multi-card filters; hide/restore; theme sync and soft-gray completion contrast; timeline widths; narrow layout; no runtime errors.",
+    "PASS: real MV3; English default and synced Chinese preference; collapsed quarter list; numeric popup; 550/600 +50 calculation; immediate completion; anchored date editing and undo; multi-card filters; hide/restore; theme sync and soft-gray completion contrast; dark popup canvas; optional dates; amount progress, auto-completion and undo; persistent drag/arrow ordering; timeline widths; narrow layout; no runtime errors.",
   );
 } finally {
   await context.close();

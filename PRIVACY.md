@@ -1,12 +1,13 @@
 # Perk Done Privacy Policy / 隐私政策
 
-Version: 0.4.1 · Last updated: October 1, 2026
+Version: 0.5.0 · Last updated: October 3, 2026
 
 ## What the extension stores
 
 Perk Done manually tracks credit-card benefits. It stores the card products you
 add, nicknames, optional last four or five digits, custom perks, hidden-perk
-settings, validity dates you enter, completion dates, configured annual fees,
+settings, card display order, validity dates you enter, completion dates,
+user-entered amounts used, configured annual fees,
 and theme/language preferences. It does not require full card numbers, bank
 credentials, or transaction information. Avoid putting these in nicknames or
 custom text.
@@ -54,7 +55,7 @@ Contact: [perkdonedev@gmail.com](mailto:perkdonedev@gmail.com)
 
 ## 中文说明
 
-Perk Done 保存您手动添加的卡片产品、昵称、可选的后 4–5 位尾号、自定义权益、隐藏状态、实际有效期、完成日期、年费，以及主题和语言偏好。无需完整卡号、银行密码或交易信息，请勿在自定义文字中填写这些信息。
+Perk Done 保存您手动添加的卡片产品、昵称、可选的后 4–5 位尾号、自定义权益、隐藏状态、卡片显示顺序、可选的实际有效期、完成日期、手动填写的已使用金额、年费，以及主题和语言偏好。无需完整卡号、银行密码或交易信息，请勿在自定义文字中填写这些信息。
 
 记录使用 Chrome 的 `storage.sync` 保存。开启 Chrome 同步后，Google 按其同步服务和隐私政策处理跨设备同步；未开启时，记录保存在当前设备。主题和语言也会缓存在本地。项目没有自有服务器，不向开发者上传钱包记录，不出售记录，不含广告、分析或第三方追踪组件，不连接银行、不读取交易或浏览历史、不注入网页。卡片目录和图片随扩展打包；用户主动打开的官网适用其自身隐私政策。
 

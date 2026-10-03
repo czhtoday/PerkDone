@@ -12,27 +12,28 @@ A Chrome extension to keep your credit card perks organized. Add your cards, mar
 
 ## Features
 
-- **One annual timeline.** Monthly, quarterly, semiannual, and annual perks share the same 12-month axis. View all your cards or select a subset.
+- **One annual timeline.** Monthly, quarterly, semiannual, and annual perks share the same 12-month axis. View all your cards or select a subset. Drag cards to set their display order.
 - **One-click completion.** Mark a period done with today's date. Click it again to correct the date or undo completion.
+- **Partial credit usage.** Enter the amount used in a small editor. The remaining balance stays visible; reaching the limit marks the perk done.
 - **A compact popup.** See your card count, remaining quarter perks, and annual fees versus completed credit value at a glance.
 - **Your cards, your names.** Add multiple copies of a product, use a nickname, and distinguish them with optional last-four or last-five digits.
-- **Track what matters.** Hide unused perks, restore them later, or add custom cards and benefits. Set actual validity dates for cardmember-year credits and certificates.
-- **A bundled catalog.** 48 selectable products across American Express, Chase, Capital One, Citi, Bank of America, Bilt, and Wells Fargo, with locally bundled issuer artwork. No live banking API is needed.
+- **Track what matters.** Hide unused perks, restore them later, or add custom cards and benefits. Cardmember-year credits and certificates work without dates. Add actual validity dates optionally for expiry tracking.
+- **A bundled catalog.** 49 selectable products across American Express, Chase, Capital One, Citi, Bank of America, Bilt, and Wells Fargo, with locally bundled issuer artwork. No live banking API is needed.
 - **Light and dark themes.** Black, white, and gray with a blue completion accent; system theme is also supported.
 - **English and Chinese.** English is the default; switch languages inside the extension.
 - **Chrome Sync.** Records and preferences sync between desktop Chrome browsers when the same Google account and the relevant sync settings are enabled.
 
-The quarter count includes visible, incomplete periods expiring between today and the end of this quarter. Completed credit value assumes the full amount of each marked period; it is an estimate, not bank-verified reimbursement or actual profit. Free-night certificates and points have no automatic cash value. Check issuer terms for eligibility, enrollment, and expiration rules.
+The quarter count includes visible, incomplete periods expiring between today and the end of this quarter. Recorded amounts count actual partial usage. One-click completions without an amount assume the full period value; it is an estimate, not bank-verified reimbursement or actual profit. Free-night certificates and points have no automatic cash value. Check issuer terms for eligibility, enrollment, and expiration rules.
 
 ## Install locally
 
-The Chrome Web Store release has been submitted for review. Until it is available, build the extension locally or use an unpacked build supplied by the maintainer.
+Perk Done is available on the Chrome Web Store. For development or early testing, build locally or use an unpacked build supplied by the maintainer.
 
 1. Open `chrome://extensions` in desktop Chrome and enable **Developer mode**.
 2. Click **Load unpacked** and select the folder containing `manifest.json`. For a local build, this is `dist`; for a ZIP, extract it first and select the extracted folder.
 3. Pin **Perk Done** to the toolbar. Click its icon for the popup, then **Open dashboard** for the annual timeline.
 
-Keep the installed folder in place. To update a local build, replace its files and click **Reload** on the existing extension. Removing and reinstalling may delete records. Local builds and the eventual store installation can have different extension IDs, so records do not automatically transfer between them.
+Keep the installed folder in place. To update a local build, replace its files and click **Reload** on the existing extension. Removing and reinstalling may delete records. Local builds and the store installation can have different extension IDs, so records do not automatically transfer between them.
 
 ## Development
 

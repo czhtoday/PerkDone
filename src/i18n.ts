@@ -6,6 +6,32 @@ export function setLanguage(value: Language) {
 }
 const translations: Record<string, string> = {
   反馈: "Feedback",
+  调整顺序: "Rearrange",
+  调整卡片顺序: "Rearrange cards",
+  "拖动卡片调整顺序，也可使用上下箭头。":
+    "Drag cards to reorder, or use the arrows.",
+  上移: "Move up",
+  下移: "Move down",
+  保存顺序: "Save order",
+  "不需要统计的权益（如 CLEAR+）可以隐藏；移到项目上点击眼睛图标。":
+    "Hide perks you don’t track, like CLEAR+. Hover a perk and click the eye icon.",
+  自由记录: "Flexible tracking",
+  限时优惠: "Limited-time offer",
+  日期可选: "Dates optional",
+  "日期可选；未设置到期提醒": "Dates optional; no expiry reminder set",
+  进行中: "In progress",
+  待使用: "left",
+  记录已使用金额: "Record amount used",
+  已使用金额: "Amount used",
+  "填写累计金额，记满自动完成。":
+    "Enter the total used. Reaching the limit marks it done.",
+  保存金额: "Save amount",
+  清空金额: "Clear amount",
+  "请输入已使用金额。": "Enter the amount used.",
+  "请输入额度范围内的有效金额。":
+    "Enter an amount between zero and the credit limit (up to two decimals).",
+  "按实际记录金额估算；房券不自动估值。":
+    "Recorded credits at face value. Free nights are not valued.",
   ...catalogTranslations,
   本季度: "This quarter",
   净赚: "Net earned",
@@ -188,8 +214,8 @@ const translations: Record<string, string> = {
   重置周期: "Reset frequency",
   "备注（可选）": "Note (optional)",
   "需要 enrollment": "Enrollment required",
-  "非自然年权益请选择「实际有效期」，添加后填写银行显示的日期。":
-    "Choose Actual validity for cardmember-year perks, then enter your bank’s dates.",
+  "非自然年权益请选择「实际有效期」，日期可选。":
+    "Choose Actual validity for cardmember-year perks. Dates are optional.",
   "· 隐藏的权益不计入待办，完成记录仍保留。":
     "· Hidden perks are excluded from to-dos. Completed records are kept.",
   恢复: "Restore",
@@ -218,8 +244,8 @@ const translations: Record<string, string> = {
     "Completed credits at face value. Free nights are not valued.",
   张卡尚未设置年费: "cards have no annual fee set",
   "项权益，本季度到期": "perks expiring this quarter",
-  "项权益尚未设置实际有效期，暂不计入到期待办。":
-    "perks need validity dates and are excluded from this list.",
+  "项权益未设置到期提醒（日期可选）。":
+    "perks have optional dates and no expiry reminder set.",
   "请选择至少一张信用卡查看权益。":
     "Select at least one card to see its perks.",
   "实际年费（USD）": "Actual annual fee (USD)",
@@ -247,12 +273,12 @@ const translations: Record<string, string> = {
     "The popup shows wallet totals. The dashboard shows your timeline and a collapsible list of perks expiring this quarter.",
   "本季度待办包含尚未完成且到期日在今天至本季度末之间的周期（含尚未开始的月份）。隐藏的权益、已过期周期、未设置有效期的房券或账户周年额度不会计入。":
     "Quarter to-dos include incomplete periods expiring from today through quarter-end, including upcoming months. Hidden, expired and undated perks are excluded.",
-  "信用卡目录来自随扩展打包的 JSON，核对日期 2026-10-01；无 API 或后台抓取。点击卡片箭头查看官方条款，实际资格和额度以银行账户为准。":
-    "The catalog is bundled JSON, checked October 1, 2026. Follow each card’s link for official terms; your bank determines eligibility and amounts.",
+  "信用卡目录来自随扩展打包的 JSON，最近更新 2026-10-03；各卡核对日期保存在目录中，无 API 或后台抓取。点击卡片箭头查看官方条款，实际资格和额度以银行账户为准。":
+    "The catalog is bundled JSON, last updated October 3, 2026; each product has its own verification date. Follow each card’s link for official terms; your bank determines eligibility and amounts.",
   "Chrome Sync 需要登录并启用同步。这里只能确认使用了同步存储区域，无法确认账号同步状态。离线可使用，同一年度数据跨设备同时修改可能以后写入者为准。":
     "Chrome Sync requires sign-in and sync enabled. The app cannot confirm your account’s sync status. It works offline; concurrent edits may use the last write.",
   "不读取网页、交易或银行登录。只存产品、昵称、可选 4–5 位尾号、隐藏设置、有效期、完成日期和主题。网页预览使用独立的本地存储；示例不保存。":
-    "No webpages, transactions or bank logins are read. Only cards, nicknames, optional last digits, annual fees, hidden settings, dates, theme and language are stored. Preview data stays separate; demos are not saved.",
+    "No webpages, transactions or bank logins are read. Only cards, order, nicknames, optional last digits, annual fees, entered amounts, hidden settings, dates, theme and language are stored. Preview data stays separate; demos are not saved.",
   "请选择不晚于今天的有效日期；尚未开始的周期不可完成。":
     "Choose a valid date no later than today. Upcoming periods cannot be completed.",
 };

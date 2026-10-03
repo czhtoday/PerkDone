@@ -1,5 +1,5 @@
 {
-  "retrievedAt": "2026-10-01",
+  "retrievedAt": "2026-10-03",
   "assets": {
     "amex-aspire": "https://icm.aexp-static.com/acquisition/card-art/NUS000000329_480x304_straight_withname.png",
     "amex-surpass": "https://icm.aexp-static.com/acquisition/card-art/NUS000000328_480x304_straight_withname.png",
@@ -48,6 +48,7 @@
     "bofa-elite": "https://www.privatebank.bankofamerica.com/content/dam/ML/solutions/redesign/credit-cards/bofa_prmeltcm_v_infinite.png",
     "amex-platinum-morgan-stanley": "https://apply.americanexpress.com/wp-content/themes/openforum/morgan-stanley/images/chg_plat_metal_morgan.svg",
     "amex-green": "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/green-card.png",
-    "chase-bountiful": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/marriott_bonvoy_bountiful_card.png"
+    "chase-bountiful": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/marriott_bonvoy_bountiful_card.png",
+    "chase-ihg-premier-select": "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/ihg_premier_select_card.png"
   }
 }

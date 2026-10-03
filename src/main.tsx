@@ -59,7 +59,7 @@ import {
   type Mutation,
 } from "./storage";
 import { t, setLanguage } from "./i18n";
-import { CardArt, CardFilter, DateEditor } from "./controls";
+import { CardArt, CardFilter, DateEditor, CardOrder } from "./controls";
 import "./styles.css";
 const popup = window.location.pathname.endsWith("/popup.html");
 const money = (n: number) =>
@@ -72,7 +72,14 @@ const money = (n: number) =>
 const shortDate = (date: string) =>
   `${Number(date.slice(5, 7))}/${Number(date.slice(8, 10))}`;
 const value = (b: Benefit, p?: Period) =>
-  b.valueLabel || money(periodAmount(b, p?.startMonth ?? 0));
+  b.valueLabel ||
+  money(
+    periodAmount(
+      p ? b : { ...b, decemberExtra: 0 },
+      p?.startMonth ?? new Date().getMonth(),
+      p?.recordYear,
+    ),
+  );
 function cachedTheme(): Theme {
   try {
     const v = localStorage.getItem("pd-theme");
@@ -164,7 +171,8 @@ function App() {
     [editCard, setEditCard] = useState<Card | null>(null),
     [help, setHelp] = useState(false),
     [hiddenCard, setHiddenCard] = useState<Card | null>(null),
-    [showAllDue, setShowAllDue] = useState(false);
+    [showAllDue, setShowAllDue] = useState(false),
+    [reordering, setReordering] = useState(false);
   const [completion, setCompletion] = useState<DueItem | null>(null),
     [date, setDate] = useState(localDate()),
     [schedule, setSchedule] = useState<{ card: Card; benefit: Benefit } | null>(
@@ -173,6 +181,7 @@ function App() {
   const [search, setSearch] = useState(""),
     [product, setProduct] = useState(catalog[0].productId);
   const lock = useRef(false);
+  const [amount, setAmount] = useState("");
   const [dateAnchor, setDateAnchor] = useState<HTMLElement | null>(null);
   setLanguage(language);
   useEffect(() => {
@@ -308,10 +317,18 @@ function App() {
     anchor?: HTMLElement,
   ) {
     const key = recordKey(card.id, benefit.id, period.recordYear, period.index);
-    if (shown.records[key]) {
+    if (shown.records[key] || benefit.trackAmount) {
       setDateAnchor(anchor ?? null);
       setCompletion({ card, benefit, period, key });
-      setDate(shown.records[key] || localDate());
+      setDate(shown.records[key] || shown.progress?.[key]?.date || localDate());
+      setAmount(
+        String(
+          shown.progress?.[key]?.amount ??
+            (shown.records[key]
+              ? periodAmount(benefit, period.startMonth, period.recordYear)
+              : ""),
+        ),
+      );
       setError("");
     } else
       await save({
@@ -634,7 +651,7 @@ function App() {
                       </small>
                     </div>
                   </div>
-                  <p>{t("按已完成权益的额度估算；房券不自动估值。")}</p>
+                  <p>{t("按实际记录金额估算；房券不自动估值。")}</p>
                   {yearly.missingFees > 0 && (
                     <p>
                       {yearly.missingFees} {t("张卡尚未设置年费")}
@@ -666,8 +683,7 @@ function App() {
                     <DueList />
                     {unset > 0 && (
                       <p className="unset-note">
-                        {unset}{" "}
-                        {t("项权益尚未设置实际有效期，暂不计入到期待办。")}
+                        {unset} {t("项权益未设置到期提醒（日期可选）。")}
                       </p>
                     )}
                   </div>
@@ -699,6 +715,15 @@ function App() {
                         selected={selected}
                         onChange={setSelected}
                       />
+                    )}
+                    {shown.cards.length > 1 && (
+                      <button
+                        className="filter-button"
+                        disabled={demo || busy}
+                        onClick={() => setReordering(true)}
+                      >
+                        {t("调整顺序")}
+                      </button>
                     )}
                   </div>
                   <div className="year-control">
@@ -778,6 +803,12 @@ function App() {
                             <div className="card-title">
                               <small>{card.bank}</small>
                               <h3 title={card.name}>{cardLabel(card)}</h3>
+                              <p className="hide-hint">
+                                <EyeOff size={12} />
+                                {t(
+                                  "不需要统计的权益（如 CLEAR+）可以隐藏；移到项目上点击眼睛图标。",
+                                )}
+                              </p>
                             </div>
                             <div className="card-actions">
                               <button
@@ -922,6 +953,8 @@ function App() {
                                             p.index,
                                           ),
                                           done = shown.records[key],
+                                          used =
+                                            shown.progress?.[key]?.amount ?? 0,
                                           status =
                                             p.start > localDate()
                                               ? "future"
@@ -937,14 +970,14 @@ function App() {
                                             key={key}
                                           >
                                             <button
-                                              className={`period ${done ? "done" : status} ${p.span === 1 ? "compact" : ""}`}
+                                              className={`period ${done ? "done" : used > 0 ? "in-progress" : status} ${p.span === 1 ? "compact" : ""}`}
                                               disabled={
                                                 busy ||
                                                 demo ||
                                                 status === "future"
                                               }
                                               aria-label={`${cardLabel(card)} ${benefit.name} ${p.recordYear} ${t(p.label)} ${done ? `Done ${done}` : t("标记完成")}`}
-                                              title={`${p.start} — ${p.end}${benefit.note ? `\n${t(benefit.note ?? "")}` : ""}`}
+                                              title={`${p.deadlineKnown === false ? t("日期可选；未设置到期提醒") : `${p.start} — ${p.end}`}${benefit.note ? `\n${t(benefit.note ?? "")}` : ""}`}
                                               onClick={(e) =>
                                                 void openCompletion(
                                                   card,
@@ -956,7 +989,9 @@ function App() {
                                             >
                                               <span className="period-top">
                                                 {benefit.frequency === "manual"
-                                                  ? `${p.start} → ${p.end}`
+                                                  ? p.deadlineKnown === false
+                                                    ? t(p.label)
+                                                    : `${p.start} → ${p.end}`
                                                   : t(p.label)}
                                                 <span>{value(benefit, p)}</span>
                                               </span>
@@ -985,14 +1020,61 @@ function App() {
                                                       className="completion-circle"
                                                       aria-hidden="true"
                                                     />
-                                                    {status === "future"
-                                                      ? t("未开始")
-                                                      : status === "expired"
-                                                        ? t("未记录")
-                                                        : t("待完成")}
+                                                    {used > 0
+                                                      ? t("进行中")
+                                                      : status === "future"
+                                                        ? t("未开始")
+                                                        : status === "expired"
+                                                          ? t("未记录")
+                                                          : t("待完成")}
                                                   </>
                                                 )}
+                                                {benefit.trackAmount &&
+                                                  !done && (
+                                                    <span className="amount-progress">
+                                                      {money(
+                                                        done
+                                                          ? (shown.progress?.[
+                                                              key
+                                                            ]?.amount ??
+                                                              periodAmount(
+                                                                benefit,
+                                                                p.startMonth,
+                                                                p.recordYear,
+                                                              ))
+                                                          : used,
+                                                      )}{" "}
+                                                      /{" "}
+                                                      {money(
+                                                        periodAmount(
+                                                          benefit,
+                                                          p.startMonth,
+                                                          p.recordYear,
+                                                        ),
+                                                      )}
+                                                      {used > 0 && !done && (
+                                                        <small>
+                                                          {" "}
+                                                          ·{" "}
+                                                          {money(
+                                                            periodAmount(
+                                                              benefit,
+                                                              p.startMonth,
+                                                              p.recordYear,
+                                                            ) - used,
+                                                          )}{" "}
+                                                          {t("待使用")}
+                                                        </small>
+                                                      )}
+                                                    </span>
+                                                  )}
                                               </span>
+                                              {p.deadlineKnown === false &&
+                                                !benefit.trackAmount && (
+                                                  <span className="expiry-note">
+                                                    {t("日期可选")}
+                                                  </span>
+                                                )}
                                               {benefit.expiryOffsetDays && (
                                                 <span className="expiry-note">
                                                   {shortDate(p.end)} {t("到期")}
@@ -1231,9 +1313,7 @@ function App() {
               />
             </label>
             <p className="field-hint">
-              {t(
-                "非自然年权益请选择「实际有效期」，添加后填写银行显示的日期。",
-              )}
+              {t("非自然年权益请选择「实际有效期」，日期可选。")}
             </p>
             <button className="primary form-submit" disabled={busy}>
               {t("添加福利")}
@@ -1250,9 +1330,49 @@ function App() {
           onClose={() => setCompletion(null)}
           error={t(error)}
           busy={busy}
-          onSave={() => void finish(date)}
+          amount={completion.benefit.trackAmount ? amount : undefined}
+          setAmount={setAmount}
+          total={periodAmount(
+            completion.benefit,
+            completion.period.startMonth,
+            completion.period.recordYear,
+          )}
+          done={!!shown.records[completion.key]}
+          onSave={() => {
+            if (!completion.benefit.trackAmount) void finish(date);
+            else if (amount.trim() === "") setError(t("请输入已使用金额。"));
+            else
+              void save({
+                type: "amount",
+                id: completion.card.id,
+                benefitId: completion.benefit.id,
+                year: completion.period.recordYear,
+                index: completion.period.index,
+                amount: Number(amount),
+                date,
+              }).then((ok) => {
+                if (ok) setCompletion(null);
+              });
+          }}
           onUndo={() => void finish(null)}
         />
+      )}
+      {reordering && (
+        <Modal
+          title={t("调整卡片顺序")}
+          error={error}
+          onClose={() => setReordering(false)}
+        >
+          <CardOrder
+            cards={shown.cards}
+            busy={busy}
+            onSave={(ids) =>
+              void save({ type: "order", ids }).then((ok) => {
+                if (ok) setReordering(false);
+              })
+            }
+          />
+        </Modal>
       )}
       {hiddenCard && (
         <Modal
@@ -1449,7 +1569,7 @@ function App() {
             </p>
             <p>
               {t(
-                "信用卡目录来自随扩展打包的 JSON，核对日期 2026-10-01；无 API 或后台抓取。点击卡片箭头查看官方条款，实际资格和额度以银行账户为准。",
+                "信用卡目录来自随扩展打包的 JSON，最近更新 2026-10-03；各卡核对日期保存在目录中，无 API 或后台抓取。点击卡片箭头查看官方条款，实际资格和额度以银行账户为准。",
               )}
             </p>
             <p>

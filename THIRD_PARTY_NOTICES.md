@@ -29,3 +29,5 @@ The release includes code from these projects under their own licenses:
 The complete notices from the installed versions are included alongside this
 file in release ZIPs under `licenses/`. The dependency inventory, resolved
 versions, and package license metadata are recorded in `package-lock.json`.
+
+IHG One Rewards Premier Select artwork was retrieved from Chase on October 3, 2026; its exact URL is recorded in `public/cards/sources.json`. Issuer trademark and artwork rights remain with their owners.

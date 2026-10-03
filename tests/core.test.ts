@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   annualValue,
+  periodAmount,
   localDate,
   periods,
   validCompletion,
@@ -124,6 +125,7 @@ describe("sync record operations", () => {
     expect(decode(change(items, { type: "remove", id: "test" }))).toEqual({
       cards: [],
       records: {},
+      progress: {},
     });
   });
   it("blocks invalid date writes and records for deleted cards", () => {
@@ -527,7 +529,13 @@ describe("expanded catalog safety", () => {
         quest.benefits.find((b) => b.id === "travelbank")!,
         2026,
       ),
-    ).toHaveLength(0);
+    ).toHaveLength(1);
+    expect(
+      benefitPeriods(
+        quest.benefits.find((b) => b.id === "hotel")!,
+        2026,
+      )[0].deadlineKnown,
+    ).toBe(false);
   });
   it("does not turn noncash Bilt benefits into cash recovery", () => {
     const product = catalog.find((p) => p.productId === "bilt-palladium")!;
@@ -549,5 +557,201 @@ describe("expanded catalog safety", () => {
     setLanguage("zh");
     expect(t(note)).toBe(note);
     setLanguage("en");
+  });
+});
+
+describe("optional dates, amount progress and order upgrades", () => {
+  const hotelCard: Card = {
+    ...catalog.find((p) => p.productId === "chase-csp")!,
+    id: "hotel-test",
+    nickname: "",
+    last4: "",
+  };
+  const amountMutation = {
+    type: "amount" as const,
+    id: hotelCard.id,
+    benefitId: "hotel",
+    year: 2025,
+    index: "undated",
+    amount: 40,
+    date: "2025-06-21",
+  };
+  it("tracks undated cash and certificates without inventing deadlines", () => {
+    const fn = card.benefits.find((b) => b.id === "free-night")!;
+    const p = benefitPeriods(fn, 2025)[0];
+    expect(p.deadlineKnown).toBe(false);
+    const wallet = decode(
+      change(change({}, { type: "add", card }), {
+        type: "complete",
+        id: card.id,
+        benefitId: fn.id,
+        year: 2025,
+        index: p.index,
+        date: "2025-06-21",
+      }),
+    );
+    expect(wallet.records[recordKey(card.id, fn.id, 2025, "undated")]).toBe(
+      "2025-06-21",
+    );
+    expect(
+      quarterDue(wallet, "2025-10-01").some((x) => x.benefit.id === fn.id),
+    ).toBe(false);
+    expect(annualValue(wallet, 2025).recovered).toBe(0);
+  });
+  it("counts partial value, keeps it due with known dates, auto-completes at the limit and supports reductions", () => {
+    let items = change({}, { type: "add", card: hotelCard });
+    items = change(items, amountMutation);
+    let w = decode(items);
+    expect(w.progress?.["hotel-test/2025/hotel/undated"].amount).toBe(40);
+    expect(w.records["hotel-test/2025/hotel/undated"]).toBeUndefined();
+    expect(annualValue(w, 2025).recovered).toBe(40);
+    items = change(items, { ...amountMutation, amount: 100 });
+    w = decode(items);
+    expect(w.records["hotel-test/2025/hotel/undated"]).toBe("2025-06-21");
+    expect(annualValue(w, 2025).recovered).toBe(100);
+    items = change(items, { ...amountMutation, amount: 25.25 });
+    expect(
+      decode(items).records["hotel-test/2025/hotel/undated"],
+    ).toBeUndefined();
+    expect(annualValue(decode(items), 2025).recovered).toBe(25.25);
+    items = change(items, {
+      type: "schedule",
+      id: hotelCard.id,
+      benefitId: "hotel",
+      start: "2025-01-01",
+      end: "2025-12-31",
+    });
+    items = change(items, {
+      ...amountMutation,
+      index: "2025-01-01_2025-12-31",
+    });
+    expect(
+      quarterDue(decode(items), "2025-10-01").some(
+        (x) => x.benefit.id === "hotel",
+      ),
+    ).toBe(true);
+  });
+  it("clears amount and completion together and removes all amounts on card removal", () => {
+    let items = change(change({}, { type: "add", card: hotelCard }), {
+      ...amountMutation,
+      amount: 100,
+    });
+    items = change(items, { ...amountMutation, type: "complete", date: null });
+    expect(Object.keys(decode(items).progress ?? {})).toHaveLength(0);
+    expect(Object.keys(decode(items).records)).toHaveLength(0);
+    items = change(items, amountMutation);
+    expect(
+      Object.keys(change(items, { type: "remove", id: hotelCard.id })),
+    ).toHaveLength(0);
+  });
+  it("rejects negative, excess, fractional-cent and nonfinite amounts without altering records", () => {
+    const items = change({}, { type: "add", card: hotelCard });
+    for (const amount of [-1, 101, 0.001, NaN, Infinity])
+      expect(() => change(items, { ...amountMutation, amount })).toThrow();
+    expect(decode(items).records).toEqual({});
+  });
+  it("preserves 0.4.1 string completions and treats them as full value", () => {
+    const wallet = decode({
+      "pd:card:hotel-test": hotelCard,
+      "pd:year:hotel-test:2025": {
+        "hotel/2025-01-01_2025-12-31": "2025-06-21",
+      },
+    });
+    expect(annualValue(wallet, 2025).recovered).toBe(100);
+    expect(wallet.records["hotel-test/2025/hotel/2025-01-01_2025-12-31"]).toBe(
+      "2025-06-21",
+    );
+  });
+  it("persists order, appends newly added cards, keeps concurrently added cards, and preserves completions", () => {
+    let items = change(change({}, { type: "add", card }), {
+      type: "add",
+      card: hotelCard,
+    });
+    items = change(items, {
+      type: "complete",
+      id: card.id,
+      benefitId: "flight",
+      year: 2025,
+      index: 0,
+      date: "2025-01-21",
+    });
+    items = change(items, { type: "order", ids: [hotelCard.id, card.id] });
+    expect(decode(items).cards.map((c) => c.id)).toEqual([
+      hotelCard.id,
+      card.id,
+    ]);
+    items = change(items, { type: "add", card: { ...card, id: "new-card" } });
+    items = change(items, { type: "order", ids: [card.id, hotelCard.id] });
+    expect(decode(items).cards.map((c) => c.id)).toEqual([
+      card.id,
+      hotelCard.id,
+      "new-card",
+    ]);
+    expect(decode(items).records["test/2025/flight/0"]).toBe("2025-01-21");
+    expect(() =>
+      change(items, { type: "order", ids: [card.id, card.id] }),
+    ).toThrow();
+  });
+  it("uses date-effective CSR amounts and keeps business terms separate", () => {
+    const personal = catalog
+      .find((c) => c.productId === "chase-csr")!
+      .benefits.find((b) => b.id === "doordash-dining")!;
+    const business = catalog
+      .find((c) => c.productId === "chase-csr-business")!
+      .benefits.find((b) => b.id === "doordash-dining")!;
+    expect(periodAmount(personal, 8, 2026)).toBe(5);
+    expect(periodAmount(personal, 9, 2026)).toBe(15);
+    expect(periodAmount(personal, 9, 2025)).toBe(5);
+    expect(periodAmount(business, 9, 2026)).toBe(5);
+    const edit = catalog
+      .find((c) => c.productId === "chase-csr-business")!
+      .benefits.find((b) => b.id === "edit")!;
+    expect(periodAmount(edit, 0, 2026)).toBe(500);
+    expect(periodAmount(edit, 0, 2027)).toBe(1000);
+  });
+  it("limits Boundless offers and keeps cohort-only perks hidden until selected", () => {
+    const bound = catalog.find(
+      (c) => c.productId === "chase-marriott-boundless",
+    )!;
+    const hydrated = hydrateCard({
+      ...bound,
+      id: "bound",
+      nickname: "",
+      last4: "",
+      benefits: [],
+    });
+    expect(
+      hydrated.benefits.find((b) => b.id === "airline-new-2027")?.hidden,
+    ).toBe(true);
+    expect(
+      benefitPeriods(
+        bound.benefits.find((b) => b.id === "airline-2026")!,
+        2027,
+      ),
+    ).toHaveLength(0);
+    expect(
+      benefitPeriods(
+        bound.benefits.find((b) => b.id === "airline-new-2027")!,
+        2028,
+      ),
+    ).toHaveLength(0);
+    const select = catalog.find(
+      (c) => c.productId === "chase-ihg-premier-select",
+    )!;
+    expect(select.annualFee).toBe(350);
+    expect(
+      benefitPeriods(
+        select.benefits.find((b) => b.id === "free-night")!,
+        2025,
+      ),
+    ).toHaveLength(0);
+    expect(select.benefits.find((b) => b.id === "food")?.amount).toBe(75);
+    expect(select.benefits.find((b) => b.id === "airline")?.amount).toBe(200);
+    expect(
+      benefitPeriods(
+        select.benefits.find((b) => b.id === "food")!,
+        2026,
+      ),
+    ).toHaveLength(1);
   });
 });

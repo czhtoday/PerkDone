@@ -1,5 +1,6 @@
 import {
   localDate,
+  periodAmount,
   benefitPeriods,
   isDate,
   type Theme,
@@ -11,6 +12,16 @@ import {
 import { hydrateCard } from "./catalog";
 const prefix = "pd:";
 export type Mutation =
+  | { type: "order"; ids: string[] }
+  | {
+      type: "amount";
+      id: string;
+      year: number;
+      benefitId: string;
+      index: number | string;
+      amount: number;
+      date: string;
+    }
   | { type: "language"; language: Language }
   | {
       type: "identity";
@@ -44,6 +55,19 @@ export function decode(items: Items): Wallet {
   const cards = Object.entries(items)
     .filter(([key]) => key.startsWith(`${prefix}card:`))
     .map(([, value]) => hydrateCard(value as Card));
+  const order = (items["pd:order"] as string[] | undefined) ?? [];
+  cards.sort(
+    (a, b) =>
+      (order.indexOf(a.id) < 0 ? order.length : order.indexOf(a.id)) -
+      (order.indexOf(b.id) < 0 ? order.length : order.indexOf(b.id)),
+  );
+  const progress: NonNullable<Wallet["progress"]> = {};
+  for (const [key, value] of Object.entries(items))
+    if (key.startsWith("pd:amount:")) {
+      const [, , id, year] = key.split(":");
+      for (const [period, amount] of Object.entries(value as typeof progress))
+        progress[`${id}/${year}/${period}`] = amount;
+    }
   const records: Wallet["records"] = {};
   for (const [key, value] of Object.entries(items))
     if (key.startsWith(`${prefix}year:`)) {
@@ -58,13 +82,25 @@ export function decode(items: Items): Wallet {
   return {
     cards,
     records,
+    progress,
     ...(theme ? { theme } : {}),
     ...(language ? { language } : {}),
   };
 }
 export function change(items: Items, mutation: Mutation) {
   const next = { ...items };
-  if (mutation.type === "language") {
+  if (mutation.type === "order") {
+    const ids = decode(items).cards.map((c) => c.id);
+    if (
+      new Set(mutation.ids).size !== mutation.ids.length ||
+      mutation.ids.some((id) => !ids.includes(id))
+    )
+      throw new Error("Invalid card order.");
+    next["pd:order"] = [
+      ...mutation.ids,
+      ...ids.filter((id) => !mutation.ids.includes(id)),
+    ];
+  } else if (mutation.type === "language") {
     if (!["en", "zh"].includes(mutation.language))
       throw new Error("Invalid language.");
     next["pd:language"] = mutation.language;
@@ -72,12 +108,27 @@ export function change(items: Items, mutation: Mutation) {
     if (!["system", "light", "dark"].includes(mutation.theme))
       throw new Error("无效主题");
     next["pd:theme"] = mutation.theme;
-  } else if (mutation.type === "add")
+  } else if (mutation.type === "add") {
+    const ids = decode(items).cards.map((c) => c.id);
     next[`${prefix}card:${mutation.card.id}`] = mutation.card;
-  else if (mutation.type === "remove") {
+    next["pd:order"] = ids.includes(mutation.card.id)
+      ? ids
+      : [...ids, mutation.card.id];
+  } else if (mutation.type === "remove") {
     delete next[`${prefix}card:${mutation.id}`];
     for (const key of Object.keys(next))
-      if (key.startsWith(`${prefix}year:${mutation.id}:`)) delete next[key];
+      if (
+        key.startsWith(`${prefix}year:${mutation.id}:`) ||
+        key.startsWith(`${prefix}amount:${mutation.id}:`)
+      )
+        delete next[key];
+    if (next["pd:order"]) {
+      const order = (next["pd:order"] as string[]).filter(
+        (id) => id !== mutation.id,
+      );
+      if (order.length) next["pd:order"] = order;
+      else delete next["pd:order"];
+    }
   } else {
     const stored = next[`${prefix}card:${mutation.id}`] as Card | undefined;
     const card = stored ? hydrateCard(stored) : undefined;
@@ -135,6 +186,7 @@ export function change(items: Items, mutation: Mutation) {
         );
       if (
         !period ||
+        (mutation.type === "amount" && !isDate(mutation.date)) ||
         (mutation.date &&
           !validCompletion(
             mutation.date,
@@ -147,8 +199,42 @@ export function change(items: Items, mutation: Mutation) {
       const key = `${prefix}year:${card.id}:${mutation.year}`;
       const group = { ...((next[key] as Record<string, string>) ?? {}) };
       const periodKey = `${mutation.benefitId}/${mutation.index}`;
-      if (mutation.date) group[periodKey] = mutation.date;
-      else delete group[periodKey];
+      const amountKey = `${prefix}amount:${card.id}:${mutation.year}`;
+      const amounts = {
+        ...((next[amountKey] as NonNullable<Wallet["progress"]>) ?? {}),
+      };
+      if (mutation.type === "amount") {
+        const cap = periodAmount(
+          benefit!,
+          period.startMonth,
+          period.recordYear,
+        );
+        if (
+          !benefit!.trackAmount ||
+          !Number.isFinite(mutation.amount) ||
+          mutation.amount < 0 ||
+          mutation.amount > cap ||
+          (Math.round(mutation.amount * 100) !== mutation.amount * 100 &&
+            Math.abs(
+              Math.round(mutation.amount * 100) - mutation.amount * 100,
+            ) > 1e-7)
+        )
+          throw new Error("请输入额度范围内的有效金额。");
+        if (mutation.amount > 0)
+          amounts[periodKey] = { amount: mutation.amount, date: mutation.date };
+        else delete amounts[periodKey];
+        if (mutation.amount === cap) group[periodKey] = mutation.date;
+        else delete group[periodKey];
+      } else if (mutation.date) {
+        group[periodKey] = mutation.date;
+        if (amounts[periodKey])
+          amounts[periodKey] = { ...amounts[periodKey], date: mutation.date };
+      } else {
+        delete group[periodKey];
+        delete amounts[periodKey];
+      }
+      if (Object.keys(amounts).length) next[amountKey] = amounts;
+      else delete next[amountKey];
       if (Object.keys(group).length) next[key] = group;
       else delete next[key];
     }

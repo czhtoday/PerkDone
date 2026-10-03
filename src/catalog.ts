@@ -10,7 +10,7 @@ export function hydrateCard(card: Card): Card {
   if (!product) return card;
   const benefits = product.benefits.map((b) => {
     const old = card.benefits.find((x) => x.id === b.id);
-    return { ...b, hidden: old?.hidden, schedule: old?.schedule };
+    return { ...b, hidden: old?.hidden ?? b.hidden, schedule: old?.schedule };
   });
   const custom = card.benefits.filter(
     (b) => !product.benefits.some((x) => x.id === b.id),

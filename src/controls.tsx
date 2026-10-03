@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, X, CreditCard } from "lucide-react";
+import {
+  ChevronDown,
+  X,
+  CreditCard,
+  GripVertical,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import {
   cardLabel,
   localDate,
@@ -83,7 +90,15 @@ export function DateEditor({
   busy,
   onSave,
   onUndo,
+  amount,
+  setAmount,
+  total,
+  done = true,
 }: {
+  amount?: string;
+  setAmount?: (value: string) => void;
+  total?: number;
+  done?: boolean;
   item: DueItem;
   anchor: HTMLElement | null;
   date: string;
@@ -117,7 +132,7 @@ export function DateEditor({
       popover="auto"
       className="date-popover"
       role="dialog"
-      aria-label={t("完成日期")}
+      aria-label={amount === undefined ? t("完成日期") : t("记录已使用金额")}
     >
       <div className="date-head">
         <b>{item.benefit.name}</b>
@@ -135,23 +150,44 @@ export function DateEditor({
           onSave();
         }}
       >
-        <label>
-          {t("完成日期")}
-          <input
-            type="date"
-            required
-            max={localDate()}
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </label>
+        {amount !== undefined && (
+          <label>
+            {t("已使用金额")}
+            <span className="amount-input">
+              <input
+                type="number"
+                min="0"
+                max={total}
+                step="0.01"
+                required
+                value={amount}
+                placeholder="0"
+                onChange={(e) => setAmount?.(e.target.value)}
+              />{" "}
+              <span className="amount-limit">/ ${total}</span>
+            </span>
+            <small>{t("填写累计金额，记满自动完成。")}</small>
+          </label>
+        )}
+        {(amount === undefined || done) && (
+          <label>
+            {t("完成日期")}
+            <input
+              type="date"
+              required
+              max={localDate()}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </label>
+        )}
         {error && (
           <p className="error" role="alert">
             {t(error)}
           </p>
         )}
         <button className="primary" disabled={busy}>
-          {t("确认修改时间")}
+          {t(amount === undefined ? "确认修改时间" : "保存金额")}
         </button>
         <button
           type="button"
@@ -159,7 +195,7 @@ export function DateEditor({
           disabled={busy}
           onClick={onUndo}
         >
-          {t("撤销完成")}
+          {t(amount === undefined || done ? "撤销完成" : "清空金额")}
         </button>
       </form>
     </div>
@@ -189,5 +225,91 @@ export function CardArt({
       <CreditCard size={mini ? 17 : 19} />
       {!mini && <span>{card.bank}</span>}
     </span>
+  );
+}
+
+export function CardOrder({
+  cards,
+  busy,
+  onSave,
+}: {
+  cards: Card[];
+  busy: boolean;
+  onSave: (ids: string[]) => void;
+}) {
+  const [ids, setIds] = useState(cards.map((c) => c.id));
+  const [dragged, setDragged] = useState<string | null>(null);
+  const [over, setOver] = useState<string | null>(null);
+  function move(id: string, target: string) {
+    setIds((old) => {
+      const next = old.filter((x) => x !== id);
+      next.splice(old.indexOf(target), 0, id);
+      return next;
+    });
+  }
+  return (
+    <>
+      <p className="modal-copy">{t("拖动卡片调整顺序，也可使用上下箭头。")}</p>
+      <ol className="reorder-list">
+        {ids.map((id, i) => {
+          const card = cards.find((c) => c.id === id)!;
+          return (
+            <li
+              key={id}
+              className={over === id ? "drag-over" : ""}
+              draggable={!busy}
+              onDragStart={(e) => {
+                e.dataTransfer.setData("text/plain", id);
+                e.dataTransfer.effectAllowed = "move";
+                setDragged(id);
+              }}
+              onDragOver={(e) => {
+                if (dragged && dragged !== id) {
+                  e.preventDefault();
+                  setOver(id);
+                }
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (dragged && dragged !== id) move(dragged, id);
+                setDragged(null);
+                setOver(null);
+              }}
+              onDragEnd={() => {
+                setDragged(null);
+                setOver(null);
+              }}
+            >
+              <GripVertical size={16} className="drag-handle" />
+              <CardArt card={card} mini />
+              <b>{cardLabel(card)}</b>
+              <button
+                className="icon-button"
+                aria-label={`${t("上移")} ${cardLabel(card)}`}
+                disabled={busy || i === 0}
+                onClick={() => move(id, ids[i - 1])}
+              >
+                <ArrowUp size={15} />
+              </button>
+              <button
+                className="icon-button"
+                aria-label={`${t("下移")} ${cardLabel(card)}`}
+                disabled={busy || i === ids.length - 1}
+                onClick={() => move(id, ids[i + 1])}
+              >
+                <ArrowDown size={15} />
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+      <button
+        className="primary form-submit"
+        disabled={busy}
+        onClick={() => onSave(ids)}
+      >
+        {t("保存顺序")}
+      </button>
+    </>
   );
 }

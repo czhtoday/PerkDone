@@ -1,16 +1,16 @@
 # Chrome 商店首次上架与更新
 
-适用版本：0.4.1。本文准备了操作步骤及可复制的英文填写内容。
-项目目前尚未上架；推送 GitHub 不会自动发布到 Chrome 商店。
+适用版本：0.5.0。本文准备了操作步骤及可复制的英文填写内容。
+项目已上架；推送 GitHub 不会自动发布到 Chrome 商店。0.5.0 需要在现有商店条目上传新版 ZIP。
 
 ## 首次上架
 
 1. 用准备长期维护项目的 Google 账号登录 [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)。可以使用专门的开发账号，并将联系邮箱设为 `perkdonedev@gmail.com`。
 2. 完成开发者注册、同意协议并支付一次性注册费。具体金额以付款页面为准；开启该 Google 账号的两步验证，填写发布者名称并验证联系邮箱。
-3. 在项目目录运行 `npm ci`（首次安装依赖）、`npm test`、`npm run package`。目前生成 `release/perk-done-0.4.1.zip`；上传整个 ZIP，不是源码目录，也不是 `.crx`。
+3. 在项目目录运行 `npm ci`（首次安装依赖）、`npm test`、`npm run package`。目前生成 `release/perk-done-0.5.0.zip`；上传整个 ZIP，不是源码目录，也不是 `.crx`。
 4. 后台点击 **Add new item → Choose file → Upload**，选择 ZIP。压缩包根目录已包含 `manifest.json`。
 5. 填写 **Store listing**：默认语言选 English，名称 Perk Done，分类选择最贴近效率工具的可用分类。填写下方描述、图标、截图、推广图及支持链接。
-6. 填写 **Privacy practices**：单一用途、`storage` 权限理由、不使用远程代码，以及实际数据使用情况。隐私政策 URL 使用公开的 [PRIVACY.md](https://github.com/czhtoday/PerkDone/blob/main/PRIVACY.md)。
+6. 填写 **Privacy practices**：单一用途、`storage` 权限理由、不使用远程代码，以及实际数据使用情况。隐私政策 URL 使用公开的 [PRIVACY.md](https://raw.githubusercontent.com/czhtoday/PerkDone/main/PRIVACY.md)。
 7. 在 **Distribution** 选择免费及发布范围。希望所有人可以搜索安装时选 Public。先小范围测试可用 Private / trusted testers；Unlisted 则通过链接访问。
 8. 填写测试说明，点击 **Submit for review**。可以选审核后自动发布，也可以审核通过后手动发布。审核时间不固定，后台会显示进度；如收到修改要求，按反馈修改后重新提交。
 
@@ -49,7 +49,7 @@ Perk Done is a manual credit card benefit tracker with a compact toolbar popup a
 
 No separate Perk Done account or bank connection is required. The extension only requests the storage permission and does not read your browsing history or transactions. The card catalog is bundled with the extension; no live banking API is used.
 
-Completion is recorded manually. Used-credit totals assume the full credit amount for each completed period and are estimates, not bank-verified reimbursements. Issuer eligibility, enrollment, and actual expiration rules still apply.
+Completion is recorded manually. Used-credit totals count entered partial amounts, or full face value for one-click completions without an amount, and are estimates, not bank-verified reimbursements. Issuer eligibility, enrollment, and actual expiration rules still apply.
 
 Open source: https://github.com/czhtoday/PerkDone
 Feedback: perkdonedev@gmail.com
@@ -81,7 +81,7 @@ The storage permission saves user-entered cards, optional card suffixes, nicknam
 
 - Homepage: `https://github.com/czhtoday/PerkDone`
 - Support: `https://github.com/czhtoday/PerkDone/issues`
-- Privacy policy: `https://github.com/czhtoday/PerkDone/blob/main/PRIVACY.md`
+- Privacy policy: `https://raw.githubusercontent.com/czhtoday/PerkDone/main/PRIVACY.md`
 - Contact email: `perkdonedev@gmail.com`
 
 **Reviewer test instructions**
@@ -101,9 +101,9 @@ Records persist in Chrome extension storage. Cross-device synchronization depend
 ## 上架后的每次更新
 
 1. 修改代码或 `src/data/cards.json`，保持已有 product/perk IDs 和存储迁移兼容。目录与图片是本地打包的，所以目录调整也需要发布新版本。
-2. 把 `public/manifest.json` 的版本提高，例如 `0.4.1` → `0.4.2`。同时更新 `package.json` 和 `package-lock.json` 的项目版本；`npm version 0.4.2 --no-git-tag-version` 可以同步后两者。这只是下次更新的例子，不会在本文中实际执行。
+2. 把 `public/manifest.json` 的版本提高，例如 `0.5.0` → `0.5.1`。同时更新 `package.json` 和 `package-lock.json` 的项目版本；`npm version 0.5.1 --no-git-tag-version` 可以同步后两者。这只是下次更新的例子，不会在本文中实际执行。
 3. 更新隐私政策版本、发布日期及涉及变化的 README。运行 `npm test`；交互、存储或迁移变化按需运行 README 所述的实际扩展浏览器检查。
-4. 运行 `npm run package`。脚本核对 manifest 与 package 版本一致，自动生成 `release/perk-done-0.4.2.zip`，并附上许可证。发布 ZIP 包含完整扩展，不只是差异文件。
+4. 运行 `npm run package`。脚本核对 manifest 与 package 版本一致，自动生成 `release/perk-done-0.5.1.zip`，并附上许可证。发布 ZIP 包含完整扩展，不只是差异文件。
 5. 提交并推送 GitHub。这个步骤只更新源代码。
 6. 打开商店后台**已有的 Perk Done 项目**，在 **Package → Upload new package** 上传新 ZIP。更新变动的描述/隐私字段，然后重新 **Submit for review**。
 7. 审核通过并发布后，Chrome 会自动向已安装用户分发更新，通常不需要卸载或重新安装。不要为每次更新创建新的商店项目；沿用项目才能保留安装身份和现有用户。
@@ -117,3 +117,7 @@ Records persist in Chrome extension storage. Cross-device synchronization depend
 ## 开源与发布包
 
 原创代码和文档采用标准 MIT License，可以 fork、研究、修改、分发及商用；分发时保留版权与许可证。银行图片及商标不属于 MIT 授权范围，见 `THIRD_PARTY_NOTICES.md`。GitHub 开源和 Chrome 商店发布可以同时进行，当前运行方式无需额外服务器或数据库。
+
+## 0.5.0 更新说明（可选用于商店文案）
+
+Optional dates for free nights and cardmember-year credits, partial credit usage with a compact amount editor, draggable card ordering, more visible hide controls, dark popup styling fixes, and updated Chase / IHG benefits. Existing saved cards and completion records are preserved.
