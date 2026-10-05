@@ -4,6 +4,8 @@
 
 A Chrome extension to keep your credit card perks organized. Add your cards, mark benefits done, and see what remains this quarter—without a separate account or bank connection.
 
+**[Install Perk Done from the Chrome Web Store →](https://chromewebstore.google.com/detail/perk-done/abceffmljpmdhhnmgbifmaabebgpbcid)**
+
 **TypeScript · React · Manifest V3 · Chrome Sync · [MIT License](LICENSE)**
 
 ![Perk Done dark dashboard](docs/screenshots/dashboard-dark.png)
@@ -27,7 +29,7 @@ The quarter count includes visible, incomplete periods expiring between today an
 
 ## Install locally
 
-Perk Done is available on the Chrome Web Store. For development or early testing, build locally or use an unpacked build supplied by the maintainer.
+For everyday use, [install Perk Done from the Chrome Web Store](https://chromewebstore.google.com/detail/perk-done/abceffmljpmdhhnmgbifmaabebgpbcid). For development or early testing, build locally or use an unpacked build supplied by the maintainer.
 
 1. Open `chrome://extensions` in desktop Chrome and enable **Developer mode**.
 2. Click **Load unpacked** and select the folder containing `manifest.json`. For a local build, this is `dist`; for a ZIP, extract it first and select the extracted folder.

@@ -4,6 +4,8 @@
 
 用 Chrome 扩展整理信用卡权益。添加卡片、标记完成，查看本季度还有哪些权益待使用，无需另外注册账号或连接银行。
 
+**[前往 Chrome 商店安装 Perk Done →](https://chromewebstore.google.com/detail/perk-done/abceffmljpmdhhnmgbifmaabebgpbcid)**
+
 **TypeScript · React · Manifest V3 · Chrome Sync · [MIT 许可证](LICENSE)**
 
 ![Perk Done 深色面板](docs/screenshots/dashboard-dark.png)
@@ -28,7 +30,7 @@
 
 ## 本地安装
 
-Perk Done 已在 Chrome 商店上架。开发或提前试用新版时，可以自行构建，或使用维护者提供的已解压安装包。
+日常使用可直接[前往 Chrome 商店安装 Perk Done](https://chromewebstore.google.com/detail/perk-done/abceffmljpmdhhnmgbifmaabebgpbcid)。开发或提前试用新版时，可以自行构建，或使用维护者提供的已解压安装包。
 
 1. 在电脑 Chrome 打开 `chrome://extensions`，开启右上角的**开发者模式**。
 2. 点击**加载已解压的扩展程序**，选择直接包含 `manifest.json` 的文件夹。自行构建时选 `dist`；收到 ZIP 时，先解压，再选解压后的文件夹。
