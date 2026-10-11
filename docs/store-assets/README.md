@@ -5,6 +5,7 @@
 - `dashboard-light-1280x800.png`: actual light dashboard using built-in demo records.
 - `popup-overview-1280x800.png`: actual demo popup with a short introductory layout.
 - `promo-440x280.png`: monochrome small promotional tile.
+- `promo-1400x560.png`: matching monochrome marquee promotional tile with an illustrative annual timeline.
 
 Screenshots and promotional tile are 24-bit RGB PNGs without alpha. UI screenshots retain the application's blue completion accent and issuer artwork. The surrounding designs and store icon use black, white, and gray.
 
@@ -14,6 +15,14 @@ The source renderer is `scripts/store-assets.mjs`. Rebuild the app before regene
 npm run build
 node scripts/store-assets.mjs
 ```
+
+To generate only the two promotional tiles (no app build needed):
+
+```sh
+node scripts/promo-assets.mjs
+```
+
+Upload `promo-440x280.png` to **Small promo tile** and `promo-1400x560.png` to **Marquee promo tile** in the Chrome Web Store listing. The marquee is optional and used for featured placements. These listing assets do not require a new extension package or version.
 
 The renderer uses Playwright Chromium; if needed install it with `npx playwright install chromium`, or set `CHROME_EXECUTABLE` to an existing Chrome-for-Testing binary. It runs against a temporary local server and a separate browser context, not your personal Chrome profile. Demo totals and periods reflect the date when generated.
 
